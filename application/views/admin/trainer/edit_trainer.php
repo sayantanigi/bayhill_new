@@ -280,7 +280,7 @@ body{margin-top:20px}
                                                             <?php if(!empty($result->image) && file_exists('uploads/trainer/profilePic/'.$result->image)) { ?>
                                                             <img src="<?= base_url('uploads/trainer/profilePic/'.$result->image) ?>" class="img-thumbnail img-profile" id="pblah">
                                                             <?php } else { ?>
-                                                            <img src="<?= base_url('uploads/unnamed.jpg') ?>" class="img-thumbnail img-profile" id="pblah">
+                                                            <img src="<?= base_url('uploads/default_profile.jpg') ?>" class="img-thumbnail img-profile" id="pblah">
                                                             <?php } ?>
                                                         </div>
                                                         <h2>
@@ -327,7 +327,7 @@ body{margin-top:20px}
                                     </div>
                                 </div>
                             </div>
-                            <div class="card shadow rounded">
+                            <!-- <div class="card shadow rounded">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="container">
@@ -446,7 +446,7 @@ body{margin-top:20px}
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>

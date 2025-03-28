@@ -264,7 +264,7 @@ body{margin-top:20px}
                                                         </div>
                                                         <div class="user clearfix">
                                                             <div class="avatar item" id="item">
-                                                                <img src="<?= base_url('uploads/unnamed.jpg') ?>" class="img-thumbnail img-profile" id="pblah">
+                                                                <img src="<?= base_url('uploads/default_profile.jpg') ?>" class="img-thumbnail img-profile" id="pblah">
                                                             </div>
                                                             <h2>
                                                                 <span id="sltation"></span>
@@ -310,7 +310,7 @@ body{margin-top:20px}
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card shadow rounded">
+                                <!-- <div class="card shadow rounded">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="container">
@@ -387,7 +387,7 @@ body{margin-top:20px}
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </form>

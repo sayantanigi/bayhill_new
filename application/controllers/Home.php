@@ -207,12 +207,14 @@ class Home extends CI_Controller {
             $course_title = base64_decode($this->input->get('ctitle', true));
             $course_id = $this->input->post('course_id', true);
             $user_id = $this->input->post('user_id', true);
+            $trainer_id = $this->input->post('trainer_id', true);
             $selected_date = date('Y-m-d', strtotime($this->input->post('selected_date', true)));
             $selected_time = $this->input->post('selected_time', true);
             $getcourseData = $this->db->query("SELECT * FROM courses WHERE course_name LIKE '%".$course_title."%'")->row();
             $insetData = array(
                 'course_id' => $course_id,
                 'user_id' => $user_id,
+                'trainer_id' => $trainer_id,
                 'booking_date' => $selected_date,
                 'booking_time' => $selected_time,
             );
@@ -288,12 +290,14 @@ class Home extends CI_Controller {
     }
     public function instructor_list() {
         $course_title = base64_decode($this->input->get('ctitle', true));
+        $user_id = base64_decode($this->input->get('uid', true));
         $getcourseData = $this->db->query("SELECT * FROM courses WHERE course_name LIKE '%".$course_title."%'")->row();
         $getinstructor_list = $this->db->query("SELECT * FROM users WHERE user_type = '2' AND status = '1'")->result();
         $data = array(
             'title' => 'Bay Hill Driving School',
             'page' => 'Instructor List',
             'subpage' => 'Instructor List',
+            'user_id' => $user_id,
             'course_id' => $getcourseData->id,
             'course_title' => $getcourseData->course_name,
             'course_week' => $getcourseData->course_week,
@@ -326,12 +330,14 @@ class Home extends CI_Controller {
     }
     public function instructor_slot() {
         $course_title = base64_decode($this->input->get('ctitle', true));
+        $user_id = base64_decode($this->input->get('uid', true));
         $getcourseData = $this->db->query("SELECT * FROM courses WHERE course_name LIKE '%".$course_title."%'")->row();
         $instructorID = base64_decode($this->input->get('insid', true));
         $data = array(
             'title' => 'Bay Hill Driving School',
             'page' => 'Instructor Slot',
             'subpage' => 'Instructor Slot',
+            'user_id' => $user_id,
             'course_id' => $getcourseData->id,
             'course_title' => $getcourseData->course_name,
             'course_week' => $getcourseData->course_week,

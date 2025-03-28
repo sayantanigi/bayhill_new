@@ -1,12 +1,13 @@
 <?php
 $getinstructor_data = $this->db->query("SELECT * FROM users WHERE id = '".$instructorID."'")->row();
+$getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'")->row();
 ?>
 <section class="enrollPnl">
     <div class="container">
         <h2 class="subtitle  wow fadeInUp">Book Instructor Slot</h2>
         <h3 class="maintitle mb-5  wow fadeInUp">Plan your reservation based on<br/> your preferences</h3>
         <div class="boxDateSchdule">
-            <form action="payment-details.html">
+            <form action="<?php echo base_url() ?>create-booking?ctitle=<?= base64_encode($getCourse->course_name)?>&insid=<?= base64_encode($instructorID)?>&uid=<?= base64_encode($user_id)?>" method="POST">
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="p-lg-5 p-3">
@@ -42,7 +43,7 @@ $getinstructor_data = $this->db->query("SELECT * FROM users WHERE id = '".$instr
                                                 <i class="fas fa-calendar-alt"></i>
                                             </div>
                                             <div class="boxInfo">
-                                                <h3>4</h3>
+                                                <h3><?= $getCourse->course_week; ?></h3>
                                                 <h4>Days In a Week</h4>
                                             </div>
                                         </div>
@@ -53,7 +54,7 @@ $getinstructor_data = $this->db->query("SELECT * FROM users WHERE id = '".$instr
                                                 <i class="fas fa-id-card-alt"></i>
                                             </div>
                                             <div class="boxInfo">
-                                                <h3>8</h3>
+                                                <h3><?= $getCourse->class_week; ?></h3>
                                                 <h4>Hours Per Week</h4>
                                             </div>
                                         </div>
@@ -64,7 +65,7 @@ $getinstructor_data = $this->db->query("SELECT * FROM users WHERE id = '".$instr
                                                 <i class="fas fa-dollar-sign"></i>
                                             </div>
                                             <div class="boxInfo">
-                                                <h3>$ 500</h3>
+                                                <h3>$ <?= $getCourse->offer_price; ?></h3>
                                                 <h4>Price</h4>
                                             </div>
                                         </div>
@@ -85,6 +86,11 @@ $getinstructor_data = $this->db->query("SELECT * FROM users WHERE id = '".$instr
                             </div>
                             <div class="text-center">
                                 <button class="enrollbtn">Confirm Book Slot</button>
+                                <input type="hidden" id="course_id" name="course_id" value="<?= $course_id; ?>">
+                                <input type="hidden" id="user_id" name="user_id" value="<?= $user_id; ?>">
+                                <input type="hidden" id="trainer_id" name="trainer_id" value="<?= $instructorID; ?>">
+                                <input type="hidden" id="selected_date" name="selected_date" value="">
+                                <input type="hidden" id="selected_time" name="selected_time" value="">
                             </div>
                         </div>
                     </div>
@@ -110,9 +116,8 @@ $getinstructor_data = $this->db->query("SELECT * FROM users WHERE id = '".$instr
 const slots = [
     { time: '09:00 am - 11:00 am', status: 'available' },
     { time: '11:00 am - 01:00 pm', status: 'available' },
-    { time: '01:00 pm - 02:00 pm', status: 'available' },
-    { time: '02:00 pm - 03:00 pm', status: 'available' },
-    { time: '03:00 pm - 05:00 pm', status: 'unavailable' },
+    { time: '01:00 pm - 03:00 pm', status: 'available' },
+    { time: '03:00 pm - 05:00 pm', status: 'available' },
     { time: '05:00 pm - 07:00 pm', status: 'available' },
     { time: '07:00 pm - 09:00 pm', status: 'available' },
     { time: '09:00 pm - 11:00 pm', status: 'available' },
@@ -167,9 +172,11 @@ $(function() {
 
             if (date < today.setHours(0, 0, 0, 0)) {
                 dayElement.addClass('disabled');
-            } else if (month === 5 && (day === 20 || day === 21)) {
+            }
+            /*else if (month === 5 && (day === 20 || day === 21)) {
                 dayElement.addClass('blocked');
-            } else {
+            }*/
+            else {
                 dayElement.addClass('available');
                 dayElement.click(() => {
                     selectedDate = date.toDateString();

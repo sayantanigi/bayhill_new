@@ -12,7 +12,11 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
             <div class="col-md-6 col-lg-4">
                 <div class="team-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
                     <div class="team-card__image">
+                        <?php if(!empty($instructor->image) && file_exists('uploads/trainer/profilePic/'.$instructor->image)) { ?>
                         <img src="<?= base_url()?>uploads/trainer/profilePic/<?= $instructor->image; ?>" alt="<?= $instructor->salutation." ".$instructor->first_name." ".$instructor->last_name?>">
+                        <?php } else { ?>
+                        <img src="<?= base_url()?>uploads/default_profile.jpg" alt="<?= $instructor->salutation." ".$instructor->first_name." ".$instructor->last_name?>">
+                        <?php } ?>
                     </div>
                     <div class="team-card__content">
                         <h3 class="team-card__title">
@@ -30,7 +34,7 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                                 </div>
                             </div>
                             <div>
-                                <a href="<?= base_url()?>instructor-slot?ctitle=<?= base64_encode($getCourse->course_name)?>&insid=<?= base64_encode($instructor->id)?>" class="btn btn-sm btn-danger">Book Now</a>
+                                <a href="<?= base_url()?>instructor-slot?ctitle=<?= base64_encode($getCourse->course_name)?>&uid=<?= base64_encode($user_id)?>&insid=<?= base64_encode($instructor->id)?>" class="btn btn-sm btn-danger">Book Now</a>
                             </div>
                         </div>
                         <div class="team-card__content-shape">

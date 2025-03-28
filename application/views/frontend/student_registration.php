@@ -32,7 +32,7 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                             <select class="form-control" name="user_type" id="user_type">
                                 <option value="">Select User Type</option>
                                 <option value="1">Student</option>
-                                <option value="2">Trainer</option>
+                                <!-- <option value="2">Trainer</option> -->
                             </select>
                             <div id="vld_user_type"></div>
                         </div>
