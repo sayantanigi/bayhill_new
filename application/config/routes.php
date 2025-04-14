@@ -56,12 +56,14 @@ $route['translate_uri_dashes'] = FALSE;
 //frontend
 $route['course_zipcode'] = 'home/course_zipcode';
 $route['drivers-ed'] = 'home/drivers_ed';
+$route['getcourselistbyzipcode'] = 'home/getcourselistbyzipcode';
 $route['courses'] = 'home/courses';
 $route['course/course_details'] = 'home/course_details';
 $route['registration'] = 'home/registration';
 $route['registration_process'] = 'home/registration_process';
 $route['booking_slot'] = 'home/booking_slot';
 $route['create-booking'] = 'home/create_booking';
+$route['confirm-booking'] = 'home/confirm_booking';
 $route['payment-details'] = 'home/payment_details';
 $route['create-payment'] = 'home/create_payment';
 $route['complete-payment'] = 'home/complete_payment';

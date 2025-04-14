@@ -4,7 +4,7 @@ $site_setting = $this->db->query("select * from  settings")->row();
 ?>
 <section class="enrollPnl">
     <div class="container">
-        <div class="text-success-msg f-20">
+        <!-- <div class="text-success-msg f-20">
             <?php if ($this->session->flashdata('message')) {
                 echo '<h3 class="h3 fw-bold mb-2  wow fadeInUp" style="text-align: center; font-size: 18px; padding: 10px; background: green; border-radius: 20px; margin-bottom: 30px; color: #fff;">'.$this->session->flashdata('message').'</h3>';
                 unset($_SESSION['message']);
@@ -13,7 +13,7 @@ $site_setting = $this->db->query("select * from  settings")->row();
                 echo '<h3 class="h3 fw-bold mb-2  wow fadeInUp" style="text-align: center; font-size: 18px; padding: 10px; background: red; border-radius: 20px; margin-bottom: 30px; color: #fff;">'.$this->session->flashdata('error').'</h3>';
                 unset($_SESSION['error']);
             } ?>
-        </div>
+        </div> -->
         <h2 class="subtitle  wow fadeInUp">Payment Details</h2>
         <h3 class="maintitle mb-5  wow fadeInUp">Enter your payment information</h3>
         <form action="<?php echo base_url() ?>create-payment?ctitle=<?= base64_encode($getCourse->course_name)?>&uid=<?= base64_encode($user_id)?>" method="POST" id="createpaymentForm">

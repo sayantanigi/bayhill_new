@@ -59,6 +59,30 @@
                             <a href="javascript:void(0)" class="drivschol-btn w-100">Trainer Not assigned</a>
                         </div>
                         <?php } ?>
+                        <?php
+                        $getBookingData = $this->db->query("SELECT * FROM booking WHERE user_id = '".@$_SESSION['bayhill']['user_id']."' AND course_id = '".@$course->id."'")->row();
+                        if(!empty($getBookingData->transaction_id)){
+                            $getBookingSlots = $this->db->query("SELECT * FROM booking_details WHERE booking_id = '".@$getBookingData->id."'")->result();
+                            if($course->course_class > count($getBookingSlots)) { ?>
+                            <div class="package-card__body__btn text-center">
+                                <a href="<?= base_url() ?>booking_slot?ctitle=<?= base64_encode($course->course_name)?>&uid=<?= base64_encode($_SESSION['bayhill']['user_id'])?>&bookingid=<?= base64_encode($getBookingData->id)?>" class="drivschol-btn w-100">Book slot for pending classes</a>
+                            </div>
+                            <?php } else { ?>
+                            <div class="col-lg-12 col-md-12 wow fadeInUp" style="text-align: center;margin-top: 15px;border: 1px solid #f59b24;border-radius: 18px;">
+                                <?php
+                                if(!empty($getBookingSlots)) {
+                                    $i = 1;
+                                    foreach ($getBookingSlots as $slot) { ?>
+                                    <p style="margin: 0px;font-size: 14px;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time; ?></p>
+                                <?php $i++; } } ?>
+                            </div>
+                            <?php }
+                        } else { ?>
+                        <div class="package-card__body__btn text-center">
+                            <a href="javascript:void(0)" onclick="completePayment(<?= @$getBookingData->id ?>)" class="drivschol-btn w-100">Book slot for pending classes</a>
+                        </div>
+                        <div class="completePayment_<?= @$getBookingData->id ?>" style="display: none;text-align: center; margin-top: 20px; color: #ed1c24; font-size: 15px;">Please complete your payment first for this course to book pending slots.</div>
+                        <?php } ?>
                     </div>
                 </div>
             </div>
@@ -68,3 +92,11 @@
         </div>
     </div>
 </section>
+<script>
+function completePayment(id) {
+    $('.completePayment_'+id).show();
+    setTimeout(function () {
+        $('.completePayment_'+id).fadeOut('slow');
+    }, 4000);
+}
+</script>

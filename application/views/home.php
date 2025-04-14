@@ -14,7 +14,7 @@
                             <p>Learn to drive with Bay Hill Driving School and gain the skills and confidence you need for life, whether you're a first time driver or need a refresher before your test.</p>
                         </div>
                         <div class="bannerenroll mt-4">
-                            <form action="<?= base_url()?>courses" method="POST">
+                            <form action="<?= base_url()?>getcourselistbyzipcode" method="POST">
                                 <div class="px-4">
                                     <p>Get started by choosing in car lessons or a course</p>
                                 </div>
@@ -48,7 +48,7 @@
                                                 </div>
                                                 <input class="btn btn-secondary mb-3 text-white fe-semibold rounded-0 flex-fill findZipcode" type="submit" value="View Packages">
                                                 <p>Already purchased a lesson package? </p>
-                                                <p><a href="#" class="text-decoration-underline">Sign in to book your next lesson</a></p>
+                                                <p><a href="<?= base_url('login')?>" class="text-decoration-underline">Sign in to book your next lesson</a></p>
                                             </div>
                                         </div>
                                     </div>
@@ -61,7 +61,7 @@
                                         </a>
                                     </div>
                                     <div class="col-lg-12 mb-3">
-                                        <a href="#" class="regbtn text-white px-4" data-bs-toggle="tooltip" data-bs-title="Returning Students">Student Login</a>
+                                        <a href="<?= base_url('login')?>" class="regbtn text-white px-4" data-bs-toggle="tooltip" data-bs-title="Returning Students">Student Login</a>
                                     </div>
                                 </div>
                             </form>
@@ -88,7 +88,7 @@
                         </div>
                         <div class="col-lg-12">
                             <div class="input-group">
-                                <form action="<?= base_url()?>courses" method="POST">
+                                <form action="<?= base_url()?>getcourselistbyzipcode" method="POST">
                                     <div class="zipformsrch w-100 shadow-none p-0">
                                         <h3 class="h6 fw-bold mb-3">Enter Your Zip Code Below to Get Started <span style="color: red;">*</span></h3>
                                         <div class="zipbox mb-3">

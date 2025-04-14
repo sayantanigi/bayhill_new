@@ -12,7 +12,11 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
             </div>
         </div>
         <div class="boxDateSchdule">
+            <?php if(empty($booking_id)) { ?>
             <form action="<?php echo base_url() ?>create-booking?ctitle=<?= base64_encode($getCourse->course_name) ?>&uid=<?= base64_encode($user_id) ?>" method="POST">
+            <?php } else { ?>
+            <form action="<?php echo base_url() ?>confirm-booking?ctitle=<?= base64_encode($getCourse->course_name) ?>&uid=<?= base64_encode($user_id) ?>&bookingid=<?= base64_encode($booking_id) ?>" method="POST">
+            <?php } ?>
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="p-lg-5 p-3">
@@ -86,7 +90,7 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                                             </div>
                                             <div class="boxInfo">
                                                 <h3 class="boxdate">15 Dec, 2024</h3>
-                                                <h5 class="boxtime">10:00 am - 12:00 pm</h5>
+                                                <h5 class="boxtime">9:00 am - 11:00 am</h5>
                                                 <h4>Date & Time</h4>
                                             </div>
                                         </div>
@@ -101,6 +105,7 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                                 <button class="enrollbtn" id="confirm-booking">Confirm Book Slot</button>
                                 <input type="hidden" id="course_id" name="course_id" value="<?= $course_id; ?>">
                                 <input type="hidden" id="user_id" name="user_id" value="<?= $user_id; ?>">
+                                <input type="hidden" id="booking_id" name="booking_id" value="<?= @$booking_id; ?>">
                                 <input type="hidden" id="selected_dates" name="selected_dates" value="">
                                 <input type="hidden" id="selected_times" name="selected_times" value="">
                             </div>
@@ -138,7 +143,14 @@ const slots = [
 let selectedSlots = [];
 let selectedDates = [];
 let currentClass = 1;
-const totalClasses = <?= $course_class; ?>;
+<?php
+$getBookingData = $this->db->query("SELECT * FROM booking WHERE user_id = '".@$_SESSION['bayhill']['user_id']."' AND course_id = '".@$course_id."'")->row();
+$getBookingSlots = $this->db->query("SELECT * FROM booking_details WHERE booking_id = '".@$getBookingData->id."'")->result();
+if($course_class > count($getBookingSlots)) { ?>
+const totalClasses = <?= $course_class - count($getBookingSlots); ?>;
+<?php } else { ?>
+const totalClasses = <?= $course_class ?>;
+<?php } ?>
 
 $(function() {
     $("#confirm-booking").hide();
@@ -187,7 +199,8 @@ $(function() {
             const date = new Date(year, month, day);
             let dayElement = $('<div></div>').text(day);
 
-            if (date < today.setHours(0, 0, 0, 0)) {
+            //if (date < today.setHours(0, 0, 0, 0)) {
+            if (date < today.setHours(0, 0, 0, 0) || date.getDay() === 0 || date.getDay() === 6) {
                 dayElement.addClass('disabled');
             } else {
                 dayElement.addClass('available');
@@ -215,12 +228,13 @@ $(function() {
     function renderSlots(formattedDate, formattedSDate) {
         const slotsElement = $('#slots');
         slotsElement.empty();
+        const disableSelection = selectedSlots.length >= totalClasses;
         slots.forEach(slot => {
             const slotElement = $('<label></label>').addClass(slot.status);
             const radioButton = $('<input>')
                 .attr('type', 'radio')
                 .attr('name', 'slot')
-                .attr('disabled', slot.status === 'unavailable')
+                .attr('disabled', slot.status === 'unavailable' || disableSelection)
                 .change(() => selectSlot(slotElement, slot.time, formattedDate, formattedSDate));
             const label = $('<span></span>').text(slot.time);
             slotElement.append(radioButton, label);
@@ -229,22 +243,23 @@ $(function() {
     }
 
     function selectSlot(slotElement, time, formattedDate, formattedSDate) {
-        selectedSlots.push(time);
-        selectedDates.push(formattedSDate);
-        $('#slots label').removeClass('selected');
-        slotElement.addClass('selected');
-        $('#selected_times').val(JSON.stringify(selectedSlots));
-        $('#selected_dates').val(JSON.stringify(selectedDates));
-        //$('#selected_dates').val(formattedSDate);
-        updateBookingDetails(formattedDate, formattedSDate);
+        if (selectedSlots.length < totalClasses) {
+            selectedSlots.push(time);
+            selectedDates.push(formattedSDate);
+            $('#slots label').removeClass('selected');
+            slotElement.addClass('selected');
+            $('#selected_times').val(JSON.stringify(selectedSlots));
+            $('#selected_dates').val(JSON.stringify(selectedDates));
+            updateBookingDetails(formattedDate, formattedSDate);
 
-        if (currentClass < totalClasses) {
-            currentClass++;
-            $('#calendar-container').show();
-            $('#slot-container').hide();
-            $('#confirm-booking').hide();
-        } else {
-            $('#confirm-booking').show();
+            if (currentClass < totalClasses) {
+                currentClass++;
+                $('#calendar-container').show();
+                $('#slot-container').hide();
+                $('#confirm-booking').show();
+            } else {
+                $('#confirm-booking').show();
+            }
         }
     }
 

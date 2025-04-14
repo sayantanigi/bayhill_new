@@ -1,6 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
@@ -30,35 +29,11 @@ class Home extends CI_Controller {
             'page' => 'Driver\'s ED',
             'subpage' => 'driver\'s ED',
         );
+        $data['DMV_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '1'")->row();
+        $data['Video_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '2'")->row();
+        $data['Permit_test'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '3'")->row();
         $this->load->view('header', $data);
         $this->load->view('frontend/drivers_ed');
-        $this->load->view('footer');
-    }
-    public function courses($pincode = false){
-        if ($this->input->server('REQUEST_METHOD') === 'POST') {
-            $pincode = $this->input->post('pincode');
-			$course_type = $this->input->post('course_type');
-        }
-        $query = "SELECT * FROM courses WHERE status = '1' AND is_deleted = '1'";
-        if (!empty($pincode)) {
-            $query .= " AND pincode = '".$pincode."'";
-        }
-        if (!empty($course_type)) {
-            $query .= " AND course_type = '".$course_type."'";
-        }
-        $query .= " ORDER BY id DESC";
-
-        $course_list = $this->db->query($query)->result();
-        $data = array(
-            'title' => 'Bay Hill Driving School',
-            'page' => 'Course List',
-            'subpage' => 'Course List',
-            'pincode' => $pincode,
-			'course_type' => $course_type,
-            'course_list' => $course_list
-        );
-        $this->load->view('header', $data);
-        $this->load->view('frontend/courses');
         $this->load->view('footer');
     }
     public function checkPincode(){
@@ -110,6 +85,41 @@ class Home extends CI_Controller {
             echo '<div class="col-lg-12 col-md-12 wow fadeInUp">No data found related to '.$_POST['pincode'].' zipcode.</div>';
         }
     }
+    public function getcourselistbyzipcode(){
+        if ($this->input->server('REQUEST_METHOD') === 'POST') {
+            $pincode = $this->input->post('pincode');
+            $course_type = $this->input->post('course_type');
+		}
+        redirect('courses?pincode='.$pincode.'&course_type='.base64_encode($course_type));
+    }
+    public function courses($pincode = false){
+        $pincode = $this->input->get('pincode');
+        $course_type = base64_decode($this->input->get('course_type'));
+        $query = "SELECT * FROM courses WHERE status = '1' AND is_deleted = '1'";
+        if (!empty($pincode)) {
+            $query .= " AND pincode = '".$pincode."'";
+        }
+        if (!empty($course_type)) {
+            $query .= " AND course_type = '".$course_type."'";
+        }
+        $query .= " ORDER BY id DESC";
+
+        $course_list = $this->db->query($query)->result();
+        $data = array(
+            'title' => 'Bay Hill Driving School',
+            'page' => 'Course List',
+            'subpage' => 'Course List',
+            'pincode' => $pincode,
+			'course_type' => $course_type,
+            'course_list' => $course_list
+        );
+        $data['DMV_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '1'")->row();
+        $data['Video_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '2'")->row();
+        $data['Permit_test'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '3'")->row();
+        $this->load->view('header', $data);
+        $this->load->view('frontend/courses');
+        $this->load->view('footer');
+    }
     public function course_details(){
         $slug = $this->input->get('cttle', true);
         if ($slug) {
@@ -121,6 +131,9 @@ class Home extends CI_Controller {
             'page' => 'Course Details',
             'subpage' => 'Course Details',
         );
+        $data['DMV_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '1'")->row();
+        $data['Video_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '2'")->row();
+        $data['Permit_test'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '3'")->row();
         $this->load->view('header', $data);
         $this->load->view('frontend/course_details', ['getcourseData' => $getcourseData]);
         $this->load->view('footer');
@@ -133,6 +146,7 @@ class Home extends CI_Controller {
             $getcourseData = '';
         }
         $country_list = $this->db->query("SELECT * FROM countries WHERE flag = '1'")->result();
+        $state_list = $this->db->query("SELECT * FROM states WHERE id = '1416'")->result();
         $data = array(
             'title' => 'Bay Hill Driving School',
             'page' => 'Registration',
@@ -142,8 +156,12 @@ class Home extends CI_Controller {
             'course_week' => @$getcourseData->course_week,
             'class_week' => @$getcourseData->class_week,
             'offer_price' => @$getcourseData->offer_price,
-            'country_list' => $country_list
+            'country_list' => $country_list,
+            'state_list' => $state_list
         );
+        $data['DMV_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '1'")->row();
+        $data['Video_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '2'")->row();
+        $data['Permit_test'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '3'")->row();
         $this->load->view('header', $data);
         $this->load->view('frontend/student_registration');
         $this->load->view('footer');
@@ -188,7 +206,12 @@ class Home extends CI_Controller {
     }
     public function booking_slot(){
         $course_title = base64_decode($this->input->get('ctitle', true));
-        $user_id = base64_decode($this->input->get('uid', true));
+        $booking_id = base64_decode($this->input->get('bookingid', true));
+        if(!empty($_SESSION['bayhill']['user_id'])) {
+            $user_id = $_SESSION['bayhill']['user_id'];
+        } else {
+            $user_id = base64_decode($this->input->get('uid', true));
+        }
         $getcourseData = $this->db->query("SELECT * FROM courses WHERE course_name LIKE '%".$course_title."%'")->row();
         $data = array(
             'title' => 'Bay Hill Driving School',
@@ -196,11 +219,15 @@ class Home extends CI_Controller {
             'subpage' => 'Booking Information',
             'user_id' => $user_id,
             'course_id' => $getcourseData->id,
+            'booking_id' => @$booking_id,
             'course_title' => $getcourseData->course_name,
             'course_duration' => $getcourseData->course_duration,
             'course_class' => $getcourseData->course_class,
             'offer_price' => $getcourseData->offer_price
         );
+        $data['DMV_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '1'")->row();
+        $data['Video_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '2'")->row();
+        $data['Permit_test'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '3'")->row();
         $this->load->view('header', $data);
         $this->load->view('frontend/booking_slot');
         $this->load->view('footer');
@@ -249,6 +276,39 @@ class Home extends CI_Controller {
             redirect('payment-details?ctitle='.base64_encode($course_title).'&uid='.base64_encode($user_id).'&bookingID='.base64_encode($booking_id));
         }
     }
+    public function confirm_booking() {
+        if ($this->input->server('REQUEST_METHOD') === 'POST') {
+            $course_title = base64_decode($this->input->get('ctitle', true));
+            $course_id = $this->input->post('course_id', true);
+            $user_id = $this->input->post('user_id', true);
+            $trainer_id = $this->input->post('trainer_id', true);
+            $booking_id = $this->input->post('booking_id', true);
+
+            $selected_date = $this->input->post('selected_dates', true);
+            $selected_date = json_decode($selected_date, true);
+            $selectedDate = implode(", ", $selected_date);
+
+            $selected_time = $this->input->post('selected_times', true);
+            $selected_time = json_decode($selected_time, true);
+            $selectedTime = implode(", ", $selected_time);
+
+            $dates = explode(", ", $selectedDate);
+            $times = explode(", ", $selectedTime);
+
+            $output = [];
+
+            for ($i = 0; $i < count($dates); $i++) {
+                $bookingDetailsData = array(
+                    'booking_id' => $booking_id,
+                    'trainer_id' => $trainer_id,
+                    'booking_date' => date('Y-m-d', strtotime($dates[$i])),
+                    'booking_time' => $times[$i],
+                );
+                $this->db->insert('booking_details', $bookingDetailsData);
+            }
+            redirect('dashboard');
+        }
+    }
     public function payment_details(){
         $course_title = base64_decode($this->input->get('ctitle', true));
         $getcourseData = $this->db->query("SELECT * FROM courses WHERE course_name LIKE '%".$course_title."%'")->row();
@@ -266,6 +326,9 @@ class Home extends CI_Controller {
             'class_week' => $getcourseData->class_week,
             'offer_price' => $getcourseData->offer_price
         );
+        $data['DMV_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '1'")->row();
+        $data['Video_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '2'")->row();
+        $data['Permit_test'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '3'")->row();
         $this->load->view('header', $data);
         $this->load->view('frontend/payment_details');
         $this->load->view('footer');
@@ -310,6 +373,9 @@ class Home extends CI_Controller {
             'trxID' => $trxID,
             'course_title' => $course_title
         );
+        $data['DMV_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '1'")->row();
+        $data['Video_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '2'")->row();
+        $data['Permit_test'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '3'")->row();
         $this->load->view('header', $data);
         $this->load->view('frontend/complete_payment');
         $this->load->view('footer');
@@ -331,6 +397,9 @@ class Home extends CI_Controller {
             'offer_price' => $getcourseData->offer_price,
             'instructor_list' => $getinstructor_list
         );
+        $data['DMV_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '1'")->row();
+        $data['Video_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '2'")->row();
+        $data['Permit_test'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '3'")->row();
         $this->load->view('header', $data);
         $this->load->view('frontend/instructor_list');
         $this->load->view('footer');
@@ -350,6 +419,9 @@ class Home extends CI_Controller {
             'offer_price' => $getcourseData->offer_price,
             'instructorID' => $instructorID
         );
+        $data['DMV_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '1'")->row();
+        $data['Video_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '2'")->row();
+        $data['Permit_test'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '3'")->row();
         $this->load->view('header', $data);
         $this->load->view('frontend/instructor_details');
         $this->load->view('footer');
@@ -371,6 +443,9 @@ class Home extends CI_Controller {
             'offer_price' => $getcourseData->offer_price,
             'instructorID' => $instructorID
         );
+        $data['DMV_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '1'")->row();
+        $data['Video_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '2'")->row();
+        $data['Permit_test'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '3'")->row();
         $this->load->view('header', $data);
         $this->load->view('frontend/instructor_slot');
         $this->load->view('footer');
@@ -385,6 +460,9 @@ class Home extends CI_Controller {
             'subpage' => 'Student Information',
             'course_id' => $course_id
         );
+        $data['DMV_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '1'")->row();
+        $data['Video_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '2'")->row();
+        $data['Permit_test'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '3'")->row();
         $this->load->view('header', $data);
         $this->load->view('frontend/student_registration');
         $this->load->view('footer');
@@ -479,6 +557,9 @@ class Home extends CI_Controller {
             'subpage' => 'FAQ',
         );
         $data['faq_list'] = $this->db->query("SELECT * FROM faq WHERE status = '1'")->result();
+        $data['DMV_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '1'")->row();
+        $data['Video_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '2'")->row();
+        $data['Permit_test'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '3'")->row();
         $this->load->view('header', $data);
         $this->load->view('frontend/faq');
         $this->load->view('footer');
@@ -490,6 +571,9 @@ class Home extends CI_Controller {
             'subpage' => 'Terms & Conditions',
         );
         $data['term'] = $this->db->query("SELECT * FROM about_us WHERE id = '3'")->row();
+        $data['DMV_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '1'")->row();
+        $data['Video_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '2'")->row();
+        $data['Permit_test'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '3'")->row();
         $this->load->view('header', $data);
         $this->load->view('frontend/term');
         $this->load->view('footer');
@@ -500,6 +584,9 @@ class Home extends CI_Controller {
             'page' => 'Contact Us',
             'subpage' => 'contact Us',
         );
+        $data['DMV_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '1'")->row();
+        $data['Video_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '2'")->row();
+        $data['Permit_test'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '3'")->row();
         $this->load->view('header', $data);
         $this->load->view('frontend/contact_us');
         $this->load->view('footer');
@@ -583,9 +670,18 @@ class Home extends CI_Controller {
     public function checkusername() {
         $checkUserName = $this->db->query("SELECT * FROM users WHERE username LIKE '%".$this->input->post('username')."%'")->row();
         if(!empty($checkUserName)) {
-            $data = array('result'=> 'error', 'data' => 'Username already exists');
+            $data = array('result'=> 'error', 'data' => 'Username already exists.');
         } else {
-            $data = array('result'=> 'success', 'data' => 'Username is Available');
+            $data = array('result'=> 'success', 'data' => 'Username is Available.');
+        }
+        echo json_encode($data); exit;
+    }
+    public function checkuseremail() {
+        $checkUserEmail = $this->db->query("SELECT * FROM users WHERE email LIKE '%".$this->input->post('username')."%'")->row();
+        if(!empty($checkUserEmail)) {
+            $data = array('result'=> 'error', 'data' => 'Email Address already exists.');
+        } else {
+            $data = array('result'=> 'success', 'data' => 'Email Address is Available.');
         }
         echo json_encode($data); exit;
     }
@@ -618,7 +714,9 @@ class Home extends CI_Controller {
             'class_week' => $getcourseData->class_week,
             'offer_price' => $getcourseData->offer_price
         );
-        //print_r($data); die();
+        $data['DMV_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '1'")->row();
+        $data['Video_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '2'")->row();
+        $data['Permit_test'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '3'")->row();
         $this->load->view('header', $data);
         $this->load->view('frontend/student_login');
         $this->load->view('footer');

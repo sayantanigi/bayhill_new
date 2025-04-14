@@ -134,7 +134,7 @@ const slots = [
 let selectedSlots = [];
 let selectedDates = [];
 let currentClass = 1;
-const totalClasses = <?= $getCourse->course_class; ?>;
+const totalClasses = <?= $course_class; ?>;
 
 $(function() {
     $("#confirm-booking").hide();
@@ -183,7 +183,8 @@ $(function() {
             const date = new Date(year, month, day);
             let dayElement = $('<div></div>').text(day);
 
-            if (date < today.setHours(0, 0, 0, 0)) {
+            //if (date < today.setHours(0, 0, 0, 0)) {
+            if (date < today.setHours(0, 0, 0, 0) || date.getDay() === 0 || date.getDay() === 6) {
                 dayElement.addClass('disabled');
             } else {
                 dayElement.addClass('available');
@@ -211,12 +212,13 @@ $(function() {
     function renderSlots(formattedDate, formattedSDate) {
         const slotsElement = $('#slots');
         slotsElement.empty();
+        const disableSelection = selectedSlots.length >= totalClasses;
         slots.forEach(slot => {
             const slotElement = $('<label></label>').addClass(slot.status);
             const radioButton = $('<input>')
                 .attr('type', 'radio')
                 .attr('name', 'slot')
-                .attr('disabled', slot.status === 'unavailable')
+                .attr('disabled', slot.status === 'unavailable' || disableSelection)
                 .change(() => selectSlot(slotElement, slot.time, formattedDate, formattedSDate));
             const label = $('<span></span>').text(slot.time);
             slotElement.append(radioButton, label);
@@ -225,22 +227,23 @@ $(function() {
     }
 
     function selectSlot(slotElement, time, formattedDate, formattedSDate) {
-        selectedSlots.push(time);
-        selectedDates.push(formattedSDate);
-        $('#slots label').removeClass('selected');
-        slotElement.addClass('selected');
-        $('#selected_times').val(JSON.stringify(selectedSlots));
-        $('#selected_dates').val(JSON.stringify(selectedDates));
-        //$('#selected_dates').val(formattedSDate);
-        updateBookingDetails(formattedDate, formattedSDate);
+        if (selectedSlots.length < totalClasses) {
+            selectedSlots.push(time);
+            selectedDates.push(formattedSDate);
+            $('#slots label').removeClass('selected');
+            slotElement.addClass('selected');
+            $('#selected_times').val(JSON.stringify(selectedSlots));
+            $('#selected_dates').val(JSON.stringify(selectedDates));
+            updateBookingDetails(formattedDate, formattedSDate);
 
-        if (currentClass < totalClasses) {
-            currentClass++;
-            $('#calendar-container').show();
-            $('#slot-container').hide();
-            $('#confirm-booking').hide();
-        } else {
-            $('#confirm-booking').show();
+            if (currentClass < totalClasses) {
+                currentClass++;
+                $('#calendar-container').show();
+                $('#slot-container').hide();
+                $('#confirm-booking').show();
+            } else {
+                $('#confirm-booking').show();
+            }
         }
     }
 

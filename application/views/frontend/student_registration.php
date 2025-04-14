@@ -27,15 +27,7 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                 <form action="<?= base_url()?>registration_process" method="post" id="registrationForm">
                 <?php } ?>
                     <div class="row">
-                        <div class="col-lg-6 col-md-6 mb-3 user_type">
-                            <label class="mb-2">Registration Type<span class="text-danger">*</span></label>
-                            <select class="form-control" name="user_type" id="user_type">
-                                <option value="">Select User Type</option>
-                                <option value="1">Student</option>
-                                <!-- <option value="2">Trainer</option> -->
-                            </select>
-                            <div id="vld_user_type"></div>
-                        </div>
+                        <input type="hidden" name="user_type" id="user_type" value="1" />
                         <div class="col-lg-12">
                             <h2 class="subtitle wow fadeInUp mt-4">Users Information</h2>
                         </div>
@@ -74,66 +66,54 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                             </select>
                             <div id="vld_gender"></div>
                         </div>
-                        <div class="col-lg-4 col-md-6 mb-3 permit">
-                            <label class="mb-2">Permit/DL# <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" placeholder="Permit/DL#" name="permit" id="permit"/>
-                            <div id="vld_permit"></div>
-                        </div>
                         <div class="col-lg-12">
-                            <h2 class="subtitle  wow fadeInUp mt-4">Contact Information</h2>
+                            <h2 class="subtitle wow fadeInUp mt-4" style="margin-bottom: 0px;">Contact Information</h2>
+                            <p style="font-size: 11px;">Required If you are under 18</p>
                         </div>
                         <div class="col-lg-6 col-md-6 mb-3">
-                            <label class="mb-2">Parents First Name <span class="text-danger">*</span></label>
+                            <label class="mb-2">Parents First Name</label>
                             <input type="text" class="form-control" placeholder="Parents First Name" name="pfirst_name" id="pfirst_name"/>
                             <div id="vld_pfirst_name"></div>
                         </div>
                         <div class="col-lg-6 col-md-6 mb-3">
-                            <label class="mb-2">Parents Last Name <span class="text-danger">*</span></label>
+                            <label class="mb-2">Parents Last Name</label>
                             <input type="text" class="form-control" placeholder="Parents Last Name" name="plast_name" id="plast_name"/>
                             <div id="vld_plast_name"></div>
                         </div>
                         <div class="col-lg-6 col-md-6 mb-3">
-                            <label class="mb-2">Parents Email <span class="text-danger">*</span></label>
+                            <label class="mb-2">Parents Email</label>
                             <input type="email" class="form-control" placeholder="Parents Email" name="pemail" id="pemail"/>
                             <div id="vld_pemail"></div>
                         </div>
                         <div class="col-lg-6 col-md-6 mb-3">
-                            <label class="mb-2">Parents Phone Number <span class="text-danger">*</span></label>
+                            <label class="mb-2">Parents Phone Number</label>
                             <input type="text" class="form-control" placeholder="Parents Phone Number" name="pphone" id="pphone"/>
                             <div id="vld_pphone"></div>
                         </div>
-                        <div class="col-lg-6 col-md-6 mb-3">
+                        <div class="col-lg-12">
+                            <h2 class="subtitle wow fadeInUp mt-4">Address Information</h2>
+                        </div>
+                        <div class="col-lg-12 col-md-6 mb-3">
                             <label class="mb-2">Street Address <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" placeholder="Street Address" name="address" id="address"/>
                             <div id="vld_address"></div>
                         </div>
-                        <div class="col-lg-6 col-md-6 mb-3">
-                            <label class="mb-2">Country <span class="text-danger">*</span> </label>
-                            <select class="form-control form-select" id="country" name="country">
-                                <option value="">Select Country</option>
-                                <?php
-                                if($country_list){
-                                foreach ($country_list as $country) { ?>
-                                <option value="<?= $country->id?>"><?= $country->name?></option>
-                                <?php } } ?>
-                            </select>
-                            <div id="vld_country"></div>
-                        </div>
                         <div class="col-lg-4 col-md-6 mb-3">
                             <label class="mb-2">State <span class="text-danger">*</span> </label>
                             <select class="form-control form-select" name="state" id="state">
-                                <option value="">Select State</option>
+                                <?php
+                                if($state_list){
+                                foreach ($state_list as $state) { ?>
+                                <option value="<?= $state->id?>"><?= $state->name?></option>
+                                <?php } } ?>
                             </select>
                             <div id="vld_state"></div>
                         </div>
                         <div class="col-lg-4 col-md-6 mb-3">
                             <label class="mb-2">City <span class="text-danger">*</span> </label>
-                            <select class="form-control form-select" name="city" id="city">
-                                <option value="">Select City</option>
-                            </select>
+                            <input type="text" class="form-control form-select" placeholder="Enter Your City" name="city" id="city" />
                             <div id="vld_city"></div>
                         </div>
-
                         <div class="col-lg-4 col-md-6 mb-3">
                             <label class="mb-2">Zip Code<span class="text-danger">*</span></label>
                             <input type="text" class="form-control" placeholder="Enter Zip Code" name="zipcode" id="zipcode"/>
@@ -161,6 +141,7 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                             <div class="form-check form-switch form-check-success">
                                 <input class="form-check-input" type="checkbox" role="switch" name="disclaimer" id="disclaimer">
                                 <label class="form-check-label">You have read and agree to the <a href="#" class="text-primary">Terms of Service</a> </label>
+                                <div id="vld_disclaimer"></div>
                             </div>
                         </div>
                         <div class="col-lg-12 mb-3">
@@ -206,34 +187,6 @@ $(document).ready(function() {
         event.preventDefault();
         event.stopPropagation();
     });
-
-    $('#country').on('change', function() {
-        var country_id = this.value;
-        $.ajax({
-            url: "<?php echo base_url()?>home/states_by_country",
-            type: "POST",
-            data: {country_id: country_id},
-            cache: false,
-            success: function(result){
-                $("#state").html(result);
-                $('#city').html('<option value="">Select State First</option>');
-            }
-        });
-    });
-
-    $('#state').on('change', function() {
-        var state_id = this.value;
-        $.ajax({
-            url: "<?php echo base_url()?>home/cities_by_state",
-            type: "POST",
-            data: {state_id: state_id},
-            cache: false,
-            success: function(result){
-                $("#city").html(result);
-            }
-        });
-    });
-
     $('#username').on('keyup', function(e) {
         var username = $('#username').val();
         if(username === ''){
@@ -255,9 +208,41 @@ $(document).ready(function() {
                         $('#vld_username').fadeIn().html(returndata.data).css({'color':'green','margin-bottom':'5px'});
                         $("#enrollbtn").prop("disabled", false);
                     } else {
-                        $('#err_username').fadeIn().html(returndata.data).css({'color':'red','margin-bottom':'5px'});
+                        $('#vld_username').fadeIn().html(returndata.data).css({'color':'red','margin-bottom':'5px'});
                         setTimeout(function(){$("#vld_username").html("");},3000);
                         $("#username").focus();
+                        $("#enrollbtn").prop("disabled", true);
+                        return false;
+                    }
+                }
+            });
+        }
+    });
+
+    $('#email').on('keyup', function(e) {
+        var email = $('#email').val();
+        if(email === ''){
+            $('#vld_email').text('This field is required').css('color', 'red').show();
+            $('#email').focus().css('border', '1px solid red');
+            setTimeout(function () { $("#vld_email").hide(); }, 5000);
+            e.preventDefault();
+        } else {
+            $("#vld_email").hide();
+            $('#email').focus().css('border', '1px solid green');
+            $.ajax({
+                type: "POST",
+                url: "<?= base_url('Home/checkuseremail')?>",
+                data: {email: email},
+                dataType:'json',
+                beforeSend : function() {},
+                success:function(returndata) {
+                    if(returndata.result === 'success') {
+                        $('#vld_email').fadeIn().html(returndata.data).css({'color':'green','margin-bottom':'5px'});
+                        $("#enrollbtn").prop("disabled", false);
+                    } else {
+                        $('#vld_email').fadeIn().html(returndata.data).css({'color':'red','margin-bottom':'5px'});
+                        setTimeout(function(){$("#vld_email").html("");},3000);
+                        $("#email").focus();
                         $("#enrollbtn").prop("disabled", true);
                         return false;
                     }
@@ -268,16 +253,8 @@ $(document).ready(function() {
 });
 
 $("#registrationForm").submit(function (e) {
+    var disclaimer = $('#disclaimer').is(':checked');
     var emailRegex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    if ($('#user_type').val() === '') {
-        $('#vld_user_type').text('This field is required').css('color', 'red').show();
-        $('#user_type').focus().css('border', '1px solid red');
-        setTimeout(function () { $("#vld_user_type").hide(); }, 2000);
-        e.preventDefault();
-    } else {
-        $('#user_type').focus().css('border', '1px solid green');
-    }
-
     if ($('#first_name').val() === '') {
         $('#vld_first_name').text('This field is required').css('color', 'red').show();
         $('#first_name').focus().css('border', '1px solid red');
@@ -330,17 +307,6 @@ $("#registrationForm").submit(function (e) {
         $('#dob').focus().css('border', '1px solid green');
     }
 
-    if ($('#user_type').val() === '2') {
-        if ($('#permit').val() === '') {
-            $('#vld_permit').text('This field is required').css('color', 'red').show();
-            $('#permit').focus().css('border', '1px solid red');
-            setTimeout(function () { $("#vld_permit").hide(); }, 2000);
-            e.preventDefault();
-        } else {
-            $('#permit').focus().css('border', '1px solid green');
-        }
-    }
-
     if ($('#gender').val() === '') {
         $('#vld_gender').text('This field is required').css('color', 'red').show();
         $('#gender').focus().css('border', '1px solid red');
@@ -350,42 +316,6 @@ $("#registrationForm").submit(function (e) {
         $('#gender').focus().css('border', '1px solid green');
     }
 
-    if ($('#pfirst_name').val() === '') {
-        $('#vld_pfirst_name').text('This field is required').css('color', 'red').show();
-        $('#pfirst_name').focus().css('border', '1px solid red');
-        setTimeout(function () { $("#vld_pfirst_name").hide(); }, 2000);
-        e.preventDefault();
-    } else {
-        $('#pfirst_name').focus().css('border', '1px solid green');
-    }
-
-    if ($('#plast_name').val() === '') {
-        $('#vld_plast_name').text('This field is required').css('color', 'red').show();
-        $('#plast_name').focus().css('border', '1px solid red');
-        setTimeout(function () { $("#vld_plast_name").hide(); }, 2000);
-        e.preventDefault();
-    } else {
-        $('#plast_name').focus().css('border', '1px solid green');
-    }
-
-    if ($('#pemail').val() === '') {
-        $('#vld_pemail').text('This field is required').css('color', 'red').show();
-        $('#pemail').focus().css('border', '1px solid red');
-        setTimeout(function () { $("#vld_pemail").hide(); }, 2000);
-        e.preventDefault();
-    } else {
-        $('#pemail').focus().css('border', '1px solid green');
-    }
-
-    if ($('#pphone').val() === '') {
-        $('#vld_pphone').text('This field is required').css('color', 'red').show();
-        $('#pphone').focus().css('border', '1px solid red');
-        setTimeout(function () { $("#vld_pphone").hide(); }, 2000);
-        e.preventDefault();
-    } else {
-        $('#pphone').focus().css('border', '1px solid green');
-    }
-
     if ($('#address').val() === '') {
         $('#vld_address').text('This field is required').css('color', 'red').show();
         $('#address').focus().css('border', '1px solid red');
@@ -393,15 +323,6 @@ $("#registrationForm").submit(function (e) {
         e.preventDefault();
     } else {
         $('#address').focus().css('border', '1px solid green');
-    }
-
-    if ($('#country').val() === '') {
-        $('#vld_country').text('This field is required').css('color', 'red').show();
-        $('#country').focus().css('border', '1px solid red');
-        setTimeout(function () { $("#vld_country").hide(); }, 2000);
-        e.preventDefault();
-    } else {
-        $('#country').focus().css('border', '1px solid green');
     }
 
     if ($('#state').val() === '') {
@@ -474,13 +395,10 @@ $("#registrationForm").submit(function (e) {
         setTimeout(function () { $("#vld_conpassword").hide(); }, 2000);
         e.preventDefault();
     }
-});
-
-$('#user_type').change(function() {
-    if($('#user_type').val() != '2'){
-        $('.permit').hide();
-    } else {
-        $('.permit').show();
+    if (!disclaimer) {
+        $('#vld_disclaimer').text('Please agree to the terms and conditions.').css('color', 'red').show();
+        setTimeout(function () { $("#vld_disclaimer").hide(); }, 2000);
+        e.preventDefault();
     }
-})
+});
 </script>
