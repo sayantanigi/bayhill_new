@@ -677,7 +677,7 @@ class Home extends CI_Controller {
         echo json_encode($data); exit;
     }
     public function checkuseremail() {
-        $checkUserEmail = $this->db->query("SELECT * FROM users WHERE email LIKE '%".$this->input->post('username')."%'")->row();
+        $checkUserEmail = $this->db->query("SELECT * FROM users WHERE email LIKE '%".$this->input->post('email')."%'")->row();
         if(!empty($checkUserEmail)) {
             $data = array('result'=> 'error', 'data' => 'Email Address already exists.');
         } else {

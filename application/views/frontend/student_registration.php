@@ -111,7 +111,7 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                         </div>
                         <div class="col-lg-4 col-md-6 mb-3">
                             <label class="mb-2">City <span class="text-danger">*</span> </label>
-                            <input type="text" class="form-control form-select" placeholder="Enter Your City" name="city" id="city" />
+                            <input type="text" class="form-control" placeholder="Enter Your City" name="city" id="city" />
                             <div id="vld_city"></div>
                         </div>
                         <div class="col-lg-4 col-md-6 mb-3">
