@@ -101,6 +101,7 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                                 <h2 class="h4 mb-15 fw-semibold bookingDetails">Booking Details</h2>
                                 <div id="booking-details" class="mt-10 mb-10"></div>
                             </div>
+                            <div id="emptySlotmsg"></div>
                             <div class="text-center">
                                 <button class="enrollbtn" id="confirm-booking">Confirm Book Slot</button>
                                 <input type="hidden" id="course_id" name="course_id" value="<?= $course_id; ?>">
@@ -230,11 +231,12 @@ $(function() {
         slotsElement.empty();
         const disableSelection = selectedSlots.length >= totalClasses;
         slots.forEach(slot => {
-            const slotElement = $('<label></label>').addClass(slot.status);
+            const isSelected = selectedSlots.includes(slot.time) && selectedDates.includes(formattedSDate); // Check if slot already selected
+            const slotElement = $('<label></label>').addClass(slot.status).toggleClass('already-selected', isSelected); // Optional: Add a class for styling already-selected slots
             const radioButton = $('<input>')
                 .attr('type', 'radio')
                 .attr('name', 'slot')
-                .attr('disabled', slot.status === 'unavailable' || disableSelection)
+                .attr('disabled', slot.status === 'unavailable' || disableSelection || isSelected)
                 .change(() => selectSlot(slotElement, slot.time, formattedDate, formattedSDate));
             const label = $('<span></span>').text(slot.time);
             slotElement.append(radioButton, label);
@@ -243,6 +245,13 @@ $(function() {
     }
 
     function selectSlot(slotElement, time, formattedDate, formattedSDate) {
+        const isDuplicate = selectedSlots.some((selectedTime, index) =>
+            selectedTime === time && selectedDates[index] === formattedSDate
+        );
+        if (isDuplicate) {
+            alert('This slot and date combination is already selected. Please choose a different one.');
+            return; // Prevent duplicate selection
+        }
         if (selectedSlots.length < totalClasses) {
             selectedSlots.push(time);
             selectedDates.push(formattedSDate);
@@ -251,7 +260,6 @@ $(function() {
             $('#selected_times').val(JSON.stringify(selectedSlots));
             $('#selected_dates').val(JSON.stringify(selectedDates));
             updateBookingDetails(formattedDate, formattedSDate);
-
             if (currentClass < totalClasses) {
                 currentClass++;
                 $('#calendar-container').show();
@@ -264,15 +272,40 @@ $(function() {
     }
 
     function updateBookingDetails(formattedDate, formattedSDate) {
+        var user_id = $("#user_id").val();
+        var course_id = $("#course_id").val();
         $("#datetimeboxInfo").hide();
-        $(".bookingDetails").show();
+        if (selectedSlots.length > 0) {
+            $(".bookingDetails").show();
+            $("#emptySlotmsg").hide()
+        }
         const bookingDetails = $('#booking-details');
         bookingDetails.empty();
         selectedSlots.forEach((slot, index) => {
             const date = new Date(selectedDates[index]);
             const formattedDate = date.toLocaleDateString('default', { day: '2-digit', month: 'short', year: 'numeric' });
-            const detail = `<div class="d-flex w-100 bookingBox align-items-center"><div class="iconBook"><i class="fas fa-calendar-check"></i></div><div class="boxInfo"><h3 class="boxdate1">${formattedDate}</h3><h5 class="boxtime">${slot}</h5><h4>Date & Time</h4></div></div>`;
+            const detail = `<div class="d-flex w-100 bookingBox align-items-center"><div class="iconBook"><i class="fas fa-calendar-check"></i></div><div class="boxInfo w-100"><h3 class="boxdate1">${formattedDate}</h3><h5 class="boxtime">${slot}</h5><h4>Date & Time</h4></div><div class="remove-slot iconBook" style="background: #df001f;"><i class="fas fa-trash remove-slot-btn" data-index="${index}"></i></div></div>`;
             bookingDetails.append(detail);
+        });
+
+        bookingDetails.off('click', '.remove-slot-btn');
+        bookingDetails.on('click', '.remove-slot-btn', function () {
+            const indexToRemove = parseInt($(this).attr('data-index'));
+            if (indexToRemove > -1) {
+                selectedSlots.splice(indexToRemove, 1);
+                selectedDates.splice(indexToRemove, 1);
+                $('#calendar-container').show();
+                $('#slot-container').hide();
+            }
+
+            if (selectedSlots.length === 0) {
+                $('#calendar-container').show(); // Show calendar for new selection
+                $('#slot-container').hide();
+                $(".bookingDetails").hide();
+                $('#confirm-booking').hide(); // Hide confirmation button until new slots are selected
+                $("#emptySlotmsg").text('All slots have been removed. Please select a new date and time.').css('color', 'red').show();
+            }
+            updateBookingDetails();
         });
     }
 

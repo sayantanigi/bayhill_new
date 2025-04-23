@@ -71,23 +71,23 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                             <p style="font-size: 11px;">Required If you are under 18</p>
                         </div>
                         <div class="col-lg-6 col-md-6 mb-3">
-                            <label class="mb-2">Parents First Name</label>
-                            <input type="text" class="form-control" placeholder="Parents First Name" name="pfirst_name" id="pfirst_name"/>
+                            <label class="mb-2 pfirst_namelbl">Parents First Name</label>
+                            <input type="text" class="form-control" placeholder="Parents First Name" name="pfirst_name" id="pfirst_name" disabled/>
                             <div id="vld_pfirst_name"></div>
                         </div>
                         <div class="col-lg-6 col-md-6 mb-3">
-                            <label class="mb-2">Parents Last Name</label>
-                            <input type="text" class="form-control" placeholder="Parents Last Name" name="plast_name" id="plast_name"/>
+                            <label class="mb-2 plast_namelbl">Parents Last Name</label>
+                            <input type="text" class="form-control" placeholder="Parents Last Name" name="plast_name" id="plast_name" disabled/>
                             <div id="vld_plast_name"></div>
                         </div>
                         <div class="col-lg-6 col-md-6 mb-3">
-                            <label class="mb-2">Parents Email</label>
-                            <input type="email" class="form-control" placeholder="Parents Email" name="pemail" id="pemail"/>
+                            <label class="mb-2 pemaillbl">Parents Email</label>
+                            <input type="email" class="form-control" placeholder="Parents Email" name="pemail" id="pemail" disabled/>
                             <div id="vld_pemail"></div>
                         </div>
                         <div class="col-lg-6 col-md-6 mb-3">
-                            <label class="mb-2">Parents Phone Number</label>
-                            <input type="text" class="form-control" placeholder="Parents Phone Number" name="pphone" id="pphone"/>
+                            <label class="mb-2 pphonelbl">Parents Phone Number</label>
+                            <input type="text" class="form-control" placeholder="Parents Phone Number" name="pphone" id="pphone" disabled/>
                             <div id="vld_pphone"></div>
                         </div>
                         <div class="col-lg-12">
@@ -183,10 +183,12 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
 <script>
 $(document).ready(function() {
     $('.permit').hide();
+
     $('.custom-cursor__cursor').on('click', function(event) {
         event.preventDefault();
         event.stopPropagation();
     });
+
     $('#username').on('keyup', function(e) {
         var username = $('#username').val();
         if(username === ''){
@@ -248,6 +250,54 @@ $(document).ready(function() {
                     }
                 }
             });
+        }
+    });
+
+    $('#dob').on('change', function() {
+        var dob = $('#dob').val();
+        if (dob) {
+            var dobDate = new Date(dob);
+            var today = new Date();
+            var age = today.getFullYear() - dobDate.getFullYear();
+            var monthDifference = today.getMonth() - dobDate.getMonth();
+            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < dobDate.getDate())) {
+                age--;
+            }
+            if (age <= 18) {
+                $("#pfirst_name").prop("disabled", false);
+                $("#pfirst_name").prop("required", true);
+                $(".pfirst_namelbl").html('Parents First Name <span class="text-danger">*</span>');
+
+                $("#plast_name").prop("disabled", false);
+                $("#plast_name").prop("required", true);
+                $(".plast_namelbl").html('Parents Last Name <span class="text-danger">*</span>');
+
+                $("#pemail").prop("disabled", false);
+                $("#pemail").prop("required", true);
+                $(".pemaillbl").html('Parents Email <span class="text-danger">*</span>');
+
+                $("#pphone").prop("disabled", false);
+                $("#pphone").prop("required", true);
+                $(".pphonelbl").html('Parents Phone Number <span class="text-danger">*</span>');
+            } else {
+                $("#pfirst_name").prop("disabled", true);
+                $("#pfirst_name").prop("required", false);
+                $(".pfirst_namelbl").html('Parents First Name');
+
+                $("#plast_name").prop("disabled", true);
+                $("#plast_name").prop("required", false);
+                $(".plast_namelbl").html('Parents Last Name');
+
+                $("#pemail").prop("disabled", true);
+                $("#pemail").prop("required", false);
+                $(".pemaillbl").html('Parents Email');
+
+                $("#pphone").prop("disabled", true);
+                $("#pphone").prop("required", false);
+                $(".pphonelbl").html('Parents Phone Number');
+            }
+        } else {
+            $('#vld_dob').html('Please select a valid date of birth.');
         }
     });
 });
