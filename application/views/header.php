@@ -10,7 +10,6 @@
     <?php if(!empty(@$settings->favicon) && file_exists('uploads/logos/'.@$settings->favicon)) { ?>
     <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('uploads/logos/'.@$settings->favicon); ?>">
     <?php } ?>
-
     <link rel="stylesheet" href="<?= base_url()?>assets/vendors/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?= base_url()?>assets/vendors/bootstrap-select/bootstrap-select.min.css">
     <link rel="stylesheet" href="<?= base_url()?>assets/vendors/animate/animate.min.css">
@@ -79,7 +78,18 @@
                             <li><a href="<?= base_url('contact') ?>" class="<?= (current_url() == base_url('contact')) ? 'active' : '' ?>">Contact</a></li>
                             <li class="btn-login">
                                 <?php if(!empty($_SESSION['bayhill']['user_id'])) { ?>
-                                <a href="<?= base_url('logout') ?>" class="active" data-bs-toggle="tooltip" data-bs-title="Returning Students">Logout</a>
+                                    <li class="dropdown">
+                                        <a href="#">
+                                            <?php
+                                            $getuser = $this->db->query("SELECT * FROM users WHERE id = '".$_SESSION['bayhill']['user_id']."'")->row();
+                                            ?>
+                                            <span class="dashroundimg">Hi <?= $getuser->first_name.' '.$getuser->last_name?>,</span> <i class="fas fa-angle-down ms-2"></i>
+                                        </a>
+                                        <ul class="sub-menu">
+                                            <li><a href="<?= base_url('dashboard') ?>">Dashboard </a></li>
+                                            <li><a href="<?= base_url('logout') ?>"><i class="fas fa-power-off me-2"></i> Logout </a></li>
+                                        </ul>
+                                    </li>
                                 <?php } else { ?>
                                 <a href="<?= base_url('login') ?>" class="active" data-bs-toggle="tooltip" data-bs-title="Returning Students">Login</a>
                                 <?php } ?>

@@ -28,6 +28,7 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                                     <li><span style="background-color: #f5f6fa;"></span> Expired slots</li>
                                 </ul>
                                 <p style="font-size: 12px; text-align: justify; color: red; margin-top: 12px; margin-bottom: 0; font-style: italic;">Note: Please select your date. Once select it cannot be undone.</p>
+                                <p style="font-size: 12px; text-align: justify; color: red; margin-top: 0; margin-bottom: 0; font-style: italic;">*You can select one or multiple dates as per your convenience.</p>
                             </div>
                             <div id="slot-container" style="display: none;">
                                 <div class="text-start"><a href="#" class="text-warning" id="back-to-calendar"><i class="fas fa-chevron-left me-1"></i> Back to Calendar</a></div>
@@ -38,6 +39,7 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                                     <li><span style="background-color: #f0d0d0;"></span> No available slots</li>
                                 </ul>
                                 <p style="font-size: 12px; text-align: justify; color: red; margin-top: 12px; margin-bottom: 0; font-style: italic;">Note: Please select your slot. Once select it cannot be undone.</p>
+                                <p style="font-size: 12px; text-align: justify; color: red; margin-top: 0; margin-bottom: 0; font-style: italic;">*You can select one or multiple dates as per your convenience.</p>
                             </div>
                         </div>
                     </div>
