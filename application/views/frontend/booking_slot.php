@@ -97,6 +97,17 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-lg-6" id="remainingClassBox">
+                                        <div class="d-flex w-100 bookingBox align-items-center">
+                                            <div class="iconBook">
+                                                <i class="fas fa-id-card-alt"></i>
+                                            </div>
+                                            <div class="boxInfo">
+                                                <h3 id="course_class">15 Dec, 2024</h3>
+                                                <h4>Remaining booking</h4>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div id="booking_details" class="mt-30 mb-50">
@@ -104,6 +115,9 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                                 <div id="booking-details" class="mt-10 mb-10"></div>
                             </div>
                             <div id="emptySlotmsg"></div>
+                            <div class="col-lg-12 mb-50" id="additionalInfo">
+                                <textarea class="form-control" id="additional_info" name="additional_info" rows="3" placeholder="Additional Information"></textarea>
+                            </div>
                             <div class="text-center">
                                 <button class="enrollbtn" id="confirm-booking">Confirm Book Slot</button>
                                 <input type="hidden" id="course_id" name="course_id" value="<?= $course_id; ?>">
@@ -157,7 +171,9 @@ const totalClasses = <?= $course_class ?>;
 
 $(function() {
     $("#confirm-booking").hide();
+    $("#additionalInfo").hide();
     $(".bookingDetails").hide();
+    $("#remainingClassBox").hide();
     const calendarElement = $('#calendar');
     const today = new Date();
     let selectedDate = null;
@@ -202,7 +218,6 @@ $(function() {
             const date = new Date(year, month, day);
             let dayElement = $('<div></div>').text(day);
 
-            //if (date < today.setHours(0, 0, 0, 0)) {
             if (date < today.setHours(0, 0, 0, 0) || date.getDay() === 0 || date.getDay() === 6) {
                 dayElement.addClass('disabled');
             } else {
@@ -261,22 +276,34 @@ $(function() {
             slotElement.addClass('selected');
             $('#selected_times').val(JSON.stringify(selectedSlots));
             $('#selected_dates').val(JSON.stringify(selectedDates));
-            updateBookingDetails(formattedDate, formattedSDate);
+            remainingClasses = totalClasses - selectedSlots.length;
+            updateBookingDetails();
             if (currentClass < totalClasses) {
                 currentClass++;
                 $('#calendar-container').show();
                 $('#slot-container').hide();
                 $('#confirm-booking').show();
+                $('#additionalInfo').show();
+                $("#remainingClassBox").show();
+                if(remainingClasses == 0) {
+                    $('#course_class').text('All Classes Booked');
+                } else {
+                    if(remainingClasses > 1) {
+                        $('#course_class').text(remainingClasses + ' Classes');
+                    } else {
+                        $('#course_class').text(remainingClasses + ' Class');
+                    }
+                }
             } else {
                 $('#confirm-booking').show();
+                $('#additionalInfo').show();
             }
         }
     }
 
-    function updateBookingDetails(formattedDate, formattedSDate) {
-        var user_id = $("#user_id").val();
-        var course_id = $("#course_id").val();
+    function updateBookingDetails() {
         $("#datetimeboxInfo").hide();
+        $("#remainingClassBox").show();
         if (selectedSlots.length > 0) {
             $(".bookingDetails").show();
             $("#emptySlotmsg").hide()
@@ -296,18 +323,28 @@ $(function() {
             if (indexToRemove > -1) {
                 selectedSlots.splice(indexToRemove, 1);
                 selectedDates.splice(indexToRemove, 1);
-                $('#calendar-container').show();
-                $('#slot-container').hide();
+                $('#selected_times').val(JSON.stringify(selectedSlots));
+                $('#selected_dates').val(JSON.stringify(selectedDates));
+                remainingClasses = totalClasses - selectedSlots.length;
+                if(remainingClasses > 0) {
+                    $('#course_class').text(remainingClasses > 1 ? `${remainingClasses} Classes` : `${remainingClasses} Class`);
+                }
+                updateBookingDetails();
+                //renderSlots(new Date().toLocaleDateString('default', { day: '2-digit', month: 'short', year: 'numeric' }), new Date().toISOString().split('T')[0]);
+                renderCalendar(today.getMonth(), today.getFullYear());
             }
 
             if (selectedSlots.length === 0) {
-                $('#calendar-container').show(); // Show calendar for new selection
+                $('#calendar-container').show();
                 $('#slot-container').hide();
                 $(".bookingDetails").hide();
-                $('#confirm-booking').hide(); // Hide confirmation button until new slots are selected
+                $('#confirm-booking').hide();
+                $('#additionalInfo').hide();
+                $("#remainingClassBox").hide();
+                $("#datetimeboxInfo").show();
                 $("#emptySlotmsg").text('All slots have been removed. Please select a new date and time.').css('color', 'red').show();
             }
-            updateBookingDetails();
+            //updateBookingDetails();
         });
     }
 
@@ -316,7 +353,6 @@ $(function() {
         $('#calendar-container').show();
     });
 
-    // Set the initial date on load
     const formattedDate = today.toLocaleDateString('default', { day: '2-digit', month: 'short', year: 'numeric' });
     const formattedSDate = today.toISOString().split('T')[0];
     $('#selected_date').val(formattedSDate);

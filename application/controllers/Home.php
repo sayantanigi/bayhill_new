@@ -238,10 +238,12 @@ class Home extends CI_Controller {
             $course_id = $this->input->post('course_id', true);
             $user_id = $this->input->post('user_id', true);
             $trainer_id = $this->input->post('trainer_id', true);
+            $additional_info = $this->input->post('additional_info', true);
             $bookingData = array(
                 'course_id' => $course_id,
                 'user_id' => $user_id,
                 'trainer_id' => $trainer_id,
+                'additional_info' => $additional_info,
             );
             $this->db->insert('booking', $bookingData);
 
