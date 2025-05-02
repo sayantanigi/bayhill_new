@@ -37,7 +37,7 @@
                                 echo $cleanedContent = str_replace(['<ul>', '</ul>'], '', $decodedContent);
                                 ?>
                             </ul>
-                            <div class="text-center mt-3"><a href="<?= base_url('course/course_details?pincode='.$pincode.'&course_type='.base64_encode($course_type).'&cttle='.base64_encode($course->course_name))?>" class="text-warning fw-bold">Read More <i class="fas fa-arrow-right"></i></a></div>
+                            <div class="text-center mt-3"><a href="<?= base_url('course/course_details?pincode='.$pincode.'&course_type='.base64_encode($course_type).'&course_code='.base64_encode($course->course_code))?>" class="text-warning fw-bold">Read More <i class="fas fa-arrow-right"></i></a></div>
                         </div>
                         <?php if(!empty($_SESSION['bayhill']['user_id'])) {
                             $getBookingData = $this->db->query("SELECT * FROM booking WHERE user_id = '".@$_SESSION['bayhill']['user_id']."' AND course_id = '".@$course->id."'")->result();
@@ -47,12 +47,12 @@
                             </div>
                             <?php } else { ?>
                             <div class="package-card__body__btn text-center">
-                                <a href="<?= base_url() ?>booking_slot?pincode=<?= $pincode ?>&course_type=<?= base64_encode($course_type)?>&ctitle=<?= base64_encode($course->course_name)?>&uid=<?= base64_encode($_SESSION['bayhill']['user_id'])?>" class="drivschol-btn w-100">Select Package</a>
+                                <a href="<?= base_url() ?>booking_slot?pincode=<?= $pincode ?>&course_type=<?= base64_encode($course_type)?>&course_code=<?= base64_encode($course->course_code)?>&uid=<?= base64_encode($_SESSION['bayhill']['user_id'])?>" class="drivschol-btn w-100">Select Package</a>
                             </div>
                             <?php } ?>
                         <?php } else { ?>
                         <div class="package-card__body__btn text-center">
-                            <a href="<?= base_url() ?>registration?pincode=<?= $pincode ?>&course_type=<?= base64_encode($course_type)?>&ctitle=<?= base64_encode($course->course_name)?>" class="drivschol-btn w-100">Select Package</a>
+                            <a href="<?= base_url() ?>registration?pincode=<?= $pincode ?>&course_type=<?= base64_encode($course_type)?>&course_code=<?= base64_encode($course->course_code)?>" class="drivschol-btn w-100">Select Package</a>
                         </div>
                         <?php } ?>
                     </div>

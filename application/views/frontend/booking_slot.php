@@ -7,15 +7,15 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
         <div class="d-lg-flex gap-4 justify-content-between">
             <div><h3 class="maintitle mb-4  wow fadeInUp">Plan your reservation based on<br/> your preferences</h3></div>
             <div class="mb-4">
-                <a href="<?= base_url() ?>booking_slot?ctitle=<?= base64_encode($getCourse->course_name)?>&uid=<?= base64_encode($user_id)?>" class="enrollbtn btn-warning">Book By Availability</a>
-                <a href="<?= base_url() ?>instructor_list?ctitle=<?= base64_encode($getCourse->course_name)?>&uid=<?= base64_encode($user_id)?>" class="enrollbtn">Book by Instructor</a>
+                <a href="<?= base_url() ?>booking_slot?course_code=<?= base64_encode($getCourse->course_code)?>&uid=<?= base64_encode($user_id)?>" class="enrollbtn btn-warning">Book By Availability</a>
+                <a href="<?= base_url() ?>instructor_list?course_code=<?= base64_encode($getCourse->course_code)?>&uid=<?= base64_encode($user_id)?>" class="enrollbtn">Book by Instructor</a>
             </div>
         </div>
         <div class="boxDateSchdule">
             <?php if(empty($booking_id)) { ?>
-            <form action="<?php echo base_url() ?>create-booking?ctitle=<?= base64_encode($getCourse->course_name) ?>&uid=<?= base64_encode($user_id) ?>" method="POST">
+            <form action="<?php echo base_url() ?>create-booking?course_code=<?= base64_encode($getCourse->course_code) ?>&uid=<?= base64_encode($user_id) ?>" method="POST">
             <?php } else { ?>
-            <form action="<?php echo base_url() ?>confirm-booking?ctitle=<?= base64_encode($getCourse->course_name) ?>&uid=<?= base64_encode($user_id) ?>&bookingid=<?= base64_encode($booking_id) ?>" method="POST">
+            <form action="<?php echo base_url() ?>confirm-booking?course_code=<?= base64_encode($getCourse->course_code) ?>&uid=<?= base64_encode($user_id) ?>&bookingid=<?= base64_encode($booking_id) ?>" method="POST">
             <?php } ?>
                 <div class="row">
                     <div class="col-lg-6">
@@ -276,7 +276,7 @@ $(function() {
             slotElement.addClass('selected');
             $('#selected_times').val(JSON.stringify(selectedSlots));
             $('#selected_dates').val(JSON.stringify(selectedDates));
-            remainingClasses = totalClasses - selectedSlots.length;
+            let remainingClasses = totalClasses - selectedSlots.length;
             updateBookingDetails();
             if (currentClass < totalClasses) {
                 currentClass++;
@@ -285,14 +285,12 @@ $(function() {
                 $('#confirm-booking').show();
                 $('#additionalInfo').show();
                 $("#remainingClassBox").show();
-                if(remainingClasses == 0) {
-                    $('#course_class').text('All Classes Booked');
+                if (remainingClasses > 1) {
+                    $('#course_class').text(remainingClasses + ' Classes');
+                } else if (remainingClasses === 1) {
+                    $('#course_class').text(remainingClasses + ' Class');
                 } else {
-                    if(remainingClasses > 1) {
-                        $('#course_class').text(remainingClasses + ' Classes');
-                    } else {
-                        $('#course_class').text(remainingClasses + ' Class');
-                    }
+                    $('#course_class').text('All Classes Booked');
                 }
             } else {
                 $('#confirm-booking').show();
@@ -328,6 +326,8 @@ $(function() {
                 remainingClasses = totalClasses - selectedSlots.length;
                 if(remainingClasses > 0) {
                     $('#course_class').text(remainingClasses > 1 ? `${remainingClasses} Classes` : `${remainingClasses} Class`);
+                } else {
+                    $('#course_class').text('All Classes Booked');
                 }
                 updateBookingDetails();
                 //renderSlots(new Date().toLocaleDateString('default', { day: '2-digit', month: 'short', year: 'numeric' }), new Date().toISOString().split('T')[0]);

@@ -16,7 +16,7 @@ $site_setting = $this->db->query("select * from  settings")->row();
         </div> -->
         <h2 class="subtitle  wow fadeInUp">Payment Details</h2>
         <h3 class="maintitle mb-5  wow fadeInUp">Enter your payment information</h3>
-        <form action="<?php echo base_url() ?>create-payment?ctitle=<?= base64_encode($getCourse->course_name)?>&uid=<?= base64_encode($user_id)?>" method="POST" id="createpaymentForm">
+        <form action="<?php echo base_url() ?>create-payment?course_code=<?= base64_encode($getCourse->course_code)?>&uid=<?= base64_encode($user_id)?>" method="POST" id="createpaymentForm">
             <div class="row">
                 <div class="col-lg-6 mb-4">
                     <div class="row justify-content-center">
@@ -25,9 +25,9 @@ $site_setting = $this->db->query("select * from  settings")->row();
                                 <div class="courseBlockcontent w-100">
                                     <img src="assets/images/serviceicon/serv-01.png" class="courblockicon">
                                     <h2><a href="#"><?= $getCourse->course_name; ?></a></h2>
-                                    <p>Course Week: <span><?= $getCourse->course_week; ?></span></p>
-                                    <p>Classes per Week: <span><?= $getCourse->class_week; ?></span></p>
-                                    <p>Price: <span>$ <?= $getCourse->offer_price; ?></span></p>
+                                    <p>Course Duration: <span><?= $getCourse->course_duration; ?></span></p>
+                                    <p>Course Classes: <span><?= $getCourse->course_class; ?></span></p>
+                                    <p>Course Price: <span>$ <?= $getCourse->offer_price; ?></span></p>
                                 </div>
                             </div>
                             <table class="table paytable">
@@ -54,17 +54,17 @@ $site_setting = $this->db->query("select * from  settings")->row();
                         <div class="row">
                             <div class="col-lg-12 mb-4">
                                 <label class="mb-2">Card Number</label>
-                                <input type="text" class="form-control" placeholder="Card Number" name="card_number" id="card_number">
+                                <input type="text" class="form-control" placeholder="Card Number" name="card_number" id="card_number" maxlength="16">
                                 <div id="vld_card_number"></div>
                             </div>
                             <div class="col-lg-6 col-md-6 mb-4">
                                 <label class="mb-2">CVV</label>
-                                <input type="text" class="form-control" placeholder="Enter CVV" name="cvv" id="cvv">
+                                <input type="text" class="form-control" placeholder="Enter CVV" name="cvv" id="cvv" maxlength="4">
                                 <div id="vld_cvv"></div>
                             </div>
                             <div class="col-lg-6 col-md-6 mb-4">
                                 <label class="mb-2">Expiry Date</label>
-                                <input type="text" class="form-control" placeholder="MM/YYYY" name="expiry_date" id="expiry_date">
+                                <input type="text" class="form-control" placeholder="MM/YYYY" name="expiry_date" id="expiry_date" maxlength="7">
                                 <div id="vld_expiry_date"></div>
                             </div>
                             <div class="col-lg-12 mb-4">
@@ -119,8 +119,8 @@ $(document).ready(function() {
         }
 
         // Validate card number
-        if (cardNumber === '' || !luhnCheck(cardNumber)) {
-            $('#vld_card_number').text('Please enter a valid card number').css('color', 'red').show();
+        if (cardNumber === ''  || cardNumber.length !== 16 || !luhnCheck(cardNumber)) {
+            $('#vld_card_number').text('Please enter a valid 16-digit card number').css('color', 'red').show();
             $('#card_number').focus().css('border', '1px solid red');
             setTimeout(function () { $("#vld_card_number").hide(); }, 2000);
             isValid = false;
@@ -168,6 +168,14 @@ $(document).ready(function() {
         } else {
             this.submit();
         }
+    });
+
+    $('#expiry_date').on('input', function () {
+        let value = $(this).val().replace(/[^0-9]/g, ''); // Remove non-numeric characters
+        if (value.length >= 2) {
+            value = value.slice(0, 2) + '/' + value.slice(2);
+        }
+        $(this).val(value);
     });
 });
 </script>

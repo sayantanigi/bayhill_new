@@ -121,10 +121,10 @@ class Home extends CI_Controller {
         $this->load->view('footer');
     }
     public function course_details(){
-        $slug = $this->input->get('cttle', true);
+        $slug = $this->input->get('course_code', true);
         if ($slug) {
             $slug = base64_decode($slug);
-            $getcourseData = $this->db->query("SELECT * FROM courses WHERE course_name LIKE '%".$slug."%'")->row();
+            $getcourseData = $this->db->query("SELECT * FROM courses WHERE course_code = '".$slug."'")->row();
         }
         $data = array(
             'title' => 'Bay Hill Driving School',
@@ -139,9 +139,9 @@ class Home extends CI_Controller {
         $this->load->view('footer');
     }
     public function registration(){
-        $course_title = base64_decode($this->input->get('ctitle', true));
-        if(!empty($course_title)) {
-            $getcourseData = $this->db->query("SELECT * FROM courses WHERE course_name LIKE '%".$course_title."%'")->row();
+        $course_code = base64_decode($this->input->get('course_code', true));
+        if(!empty($course_code)) {
+            $getcourseData = $this->db->query("SELECT * FROM courses WHERE course_code = '".$course_code."'")->row();
         } else {
             $getcourseData = '';
         }
@@ -168,7 +168,7 @@ class Home extends CI_Controller {
     }
     public function registration_process(){
         if ($this->input->server('REQUEST_METHOD') === 'POST') {
-            $course_title = base64_decode($this->input->get('ctitle', true));
+            $course_code = base64_decode($this->input->get('course_code', true));
             $user_data = array(
                 'unique_code' => strtotime(date('Y-m-d h:i:s')),
                 'user_type' => $this->input->post('user_type'),
@@ -196,8 +196,8 @@ class Home extends CI_Controller {
             );
             $this->db->insert('users', $user_data);
             $insert_id = $this->db->insert_id();
-            if(!empty($course_title)) {
-                redirect('booking_slot?ctitle='.base64_encode($course_title).'&uid='.base64_encode($insert_id));
+            if(!empty($course_code)) {
+                redirect('booking_slot?course_code='.base64_encode($course_code).'&uid='.base64_encode($insert_id));
             } else {
                 $this->session->set_flashdata('message', 'You have successfully registered with us. Please continue with login process.');
                 redirect('registration');
@@ -205,14 +205,14 @@ class Home extends CI_Controller {
         }
     }
     public function booking_slot(){
-        $course_title = base64_decode($this->input->get('ctitle', true));
+        $course_code = base64_decode($this->input->get('course_code', true));
         $booking_id = base64_decode($this->input->get('bookingid', true));
         if(!empty($_SESSION['bayhill']['user_id'])) {
             $user_id = $_SESSION['bayhill']['user_id'];
         } else {
             $user_id = base64_decode($this->input->get('uid', true));
         }
-        $getcourseData = $this->db->query("SELECT * FROM courses WHERE course_name LIKE '%".$course_title."%'")->row();
+        $getcourseData = $this->db->query("SELECT * FROM courses WHERE course_code = '".$course_code."'")->row();
         $data = array(
             'title' => 'Bay Hill Driving School',
             'page' => 'Booking Information',
@@ -234,7 +234,7 @@ class Home extends CI_Controller {
     }
     public function create_booking() {
         if ($this->input->server('REQUEST_METHOD') === 'POST') {
-            $course_title = base64_decode($this->input->get('ctitle', true));
+            $course_code = base64_decode($this->input->get('course_code', true));
             $course_id = $this->input->post('course_id', true);
             $user_id = $this->input->post('user_id', true);
             $trainer_id = $this->input->post('trainer_id', true);
@@ -249,8 +249,6 @@ class Home extends CI_Controller {
 
             $booking_id = $this->db->insert_id();
 
-            //$selected_date = date('Y-m-d', strtotime($this->input->post('selected_date', true)));
-            //$selected_time = $this->input->post('selected_time', true);
             $selected_date = $this->input->post('selected_dates', true);
             $selected_date = json_decode($selected_date, true);
             $selectedDate = implode(", ", $selected_date);
@@ -265,7 +263,6 @@ class Home extends CI_Controller {
             $output = [];
 
             for ($i = 0; $i < count($dates); $i++) {
-                //echo $output = "date = '{$dates[$i]}', time = '{$times[$i]}'";
                 $bookingDetailsData = array(
                     'booking_id' => $booking_id,
                     'trainer_id' => $trainer_id,
@@ -274,13 +271,12 @@ class Home extends CI_Controller {
                 );
                 $this->db->insert('booking_details', $bookingDetailsData);
             }
-            //$getcourseData = $this->db->query("SELECT * FROM courses WHERE course_name LIKE '%".$course_title."%'")->row();
-            redirect('payment-details?ctitle='.base64_encode($course_title).'&uid='.base64_encode($user_id).'&bookingID='.base64_encode($booking_id));
+            redirect('payment-details?course_code='.base64_encode($course_code).'&uid='.base64_encode($user_id).'&bookingID='.base64_encode($booking_id));
         }
     }
     public function confirm_booking() {
         if ($this->input->server('REQUEST_METHOD') === 'POST') {
-            $course_title = base64_decode($this->input->get('ctitle', true));
+            $course_code = base64_decode($this->input->get('course_code', true));
             $course_id = $this->input->post('course_id', true);
             $user_id = $this->input->post('user_id', true);
             $trainer_id = $this->input->post('trainer_id', true);
@@ -312,8 +308,8 @@ class Home extends CI_Controller {
         }
     }
     public function payment_details(){
-        $course_title = base64_decode($this->input->get('ctitle', true));
-        $getcourseData = $this->db->query("SELECT * FROM courses WHERE course_name LIKE '%".$course_title."%'")->row();
+        $course_code = base64_decode($this->input->get('course_code', true));
+        $getcourseData = $this->db->query("SELECT * FROM courses WHERE course_code = '".$course_code."'")->row();
         $user_id = base64_decode($this->input->get('uid', true));
         $booking_id = base64_decode($this->input->get('bookingID', true));
         $data = array(
@@ -324,8 +320,8 @@ class Home extends CI_Controller {
             'booking_id' => $booking_id,
             'course_id' => $getcourseData->id,
             'course_title' => $getcourseData->course_name,
-            'course_week' => $getcourseData->course_week,
-            'class_week' => $getcourseData->class_week,
+            'course_week' => $getcourseData->course_duration,
+            'class_week' => $getcourseData->course_class,
             'offer_price' => $getcourseData->offer_price
         );
         $data['DMV_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '1'")->row();
@@ -337,7 +333,7 @@ class Home extends CI_Controller {
     }
     public function create_payment() {
         if ($this->input->server('REQUEST_METHOD') === 'POST') {
-            $course_title = base64_decode($this->input->get('ctitle', true));
+            $course_code = base64_decode($this->input->get('course_code', true));
             $user_id = $this->input->post('user_id', true);
             $booking_id = $this->input->post('booking_id');
             $transaction_id = 'txn_' . time();
@@ -357,23 +353,23 @@ class Home extends CI_Controller {
                 $this->session->set_flashdata('message', 'Payment successful');
                 $getTransactionID = $this->db->query("SELECT * FROM booking WHERE id = '".$booking_id."'")->row();
                 $trxID = $getTransactionID->transaction_id;
-                redirect('complete-payment?trxID='.base64_encode($trxID).'&ctitle='.base64_encode($course_title));
+                redirect('complete-payment?trxID='.base64_encode($trxID).'&course_code='.base64_encode($course_code));
             } else {
                 $this->db->update("booking", array('status'=>'2'), "id = '".$booking_id."'");
                 $this->session->set_flashdata('error', 'Payment unsuccessful, Please try again later.');
-                redirect('payment-details?ctitle='.base64_encode($course_title).'&uid='.base64_encode($user_id).'&bookingID='.base64_encode($booking_id));
+                redirect('payment-details?course_code='.base64_encode($course_code).'&uid='.base64_encode($user_id).'&bookingID='.base64_encode($booking_id));
             }
         }
     }
     public function complete_payment() {
         $trxID = base64_decode($this->input->get('trxID', true));
-        $course_title = base64_decode($this->input->get('ctitle', true));
+        $course_code = base64_decode($this->input->get('course_code', true));
         $data = array(
             'title' => 'Bay Hill Driving School',
             'page' => 'Complete Payment',
             'subpage' => 'Complete Payment',
             'trxID' => $trxID,
-            'course_title' => $course_title
+            'course_code' => $course_code
         );
         $data['DMV_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '1'")->row();
         $data['Video_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '2'")->row();
@@ -383,9 +379,9 @@ class Home extends CI_Controller {
         $this->load->view('footer');
     }
     public function instructor_list() {
-        $course_title = base64_decode($this->input->get('ctitle', true));
+        $course_code = base64_decode($this->input->get('course_code', true));
         $user_id = base64_decode($this->input->get('uid', true));
-        $getcourseData = $this->db->query("SELECT * FROM courses WHERE course_name LIKE '%".$course_title."%'")->row();
+        $getcourseData = $this->db->query("SELECT * FROM courses WHERE course_code = '".$course_code."'")->row();
         $getinstructor_list = $this->db->query("SELECT * FROM users WHERE user_type = '2' AND status = '1'")->result();
         $data = array(
             'title' => 'Bay Hill Driving School',
@@ -393,7 +389,7 @@ class Home extends CI_Controller {
             'subpage' => 'Instructor List',
             'user_id' => $user_id,
             'course_id' => $getcourseData->id,
-            'course_title' => $getcourseData->course_name,
+            'course_code' => $getcourseData->course_name,
             'course_week' => $getcourseData->course_week,
             'class_week' => $getcourseData->class_week,
             'offer_price' => $getcourseData->offer_price,
@@ -407,8 +403,8 @@ class Home extends CI_Controller {
         $this->load->view('footer');
     }
     public function instructor_details() {
-        $course_title = base64_decode($this->input->get('ctitle', true));
-        $getcourseData = $this->db->query("SELECT * FROM courses WHERE course_name LIKE '%".$course_title."%'")->row();
+        $course_code = base64_decode($this->input->get('course_code', true));
+        $getcourseData = $this->db->query("SELECT * FROM courses WHERE course_name LIKE '%".$course_code."%'")->row();
         $instructorID = base64_decode($this->input->get('insid', true));
         $data = array(
             'title' => 'Bay Hill Driving School',
@@ -429,7 +425,7 @@ class Home extends CI_Controller {
         $this->load->view('footer');
     }
     public function instructor_slot() {
-        $course_title = base64_decode($this->input->get('ctitle', true));
+        $course_title = base64_decode($this->input->get('course_title', true));
         $user_id = base64_decode($this->input->get('uid', true));
         $getcourseData = $this->db->query("SELECT * FROM courses WHERE course_name LIKE '%".$course_title."%'")->row();
         $instructorID = base64_decode($this->input->get('insid', true));

@@ -22,7 +22,7 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                 <h3 class="h3 fw-bold mb-2  wow fadeInUp">Registration</h3>
                 <p>Complete your registration to begin your learning journey with us.</p>
                 <?php if(!empty($course_id)) { ?>
-                <form action="<?= base_url()?>registration_process?ctitle=<?= base64_encode($getCourse->course_name)?>" method="post" id="registrationForm">
+                <form action="<?= base_url()?>registration_process?course_code=<?= base64_encode($getCourse->course_code)?>" method="post" id="registrationForm">
                 <?php } else { ?>
                 <form action="<?= base_url()?>registration_process" method="post" id="registrationForm">
                 <?php } ?>
