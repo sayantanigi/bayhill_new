@@ -53,7 +53,7 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                         </div>
                         <div class="col-lg-4 col-md-6 mb-3">
                             <label class="mb-2">Student Date of Birth  <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" name="dob" id="dob"/>
+                            <input type="date" class="form-control" name="dob" id="dob" />
                             <div id="vld_dob"></div>
                         </div>
                         <div class="col-lg-4 col-md-6 mb-4">
@@ -244,6 +244,7 @@ $(document).ready(function() {
                     } else {
                         $('#vld_email').fadeIn().html(returndata.data).css({'color':'red','margin-bottom':'5px'});
                         setTimeout(function(){$("#vld_email").html("");},3000);
+                        $('#email').focus().css('border', '1px solid red');
                         $("#email").focus();
                         $("#enrollbtn").prop("disabled", true);
                         return false;
@@ -254,7 +255,6 @@ $(document).ready(function() {
     });
 
     $('#dob').on('change', function() {
-        var dob = $('#dob').val();
         if (dob) {
             var dobDate = new Date(dob);
             var today = new Date();
@@ -308,7 +308,7 @@ $("#registrationForm").submit(function (e) {
     if ($('#first_name').val() === '') {
         $('#vld_first_name').text('This field is required').css('color', 'red').show();
         $('#first_name').focus().css('border', '1px solid red');
-        setTimeout(function () { $("#vld_first_name").hide(); }, 2000);
+        setTimeout(function () { $("#vld_first_name").hide(); }, 5000);
         e.preventDefault();
     } else {
         $('#first_name').focus().css('border', '1px solid green');
@@ -317,7 +317,7 @@ $("#registrationForm").submit(function (e) {
     if ($('#last_name').val() === '') {
         $('#vld_last_name').text('This field is required').css('color', 'red').show();
         $('#last_name').focus().css('border', '1px solid red');
-        setTimeout(function () { $("#vld_last_name").hide(); }, 2000);
+        setTimeout(function () { $("#vld_last_name").hide(); }, 5000);
         e.preventDefault();
     } else {
         $('#last_name').focus().css('border', '1px solid green');
@@ -326,7 +326,7 @@ $("#registrationForm").submit(function (e) {
     if ($('#phone').val() === '') {
         $('#vld_phone').text('This field is required').css('color', 'red').show();
         $('#phone').focus().css('border', '1px solid red');
-        setTimeout(function () { $("#vld_phone").hide(); }, 2000);
+        setTimeout(function () { $("#vld_phone").hide(); }, 5000);
         e.preventDefault();
     } else {
         $('#phone').focus().css('border', '1px solid green');
@@ -335,13 +335,13 @@ $("#registrationForm").submit(function (e) {
     if ($('#email').val() === '') {
         $('#vld_email').text('This field is required').css('color', 'red').show();
         $('#email').focus().css('border', '1px solid red');
-        setTimeout(function () { $("#vld_email").hide(); }, 2000);
+        setTimeout(function () { $("#vld_email").hide(); }, 5000);
         e.preventDefault();
     } else {
         if(!emailRegex.test($('#email').val())) {
             $('#vld_email').text('Please enter a valid email').css('color', 'red').show();
             $('#email').focus().css('border', '1px solid red');
-            setTimeout(function () { $("#vld_email").hide(); }, 2000);
+            setTimeout(function () { $("#vld_email").hide(); }, 5000);
             e.preventDefault();
         } else {
             $('#email').focus().css('border', '1px solid green');
@@ -351,16 +351,30 @@ $("#registrationForm").submit(function (e) {
     if ($('#dob').val() === '') {
         $('#vld_dob').text('This field is required').css('color', 'red').show();
         $('#dob').focus().css('border', '1px solid red');
-        setTimeout(function () { $("#vld_dob").hide(); }, 2000);
+        setTimeout(function () { $("#vld_dob").hide(); }, 5000);
         e.preventDefault();
     } else {
         $('#dob').focus().css('border', '1px solid green');
     }
 
+    var dob = $('#dob').val();
+    const year = dob.split('-')[0];
+    if (year.length !== 4 || isNaN(year)) {
+        $('#vld_dob').text('Year must be exactly 4 digits.').css('color', 'red').show();
+        $('#dob').focus().css('border', '1px solid red');
+        $("#enrollbtn").prop("disabled", true);
+        setTimeout(function () { $("#vld_dob").hide(); }, 5000);
+        e.preventDefault();
+    } else {
+        $('#vld_dob').text(''); // Clear validation message
+        $('#dob').focus().css('border', '1px solid green');
+        $("#enrollbtn").prop("disabled", false);
+    }
+
     if ($('#gender').val() === '') {
         $('#vld_gender').text('This field is required').css('color', 'red').show();
         $('#gender').focus().css('border', '1px solid red');
-        setTimeout(function () { $("#vld_gender").hide(); }, 2000);
+        setTimeout(function () { $("#vld_gender").hide(); }, 5000);
         e.preventDefault();
     } else {
         $('#gender').focus().css('border', '1px solid green');
@@ -369,7 +383,7 @@ $("#registrationForm").submit(function (e) {
     if ($('#address').val() === '') {
         $('#vld_address').text('This field is required').css('color', 'red').show();
         $('#address').focus().css('border', '1px solid red');
-        setTimeout(function () { $("#vld_address").hide(); }, 2000);
+        setTimeout(function () { $("#vld_address").hide(); }, 5000);
         e.preventDefault();
     } else {
         $('#address').focus().css('border', '1px solid green');
@@ -378,7 +392,7 @@ $("#registrationForm").submit(function (e) {
     if ($('#state').val() === '') {
         $('#vld_state').text('This field is required').css('color', 'red').show();
         $('#state').focus().css('border', '1px solid red');
-        setTimeout(function () { $("#vld_state").hide(); }, 2000);
+        setTimeout(function () { $("#vld_state").hide(); }, 5000);
         e.preventDefault();
     } else {
         $('#state').focus().css('border', '1px solid green');
@@ -387,7 +401,7 @@ $("#registrationForm").submit(function (e) {
     if ($('#city').val() === '') {
         $('#vld_city').text('This field is required').css('color', 'red').show();
         $('#city').focus().css('border', '1px solid red');
-        setTimeout(function () { $("#vld_city").hide(); }, 2000);
+        setTimeout(function () { $("#vld_city").hide(); }, 5000);
         e.preventDefault();
     } else {
         $('#city').focus().css('border', '1px solid green');
@@ -396,7 +410,7 @@ $("#registrationForm").submit(function (e) {
     if ($('#zipcode').val() === '') {
         $('#vld_zipcode').text('This field is required').css('color', 'red').show();
         $('#zipcode').focus().css('border', '1px solid red');
-        setTimeout(function () { $("#vld_zipcode").hide(); }, 2000);
+        setTimeout(function () { $("#vld_zipcode").hide(); }, 5000);
         e.preventDefault();
     } else {
         $('#zipcode').focus().css('border', '1px solid green');
@@ -405,7 +419,7 @@ $("#registrationForm").submit(function (e) {
     if ($('#username').val() === '') {
         $('#vld_username').text('This field is required').css('color', 'red').show();
         $('#username').focus().css('border', '1px solid red');
-        setTimeout(function () { $("#vld_username").hide(); }, 2000);
+        setTimeout(function () { $("#vld_username").hide(); }, 5000);
         e.preventDefault();
     } else {
         $('#username').focus().css('border', '1px solid green');
@@ -414,13 +428,13 @@ $("#registrationForm").submit(function (e) {
     if ($('#password').val() === '') {
         $('#vld_password').text('This field is required').css('color', 'red').show();
         $('#password').focus().css('border', '1px solid red');
-        setTimeout(function () { $("#vld_password").hide(); }, 2000);
+        setTimeout(function () { $("#vld_password").hide(); }, 5000);
         e.preventDefault();
     } else {
         if ($('#password').val().length < 8) {
             $('#vld_password').text('Password should be at least 8 characters long').css('color', 'red').show();
             $('#password').focus().css('border', '1px solid red');
-            setTimeout(function () { $("#vld_password").hide(); }, 2000);
+            setTimeout(function () { $("#vld_password").hide(); }, 5000);
             e.preventDefault();
         }
     }
@@ -428,13 +442,13 @@ $("#registrationForm").submit(function (e) {
     if ($('#conpassword').val() === '') {
         $('#vld_conpassword').text('This field is required').css('color', 'red').show();
         $('#conpassword').focus().css('border', '1px solid red');
-        setTimeout(function () { $("#vld_conpassword").hide(); }, 2000);
+        setTimeout(function () { $("#vld_conpassword").hide(); }, 5000);
         e.preventDefault();
     } else {
         if ($('#conpassword').val().length < 8) {
             $('#vld_conpassword').text('Confirm Password should be at least 8 characters long').css('color', 'red').show();
             $('#conpassword').focus().css('border', '1px solid red');
-            setTimeout(function () { $("#vld_conpassword").hide(); }, 2000);
+            setTimeout(function () { $("#vld_conpassword").hide(); }, 5000);
             e.preventDefault();
         }
     }
@@ -442,12 +456,12 @@ $("#registrationForm").submit(function (e) {
     if ($('#password').val() !== $('#conpassword').val()) {
         $('#vld_conpassword').text('Password Mismatch').css('color', 'red').show();
         $('#conpassword').focus().css('border', '1px solid red');
-        setTimeout(function () { $("#vld_conpassword").hide(); }, 2000);
+        setTimeout(function () { $("#vld_conpassword").hide(); }, 5000);
         e.preventDefault();
     }
     if (!disclaimer) {
         $('#vld_disclaimer').text('Please agree to the terms and conditions.').css('color', 'red').show();
-        setTimeout(function () { $("#vld_disclaimer").hide(); }, 2000);
+        setTimeout(function () { $("#vld_disclaimer").hide(); }, 5000);
         e.preventDefault();
     }
 });
