@@ -7,13 +7,13 @@
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-7">
-                <h2 class="h2 fw-bold  mb-4"> California Online Drivers Education</h2>
-                  <h3 class="h5 fw-bold mb-3 text-primary">DMV Approved Online Drivers Ed – <span class="text-danger">LICENSE # E4716</span></h3>
+                <h2 class="h2 fw-bold  mb-4"> BEHIND THE WHEEL DRIVING LESSONS</h2>
+                  <h3 class="h5 fw-bold mb-3 text-primary">DMV Approved Driving Lesson – <span class="text-danger">LICENSE # E4716</span></h3>
                 <ul class="list-unstyled service-details__list mb-4">
-                    <li> <i class="fa fa-check-circle text-success"></i> DMV Certificate of Completion for Driver's Ed</li>
-                    <li> <i class="fa fa-check-circle text-success"></i> Self Paced Lessons - No Timers</li>
-                    <li> <i class="fa fa-check-circle text-success"></i> DMV Practice Tests at no extra cost </li>
-                    <li> <i class="fa fa-check-circle text-success"></i> FAST Shipping of DMV Certificate </li>
+                    <li> <i class="fa fa-check-circle text-success"></i> Private one-on-one lessons</li>
+                    <li> <i class="fa fa-check-circle text-success"></i> Clean and very well maintained Vehicles</li>
+                    <li> <i class="fa fa-check-circle text-success"></i> Free pick-up and drop-off</li>
+                    <li> <i class="fa fa-check-circle text-success"></i> Experienced, patient and positive instructors</li>
                 </ul>
             </div>
             <div class="col-lg-5 text-center">
@@ -26,9 +26,9 @@
     <div class="container">
         <h3 class="text-center mb-5 fw-bold h2">Frequently Asked Questions</h3>
         <div class="accordion accordion-flush" id="accordionFlushExample">
-            <?php if(!empty($faq_list)) {
+            <?php if(!empty($drivingschoolfaq_list)) {
             $i = 1;
-            foreach ($faq_list as $faq) { ?>
+            foreach ($drivingschoolfaq_list as $faq) { ?>
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse<?= $i?>" aria-expanded="false" aria-controls="flush-collapse<?= $i?>">

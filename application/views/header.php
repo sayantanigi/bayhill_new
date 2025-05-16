@@ -69,24 +69,24 @@
                             <li><a href="<?= base_url('drivers-ed') ?>" class="<?= (current_url() == base_url('drivers-ed')) ? 'active' : '' ?>">Drivers Ed</a></li>
                             <li><a href="https://bayhilltrafficschool.com/" target="_blank">Traffic Shool</a></li>
                             <li class="dropdown">
-                                <a href="<?= base_url('faq') ?>" class="<?= (current_url() == base_url('faq')) ? 'active' : '' ?>">FAQ</a>
+                                <a href="javascript:void(0)" class="<?= (current_url() == base_url('faq')) ? 'active' : '' ?>">FAQ</a>
                                 <ul>
-                                    <li><a href="<?= base_url('drivers-ed') ?>" class="<?= (current_url() == base_url('drivers-ed')) ? 'active' : '' ?>">Drivers Ed</a></li>
-                                    <li><a href="#">Driving School</a></li>
+                                    <li><a href="<?= base_url('driver-ed-faq') ?>" class="<?= (current_url() == base_url('drivers-ed')) ? 'active' : '' ?>">Drivers Ed</a></li>
+                                    <li><a href="<?= base_url('driving-school-faq') ?>" class="<?= (current_url() == base_url('driving-school-faq')) ? 'active' : '' ?>">Driving School</a></li>
                                 </ul>
                             </li>
                             <li><a href="<?= base_url('contact') ?>" class="<?= (current_url() == base_url('contact')) ? 'active' : '' ?>">Contact</a></li>
                             <li class="btn-login">
                                 <?php if(!empty($_SESSION['bayhill']['user_id'])) { ?>
                                     <li class="dropdown">
-                                        <a href="#">
-                                            <?php
-                                            $getuser = $this->db->query("SELECT * FROM users WHERE id = '".$_SESSION['bayhill']['user_id']."'")->row();
-                                            ?>
-                                            <span class="dashroundimg">Hi <?= $getuser->first_name.' '.$getuser->last_name?>,</span> <i class="fas fa-angle-down ms-2"></i>
+                                        <a href="javascript:void(0)">
+                                            <?php $getuser = $this->db->query("SELECT * FROM users WHERE id = '".$_SESSION['bayhill']['user_id']."'")->row(); ?>
+                                            <span class="dashroundimg" style="color: #fff;">Hi <?= $getuser->first_name.' '.$getuser->last_name?>,</span> <i class="fas fa-angle-down ms-2" style="color: #fff;"></i>
                                         </a>
                                         <ul class="sub-menu">
                                             <li><a href="<?= base_url('dashboard') ?>">Dashboard </a></li>
+                                            <li><a href="<?= base_url('profile-settings') ?>">Profile Settings </a></li>
+                                            <li><a href="<?= base_url('change-password') ?>">Change Password </a></li>
                                             <li><a href="<?= base_url('logout') ?>"><i class="fas fa-power-off me-2"></i> Logout </a></li>
                                         </ul>
                                     </li>

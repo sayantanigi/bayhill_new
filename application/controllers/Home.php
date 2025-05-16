@@ -3,7 +3,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
-
 class Home extends CI_Controller {
     public function __construct() {
         parent::__construct();
@@ -548,7 +547,7 @@ class Home extends CI_Controller {
         }
         echo $html;
     }
-    public function faq() {
+    /*public function faq() {
         $data = array(
             'title' => 'Bay Hill Driving School',
             'page' => 'FAQ',
@@ -560,6 +559,34 @@ class Home extends CI_Controller {
         $data['Permit_test'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '3'")->row();
         $this->load->view('header', $data);
         $this->load->view('frontend/faq');
+        $this->load->view('footer');
+    }*/
+    public function driveredfaq() {
+        $data = array(
+            'title' => 'Bay Hill Driving School',
+            'page' => 'Driver Education FAQ',
+            'subpage' => 'Driver Education FAQ',
+        );
+        $data['driveredfaq_list'] = $this->db->query("SELECT * FROM faq WHERE status = '1' AND faqtype = '1'")->result();
+        $data['DMV_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '1'")->row();
+        $data['Video_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '2'")->row();
+        $data['Permit_test'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '3'")->row();
+        $this->load->view('header', $data);
+        $this->load->view('frontend/driveredfaq');
+        $this->load->view('footer');
+    }
+    public function drivingschoolfaq() {
+        $data = array(
+            'title' => 'Bay Hill Driving School',
+            'page' => 'Driving School FAQ',
+            'subpage' => 'Driving School FAQ',
+        );
+        $data['drivingschoolfaq_list'] = $this->db->query("SELECT * FROM faq WHERE status = '1' AND faqtype = '2'")->result();
+        $data['DMV_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '1'")->row();
+        $data['Video_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '2'")->row();
+        $data['Permit_test'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '3'")->row();
+        $this->load->view('header', $data);
+        $this->load->view('frontend/drivingschoolfaq');
         $this->load->view('footer');
     }
     public function terms() {
@@ -675,7 +702,7 @@ class Home extends CI_Controller {
         echo json_encode($data); exit;
     }
     public function checkuseremail() {
-        $checkUserEmail = $this->db->query("SELECT * FROM users WHERE email LIKE '%".$this->input->post('email')."%'")->row();
+        $checkUserEmail = $this->db->query("SELECT * FROM users WHERE email = '".$this->input->post('email')."'")->row();
         if(!empty($checkUserEmail)) {
             $data = array('result'=> 'error', 'data' => 'Email Address already exists.');
         } else {
@@ -735,7 +762,7 @@ class Home extends CI_Controller {
                 'UserLoggedIn'=> TRUE,
             );
             $this->session->set_userdata($data);
-            $this->session->set_flashdata('message', 'You have successfully registered with us. Please continue with login process.');
+            $this->session->set_flashdata('message', 'You have successfully logged in.');
             redirect('dashboard');
         } else {
             $this->session->set_flashdata('error', 'Invalid login credential. Please login with valid credential');

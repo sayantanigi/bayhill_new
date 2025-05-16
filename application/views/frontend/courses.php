@@ -1,6 +1,7 @@
 <section class="courseListpnl">
     <div class="container">
         <h2 class="subtitle wow fadeInUp">Course List</h2>
+        <p style="color: #EC2526; font-style: italic;">*CANCELLATIONS FEES OF $60 APPLY IF CANCELLATION ISN’T MADE 48 HOURS PRIOR TO YOUR SCHEDULED CLASS</p>
         <h3 class="maintitle mb-4 wow fadeInUp">Driving Course Details and Offerings</h3>
         <div id="loader" style="display:none; text-align: center; position: absolute; z-index: 1; width: 100%;">
             <img src="<?= base_url() ?>assets/images/loader.gif" alt="Loading...">

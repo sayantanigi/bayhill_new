@@ -12,13 +12,12 @@ class Faq extends CI_Controller {
             'page' => 'cms',
             'subpage' => 'faq'
         );
-        $data['faq'] = $this->Adminmodel->get_all_record('id, question, answer, status', 'faq', '', array('id', 'DESC'), '');
+        $data['faq'] = $this->Adminmodel->get_all_record('*', 'faq', '', array('id', 'DESC'), '');
         $this->load->view('admin/header', $data);
         $this->load->view('admin/sidebar');
         $this->load->view('admin/faq/faq_list');
         $this->load->view('admin/footer');
     }
-
     public function add() {
         $data = array(
             'title' => 'Add Games',
@@ -39,6 +38,7 @@ class Faq extends CI_Controller {
                 $data = array(
                     'question' => strip_tags($this->input->post('question')),
                     'answer' => $this->input->post('answer'),
+                    'faqtype' => strip_tags($this->input->post('faqtype')),
                     'status' => strip_tags($this->input->post('status')),
                     'created_at' => date('Y-m-d H:i:s')
                 );
@@ -61,7 +61,6 @@ class Faq extends CI_Controller {
         }
         echo json_encode($response);
     }
-
     public function edit($id) {
         $data = array(
             'title' => 'Edit Faq',
@@ -74,7 +73,6 @@ class Faq extends CI_Controller {
         $this->load->view('admin/faq/edit_faq');
         $this->load->view('admin/footer');
     }
-
     public function editfaq() {
         $id = strip_tags($this->input->post('id'));
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -85,6 +83,7 @@ class Faq extends CI_Controller {
                 $data = array(
                     'question' => strip_tags($this->input->post('question')),
                     'answer' => $this->input->post('answer'),
+                    'faqtype' => strip_tags($this->input->post('faqtype')),
                     'status' => strip_tags($this->input->post('status')),
                     'updated_at' => date('Y-m-d H:i:s')
                 );
@@ -107,8 +106,7 @@ class Faq extends CI_Controller {
         }
         echo json_encode($response);
     }
-
-    function delete($id) {
+    public function delete($id) {
         if (empty($id)) {
             return false;
         }

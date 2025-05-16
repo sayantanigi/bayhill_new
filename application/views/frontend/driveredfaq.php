@@ -26,9 +26,9 @@
     <div class="container">
         <h3 class="text-center mb-5 fw-bold h2">Frequently Asked Questions</h3>
         <div class="accordion accordion-flush" id="accordionFlushExample">
-            <?php if(!empty($faq_list)) {
+            <?php if(!empty($driveredfaq_list)) {
             $i = 1;
-            foreach ($faq_list as $faq) { ?>
+            foreach ($driveredfaq_list as $faq) { ?>
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse<?= $i?>" aria-expanded="false" aria-controls="flush-collapse<?= $i?>">

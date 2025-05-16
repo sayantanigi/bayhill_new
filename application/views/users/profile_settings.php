@@ -1,14 +1,7 @@
-<?php
-$getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'")->row();
-?>
 <section class="enrollPnl">
     <div class="container">
         <div class="row g-5">
-            <?php if(!empty($course_id)) { ?>
-            <div class="col-lg-8">
-            <?php } else { ?>
             <div class="col-lg-12">
-            <?php } ?>
                 <div class="text-success-msg f-20">
                     <?php if ($this->session->flashdata('message')) {
                         echo '<p style="text-align: center; font-size: 18px; padding: 10px; background: green; border-radius: 20px; margin-bottom: 30px; color: #fff;">'.$this->session->flashdata('message').'</p>';
@@ -19,52 +12,62 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                         unset($_SESSION['error']);
                     } ?>
                 </div>
-                <h3 class="h3 fw-bold mb-2  wow fadeInUp">Registration</h3>
-                <p>Complete your registration to begin your learning journey with us.</p>
-                <?php if(!empty($course_id)) { ?>
-                <form action="<?= base_url()?>registration_process?course_code=<?= base64_encode($getCourse->course_code)?>" method="post" id="registrationForm">
-                <?php } else { ?>
-                <form action="<?= base_url()?>registration_process" method="post" id="registrationForm">
-                <?php } ?>
+                <h3 class="h3 fw-bold mb-2  wow fadeInUp">Profile Settings</h3>
+                <form action="<?= base_url()?>saveProfileData" method="post" id="profileForm" enctype="multipart/form-data">
                     <div class="row">
                         <input type="hidden" name="user_type" id="user_type" value="1" />
                         <div class="col-lg-12">
                             <h2 class="subtitle wow fadeInUp mt-4">Users Information</h2>
                         </div>
-                        <div class="col-lg-6 col-md-6 mb-3">
+                        <div class="col-lg-4 col-md-6 mb-3">
                             <label class="mb-2">First Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" placeholder="Enter your first name" name="first_name" id="first_name"/>
+                            <input type="text" class="form-control" placeholder="Enter your first name" name="first_name" id="first_name" value="<?= @$getUserDetails->first_name; ?>"/>
                             <div id="vld_first_name"></div>
                         </div>
-                        <div class="col-lg-6 col-md-6 mb-3">
+                        <div class="col-lg-4 col-md-6 mb-3">
                             <label class="mb-2">Last Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" placeholder="Enter your last name" name="last_name" id="last_name"/>
+                            <input type="text" class="form-control" placeholder="Enter your last name" name="last_name" id="last_name" value="<?= @$getUserDetails->last_name; ?>"/>
                             <div id="vld_last_name"></div>
                         </div>
-                        <div class="col-lg-6 col-md-6 mb-3">
+                        <div class="col-lg-4 col-md-6 mb-3">
                             <label class="mb-2">Phone No <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" placeholder="Enter your phone number" name="phone" id="phone"/>
+                            <input type="text" class="form-control" placeholder="Enter your phone number" name="phone" id="phone" value="<?= @$getUserDetails->phone; ?>"/>
                             <div id="vld_phone"></div>
                         </div>
-                        <div class="col-lg-6 col-md-6 mb-3">
+                        <div class="col-lg-4 col-md-6 mb-3">
                             <label class="mb-2">Email <span class="text-danger">*</span></label>
-                            <input type="email" class="form-control" placeholder="Enter your email" name="email" id="email"/>
+                            <input type="email" class="form-control" placeholder="Enter your email" name="email" id="email" value="<?= @$getUserDetails->email; ?>"/>
                             <div id="vld_email"></div>
                         </div>
                         <div class="col-lg-4 col-md-6 mb-3">
-                            <label class="mb-2">Student Date of Birth  <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" name="dob" id="dob" />
+                            <label class="mb-2">Username <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" placeholder="Enter your username" name="username" id="username" value="<?= @$getUserDetails->username; ?>" readonly/>
+                            <div id="vld_username"></div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 mb-3">
+                            <label class="mb-2">Date of Birth  <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" name="dob" id="dob" value="<?= @$getUserDetails->dob; ?>"/>
                             <div id="vld_dob"></div>
                         </div>
                         <div class="col-lg-4 col-md-6 mb-4">
                             <label class="mb-2">Gender <span class="text-danger">*</span></label>
                             <select class="form-control form-select" id="gender" name="gender">
                                 <option value="">Select Gender</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Other">Other</option>
+                                <option value="Male" <?php if(@$getUserDetails->gender == "Male") {echo "selected"; }?>>Male</option>
+                                <option value="Female" <?php if(@$getUserDetails->gender == "Female") {echo "selected"; }?>>Female</option>
+                                <option value="Other" <?php if(@$getUserDetails->gender == "Other") {echo "selected"; }?>>Other</option>
                             </select>
                             <div id="vld_gender"></div>
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="mb-2">Profile Picture <span class="text-danger">*</span></label>
+                            <input type="file" class="form-control" name="profile_pic" id="profile_pic" accept=".jpg, .jpeg, .png"/>
+                        </div>
+                        <div class="col-lg-2 mb-3">
+                            <div id="vld_profile_pic"></div>
+                            <div class="profilepic">
+                                <img id="profile_pic_preview" src="<?= !empty(@$getUserDetails->image) && file_exists('uploads/student/profilePic/'.@$getUserDetails->image) ? base_url('uploads/student/profilePic/'.@$getUserDetails->image) : base_url('assets/images/profile_default.png'); ?>" alt="Profile Picture" style="width: 100px; height: 100px; border-radius: 50%;">
+                            </div>
                         </div>
                         <div class="col-lg-12">
                             <h2 class="subtitle wow fadeInUp mt-4" style="margin-bottom: 0px;">Contact Information</h2>
@@ -72,22 +75,22 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                         </div>
                         <div class="col-lg-6 col-md-6 mb-3">
                             <label class="mb-2 pfirst_namelbl">Parents First Name</label>
-                            <input type="text" class="form-control" placeholder="Parents First Name" name="pfirst_name" id="pfirst_name" disabled/>
+                            <input type="text" class="form-control" placeholder="Parents First Name" name="pfirst_name" id="pfirst_name" value="<?= @$getUserDetails->pfirst_name;?>" disabled/>
                             <div id="vld_pfirst_name"></div>
                         </div>
                         <div class="col-lg-6 col-md-6 mb-3">
                             <label class="mb-2 plast_namelbl">Parents Last Name</label>
-                            <input type="text" class="form-control" placeholder="Parents Last Name" name="plast_name" id="plast_name" disabled/>
+                            <input type="text" class="form-control" placeholder="Parents Last Name" name="plast_name" id="plast_name" value="<?= @$getUserDetails->plast_name;?>" disabled/>
                             <div id="vld_plast_name"></div>
                         </div>
                         <div class="col-lg-6 col-md-6 mb-3">
                             <label class="mb-2 pemaillbl">Parents Email</label>
-                            <input type="email" class="form-control" placeholder="Parents Email" name="pemail" id="pemail" disabled/>
+                            <input type="email" class="form-control" placeholder="Parents Email" name="pemail" id="pemail" value="<?= @$getUserDetails->pemail;?>" disabled/>
                             <div id="vld_pemail"></div>
                         </div>
                         <div class="col-lg-6 col-md-6 mb-3">
                             <label class="mb-2 pphonelbl">Parents Phone Number</label>
-                            <input type="text" class="form-control" placeholder="Parents Phone Number" name="pphone" id="pphone" disabled/>
+                            <input type="text" class="form-control" placeholder="Parents Phone Number" name="pphone" id="pphone" value="<?= @$getUserDetails->pphone; ?>" disabled/>
                             <div id="vld_pphone"></div>
                         </div>
                         <div class="col-lg-12">
@@ -95,14 +98,14 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                         </div>
                         <div class="col-lg-12 col-md-6 mb-3">
                             <label class="mb-2">Street Address <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" placeholder="Street Address" name="address" id="address"/>
+                            <input type="text" class="form-control" placeholder="Street Address" name="address" id="address" value="<?= @$getUserDetails->address; ?>"/>
                             <div id="vld_address"></div>
                         </div>
                         <div class="col-lg-4 col-md-6 mb-3">
                             <label class="mb-2">State <span class="text-danger">*</span> </label>
                             <select class="form-control form-select" name="state" id="state">
                                 <?php
-                                if($state_list){
+                                if($state_list) {
                                 foreach ($state_list as $state) { ?>
                                 <option value="<?= $state->id?>"><?= $state->name?></option>
                                 <?php } } ?>
@@ -111,68 +114,21 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                         </div>
                         <div class="col-lg-4 col-md-6 mb-3">
                             <label class="mb-2">City <span class="text-danger">*</span> </label>
-                            <input type="text" class="form-control" placeholder="Enter Your City" name="city" id="city" />
+                            <input type="text" class="form-control" placeholder="Enter Your City" name="city" id="city" value="<?= @$getUserDetails->city; ?>"/>
                             <div id="vld_city"></div>
                         </div>
                         <div class="col-lg-4 col-md-6 mb-3">
                             <label class="mb-2">Zip Code<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" placeholder="Enter Zip Code" name="zipcode" id="zipcode"/>
+                            <input type="text" class="form-control" placeholder="Enter Zip Code" name="zipcode" id="zipcode" value="<?= @$getUserDetails->zipcode; ?>"/>
                             <div id="vld_zipcode"></div>
                         </div>
-                        <div class="col-lg-12">
-                            <h2 class="subtitle wow fadeInUp mt-3">Create Account</h2>
-                        </div>
-                        <div class="col-lg-12 col-md-12 mb-3">
-                            <label class="mb-2">Username <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" placeholder="Enter your username" name="username" id="username"/>
-                            <div id="vld_username"></div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 mb-3">
-                            <label class="mb-2">Password <span class="text-danger">*</span></label>
-                            <input type="password" class="form-control" placeholder="Enter your password" name="password" id="password"/>
-                            <div id="vld_password"></div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 mb-3">
-                            <label class="mb-2">Confirm Password <span class="text-danger">*</span></label>
-                            <input type="password" class="form-control" placeholder="Enter your confirm password" name="conpassword" id="conpassword"/>
-                            <div id="vld_conpassword"></div>
-                        </div>
-                        <div class="col-lg-12 mb-4 d-lg-flex gap-5 mb-3">
-                            <div class="form-check form-switch form-check-success">
-                                <input class="form-check-input" type="checkbox" role="switch" name="disclaimer" id="disclaimer">
-                                <label class="form-check-label">You have read and agree to the <a href="#" class="text-primary">Terms of Service</a> </label>
-                                <div id="vld_disclaimer"></div>
-                            </div>
-                        </div>
                         <div class="col-lg-12 mb-3">
-                            <?php if(!empty($course_id)) { ?>
-                            <button class="enrollbtn" type="submit" id="enrollbtn">Next</button>
-                            <?php } else { ?>
-                            <button class="enrollbtn" type="submit" id="enrollbtn">Submit</button>
-                            <?php } ?>
+                            <button class="enrollbtn" type="submit" id="enrollbtn">Update Profile</button>
+                            <input type="hidden" name="user_id" id="user_id" value="<?= @$getUserDetails->id; ?>" />
                         </div>
                     </div>
                 </form>
             </div>
-            <?php if(!empty($course_id)) { ?>
-            <div class="col-lg-4">
-                <h3 class="h4 fw-bold mb-4 wow fadeInUp">Order Summary</h3>
-                <div class="p-4 bg-light pb-2 border rounded">
-                    <table class="table paytable">
-                        <tbody>
-                            <tr>
-                                <td style="width: 260px;"><?= $course_title; ?></td>
-                                <td class="text-end">$ <?= $offer_price; ?></td>
-                            </tr>
-                            <tr>
-                                <td class="border-top fw-semibold">You Pay	:</td>
-                                <td class="border-top text-end h6 text-primary fw-semibold">$ <?= $offer_price; ?></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <?php } ?>
         </div>
     </div>
 </section>
@@ -189,41 +145,9 @@ $(document).ready(function() {
         event.stopPropagation();
     });
 
-    $('#username').on('keyup', function(e) {
-        var username = $('#username').val();
-        if(username === ''){
-            $('#vld_username').text('This field is required').css('color', 'red').show();
-            $('#username').focus().css('border', '1px solid red');
-            setTimeout(function () { $("#vld_username").hide(); }, 5000);
-            e.preventDefault();
-        } else {
-            $("#vld_username").hide();
-            $('#username').focus().css('border', '1px solid green');
-            $.ajax({
-                type: "POST",
-                url: "<?= base_url('Home/checkusername')?>",
-                data: {username: username},
-                dataType:'json',
-                beforeSend : function() {},
-                success:function(returndata) {
-                    if(returndata.result === 'success') {
-                        $('#vld_username').fadeIn().html(returndata.data).css({'color':'green','margin-bottom':'5px'});
-                        $("#enrollbtn").prop("disabled", false);
-                    } else {
-                        $('#vld_username').fadeIn().html(returndata.data).css({'color':'red','margin-bottom':'5px'});
-                        setTimeout(function(){$("#vld_username").html("");},3000);
-                        $("#username").focus();
-                        $("#enrollbtn").prop("disabled", true);
-                        return false;
-                    }
-                }
-            });
-        }
-    });
-
     $('#email').on('keyup', function(e) {
         var email = $('#email').val();
-        if(email === ''){
+        if(email === '') {
             $('#vld_email').text('This field is required').css('color', 'red').show();
             $('#email').focus().css('border', '1px solid red');
             setTimeout(function () { $("#vld_email").hide(); }, 5000);
@@ -301,10 +225,21 @@ $(document).ready(function() {
             $('#vld_dob').html('Please select a valid date of birth.');
         }
     });
+
+    $('#profile_pic').on('change', function(event) {
+        var input = event.target;
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#profile_pic_preview').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    });
+
 });
 
-$("#registrationForm").submit(function (e) {
-    var disclaimer = $('#disclaimer').is(':checked');
+$("#profileForm").submit(function (e) {
     var emailRegex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
     if ($('#first_name').val() === '') {
         $('#vld_first_name').text('This field is required').css('color', 'red').show();
@@ -415,55 +350,6 @@ $("#registrationForm").submit(function (e) {
         e.preventDefault();
     } else {
         $('#zipcode').focus().css('border', '1px solid green');
-    }
-
-    if ($('#username').val() === '') {
-        $('#vld_username').text('This field is required').css('color', 'red').show();
-        $('#username').focus().css('border', '1px solid red');
-        setTimeout(function () { $("#vld_username").hide(); }, 5000);
-        e.preventDefault();
-    } else {
-        $('#username').focus().css('border', '1px solid green');
-    }
-
-    if ($('#password').val() === '') {
-        $('#vld_password').text('This field is required').css('color', 'red').show();
-        $('#password').focus().css('border', '1px solid red');
-        setTimeout(function () { $("#vld_password").hide(); }, 5000);
-        e.preventDefault();
-    } else {
-        if ($('#password').val().length < 8) {
-            $('#vld_password').text('Password should be at least 8 characters long').css('color', 'red').show();
-            $('#password').focus().css('border', '1px solid red');
-            setTimeout(function () { $("#vld_password").hide(); }, 5000);
-            e.preventDefault();
-        }
-    }
-
-    if ($('#conpassword').val() === '') {
-        $('#vld_conpassword').text('This field is required').css('color', 'red').show();
-        $('#conpassword').focus().css('border', '1px solid red');
-        setTimeout(function () { $("#vld_conpassword").hide(); }, 5000);
-        e.preventDefault();
-    } else {
-        if ($('#conpassword').val().length < 8) {
-            $('#vld_conpassword').text('Confirm Password should be at least 8 characters long').css('color', 'red').show();
-            $('#conpassword').focus().css('border', '1px solid red');
-            setTimeout(function () { $("#vld_conpassword").hide(); }, 5000);
-            e.preventDefault();
-        }
-    }
-
-    if ($('#password').val() !== $('#conpassword').val()) {
-        $('#vld_conpassword').text('Password Mismatch').css('color', 'red').show();
-        $('#conpassword').focus().css('border', '1px solid red');
-        setTimeout(function () { $("#vld_conpassword").hide(); }, 5000);
-        e.preventDefault();
-    }
-    if (!disclaimer) {
-        $('#vld_disclaimer').text('Please agree to the terms and conditions.').css('color', 'red').show();
-        setTimeout(function () { $("#vld_disclaimer").hide(); }, 5000);
-        e.preventDefault();
     }
 });
 </script>

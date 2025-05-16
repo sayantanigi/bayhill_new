@@ -16,7 +16,7 @@ p strong{
 </style>
 <div class="main-content">
     <div class="page-content">
-        <div class="container-fluid">  
+        <div class="container-fluid">
             <section class="bg-light-gray">
                 <div class="container">
                     <div class="row">
@@ -35,7 +35,7 @@ p strong{
                     <div class="row">
                         <div class="col-lg-12 mb-3">
                             <div class="card shadow rounded">
-                                <div class="card-body">    
+                                <div class="card-body">
                                     <form id="submitform" method="post" enctype="multipart/form-data" >
                                         <div class="form-group mb-2">
                                             <label class="fw-semibold  text-black">Question</label>
@@ -47,6 +47,14 @@ p strong{
                                             <textarea type="text" class="form-control editor summermote" name="answer"  id="answer"  autocomplete="off"></textarea>
                                         </div>
                                         <small id="answer_error"></small>
+                                        <div class="form-group mb-2">
+                                            <label class="fw-semibold  text-black">Type</label>
+                                            <select class="form-control" name="faqtype" id="usertype">
+                                                <option value="">Select Type</option>
+                                                <option value="1">Driver Education FAQ</option>
+                                                <option value="2">Driving School FAQ</option>
+                                            </select>
+                                        </div>
                                         <div class="form-group mb-2">
                                             <label class="fw-semibold  text-black">Status</label>
                                             <select class="form-control" name="status"  id="userstatus">
@@ -62,7 +70,7 @@ p strong{
                                         </div>
                                     </form>
                                 </div>
-                            </div>      
+                            </div>
                         </div>
                     </div>
                 </div>

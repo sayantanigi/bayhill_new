@@ -28,14 +28,14 @@
                                 <div class="col-sm-2 text-end" style="padding-left: 54px;">
                                     <a href="<?= base_url('admin/faq/add') ?>" class="btn btn-success btn-sm"><i class="fa fa-plus"></i>&nbsp;Add FAQ</a>
                                 </div>
-                            </div>   	
+                            </div>
                             <div class="">
                                 <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
                                     <thead class="thead-light text-center">
                                         <tr>
                                             <th>#</th>
+                                            <th>Type</th>
                                             <th>Question</th>
-                                            <!--<th>Answer</th>-->
                                             <th>Status</th>
                                             <th class="text-center">Action</th>
                                         </tr>
@@ -45,8 +45,8 @@
                                             <?php foreach ($faq as $key => $v): ?>
                                                 <tr>
                                                     <td><?= $key + 1 ?></td>
+                                                    <td><?php if(@$v->faqtype == '1') {echo "Driver ED";} else {echo "Driving School";} ?></td>
                                                     <td><?= @$v->question; ?></td>
-                                                    <!--<td><?= strip_tags(@$v->answer); ?></td>-->
                                                     <td>
                                                         <div class="form-check mb-3 mt-3">
                                                             <input type="checkbox" class="form-check-input small" id="statusChange_<?= $key ?>" switch="bool" value="<?= @$v->status ?>" <?= (@$v->status == 1) ? 'checked' : '' ?>  onchange="changePckStatus(<?= @$v->id ?>, $(this))">
@@ -107,7 +107,7 @@
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>
     <script type="text/javascript">
         var adminUrl = ""
         function myfunc() {

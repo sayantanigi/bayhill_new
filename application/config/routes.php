@@ -71,13 +71,19 @@ $route['instructor_list'] = 'home/instructor_list';
 $route['instructor-details'] = 'home/instructor_details';
 $route['instructor-slot'] = 'home/instructor_slot';
 $route['student_form'] = 'home/student_form';
-$route['faq'] = 'home/faq';
+//$route['faq'] = 'home/faq';
+$route['driver-ed-faq'] = 'home/driveredfaq';
+$route['driving-school-faq'] = 'home/drivingschoolfaq';
 $route['terms'] = 'home/terms';
 $route['contact'] = 'home/contact_us';
 $route['contact_store'] = 'home/contact_store';
 $route['login'] = 'home/login';
 $route['login_process'] = 'home/login_process';
 $route['dashboard'] = 'users/dashboard';
+$route['profile-settings'] = 'users/dashboard/profile_settings';
+$route['saveProfileData'] = 'users/dashboard/update_profile';
+$route['change-password'] = 'users/dashboard/change_password';
+$route['updatePassword'] = 'users/dashboard/update_password';
 $route['logout'] = 'users/dashboard/logout';
 
 //admin

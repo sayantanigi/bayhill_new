@@ -1,8 +1,18 @@
 <section class="courseListpnl">
     <div class="container">
+        <div class="text-success-msg f-20">
+            <?php if ($this->session->flashdata('message')) {
+                echo '<p style="text-align: center; font-size: 18px; padding: 10px; background: green; border-radius: 20px; margin-bottom: 30px; color: #fff;">'.$this->session->flashdata('message').'</p>';
+                unset($_SESSION['message']);
+            } ?>
+            <?php if ($this->session->flashdata('error')) {
+                echo '<p style="text-align: center; font-size: 18px; padding: 10px; background: red; border-radius: 20px; margin-bottom: 30px; color: #fff;">'.$this->session->flashdata('error').'</p>';
+                unset($_SESSION['error']);
+            } ?>
+        </div>
         <h2 class="subtitle  wow fadeInUp">Welcome, <?= $_SESSION['bayhill']['first_name']." ".$_SESSION['bayhill']['last_name']?></h2>
-        <h2 class="subtitle  wow fadeInUp">Course List</h2>
         <h3 class="maintitle mb-4  wow fadeInUp">Your Purchased Course List</h3>
+        <p style="color: #EC2526; font-style: italic;">*CANCELLATIONS FEES OF $60 APPLY IF CANCELLATION ISN’T MADE 48 HOURS PRIOR TO YOUR SCHEDULED CLASS</p>
         <div class="row g-4">
             <?php
             if (!empty($getPurchasedCourseList)) {
