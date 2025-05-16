@@ -33,7 +33,7 @@ p strong{font-weight: 600 !important; color: black !important;}
                                 <div class="col-sm-2 text-end" style="padding-left: 54px;">
                                     <a href="<?= base_url('admin/student/add_student') ?>" class="btn btn-success btn-sm"><i class="fa fa-plus"></i>&nbsp;Add</a>
                                 </div>
-                            </div>   	
+                            </div>
                             <div class="">
                                 <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
                                     <thead class="thead-light text-center">
@@ -54,7 +54,7 @@ p strong{font-weight: 600 !important; color: black !important;}
                                             <?php foreach ($trainer_list as $key => $v): ?>
                                                 <tr>
                                                     <td><?= $key + 1 ?></td>
-                                                    <td><?= ucfirst(@$v->first_name); ?> &nbsp; <?= ucfirst(@$v->last_name); ?></td>
+                                                    <td><?= ucfirst(@$v->first_name)." ".ucfirst(@$v->last_name); ?></td>
                                                     <td><?= @$v->email; ?></td>
                                                     <td><?= @$v->phone; ?></td>
                                                     <td><?= @$v->address; ?></td>
@@ -88,7 +88,7 @@ p strong{font-weight: 600 !important; color: black !important;}
     </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>
 <script type="text/javascript">
 function deleteDeals(dealId) {
     swal({

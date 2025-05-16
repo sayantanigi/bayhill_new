@@ -74,22 +74,18 @@
         </div>
     </div>
 </section>
-<section class="yelpreview  wow fadeInUp">
+<section>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d101210.25279283331!2d-122.00543699999999!3d37.559295!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fbf9ca07dcb6d%3A0xfc29ae26cb7d1f1c!2sBay%20Hill%20Driving%20School!5e0!3m2!1sen!2sin!4v1747312187312!5m2!1sen!2sin" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</section>
+<!-- <section class="yelpreview  wow fadeInUp">
     <div class="container">
         <div class="yelpBox">
             <div class="row g-5 justify-content-between align-items-center">
                 <div class="col-lg-8">
                     <h2 class="h5 mb-3">Why Take California Driver Ed With Us?</h2>
-                    <p>We help teens and families navigate through their first-time driver experience to ensure
-                        that it is stress, worry and speedbump free. Our courses can be completed on any mobile
-                        device and will automatically save your progress each time you log out. Join thousands
-                        of teens who chose First Time Driver for their online driver education and get ready to
-                        earn
-                        your California Learner’s Permit. Join thousands of teens who chose First Time Driver
-                        for
-                        their online driver education and get ready to earn your California Learner’s Permit.
-                        Find
-                        our course now.</p>
+                    <p>Bay Hill Driving School, established in 2010, offers high-quality driver education designed to help you become a safe and confident driver in California. Our DMV-approved instructors are fully licensed and bring years of behind-the-wheel experience, providing patient, supportive training for both teens and adults. We pride ourselves on professional, courteous instruction tailored to your needs—whether you're just starting out, brushing up your skills, or preparing for the DMV driving test.
+
+</p>
                     <div class="mt-3">
                         <a href="#" class="enrollbtn">Course FAQ</a>
                     </div>
@@ -100,6 +96,31 @@
             </div>
         </div>
     </div>
+</section> -->
+<section class="whychoose" style="background-image: url(<?= base_url(); ?>assets/images/bg-cover-01.jpg);">
+
+    <div class="container">
+
+        <div class="row g-5 justify-content-center align-items-center">
+
+            <div class="col-lg-10 text-center">
+
+                <h2 class="maintitle text-white mb-4">Why Take California Driver Ed With Us?</h2>
+
+                <p>Bay Hill Driving School, established in 2010, offers high-quality driver education designed to help you become a safe and confident driver in California. Our DMV-approved instructors are fully licensed and bring years of behind-the-wheel experience, providing patient, supportive training for both teens and adults. We pride ourselves on professional, courteous instruction tailored to your needs—whether you're just starting out, brushing up your skills, or preparing for the DMV driving test.</p>
+
+                <div class="mt-5">
+
+                    <a href="<?= base_url('faq'); ?>" class="enrollbtn text-uppercase">Course FAQ</a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </section>
 <style>
 #contact-messages {margin: 5px 0px 0px 10px; text-align: center; width: 350px; border: 0; display: inline-block;}

@@ -34,7 +34,22 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                                 </div>
                             </div>
                             <div>
+                                <?php
+                                $booking_details = $this->db->query("SELECT * FROM booking_details WHERE booking_date = '".date('Y-m-d')."'")->result();
+                                if(!empty($booking_details)){
+                                    $bookingIds = array_map(function($booking_details) {
+                                        return $booking_details->booking_id;
+                                    }, $booking_details);
+                                    $bookingID = implode(',', $bookingIds);
+                                    $totalTCount = $this->db->query("SELECT * FROM booking WHERE id IN (".$bookingID.") AND trainer_id = '".$instructor->id."'")->num_rows();
+                                    if($totalTCount > 3) { ?>
+                                    <a href="javascript:void(0)" class="btn btn-sm btn-danger">Already Booked</a>
+                                    <?php } else { ?>
+                                    <a href="<?= base_url()?>instructor-slot?ctitle=<?= base64_encode($getCourse->course_name)?>&uid=<?= base64_encode($user_id)?>&insid=<?= base64_encode($instructor->id)?>" class="btn btn-sm btn-danger">Book Now</a>
+                                    <?php } ?>
+                                <?php } else { ?>
                                 <a href="<?= base_url()?>instructor-slot?ctitle=<?= base64_encode($getCourse->course_name)?>&uid=<?= base64_encode($user_id)?>&insid=<?= base64_encode($instructor->id)?>" class="btn btn-sm btn-danger">Book Now</a>
+                                <?php } ?>
                             </div>
                         </div>
                         <div class="team-card__content-shape">

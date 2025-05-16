@@ -7,15 +7,15 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
         <div class="d-lg-flex gap-4 justify-content-between">
             <div><h3 class="maintitle mb-4  wow fadeInUp">Plan your reservation based on<br/> your preferences</h3></div>
             <div class="mb-4">
-                <a href="<?= base_url() ?>booking_slot?ctitle=<?= base64_encode($getCourse->course_name)?>&uid=<?= base64_encode($user_id)?>" class="enrollbtn btn-warning">Book By Availability</a>
-                <a href="<?= base_url() ?>instructor_list?ctitle=<?= base64_encode($getCourse->course_name)?>&uid=<?= base64_encode($user_id)?>" class="enrollbtn">Book by Instructor</a>
+                <a href="<?= base_url() ?>booking_slot?course_code=<?= base64_encode($getCourse->course_code)?>&uid=<?= base64_encode($user_id)?>" class="enrollbtn btn-warning">Book By Availability</a>
+                <a href="<?= base_url() ?>instructor_list?course_code=<?= base64_encode($getCourse->course_code)?>&uid=<?= base64_encode($user_id)?>" class="enrollbtn">Book by Instructor</a>
             </div>
         </div>
         <div class="boxDateSchdule">
             <?php if(empty($booking_id)) { ?>
-            <form action="<?php echo base_url() ?>create-booking?ctitle=<?= base64_encode($getCourse->course_name) ?>&uid=<?= base64_encode($user_id) ?>" method="POST">
+            <form action="<?php echo base_url() ?>create-booking?course_code=<?= base64_encode($getCourse->course_code) ?>&uid=<?= base64_encode($user_id) ?>" method="POST">
             <?php } else { ?>
-            <form action="<?php echo base_url() ?>confirm-booking?ctitle=<?= base64_encode($getCourse->course_name) ?>&uid=<?= base64_encode($user_id) ?>&bookingid=<?= base64_encode($booking_id) ?>" method="POST">
+            <form action="<?php echo base_url() ?>confirm-booking?course_code=<?= base64_encode($getCourse->course_code) ?>&uid=<?= base64_encode($user_id) ?>&bookingid=<?= base64_encode($booking_id) ?>" method="POST">
             <?php } ?>
                 <div class="row">
                     <div class="col-lg-6">
@@ -28,6 +28,7 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                                     <li><span style="background-color: #f5f6fa;"></span> Expired slots</li>
                                 </ul>
                                 <p style="font-size: 12px; text-align: justify; color: red; margin-top: 12px; margin-bottom: 0; font-style: italic;">Note: Please select your date. Once select it cannot be undone.</p>
+                                <p style="font-size: 12px; text-align: justify; color: red; margin-top: 0; margin-bottom: 0; font-style: italic;">*You can select one or multiple dates as per your convenience.</p>
                             </div>
                             <div id="slot-container" style="display: none;">
                                 <div class="text-start"><a href="#" class="text-warning" id="back-to-calendar"><i class="fas fa-chevron-left me-1"></i> Back to Calendar</a></div>
@@ -38,6 +39,7 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                                     <li><span style="background-color: #f0d0d0;"></span> No available slots</li>
                                 </ul>
                                 <p style="font-size: 12px; text-align: justify; color: red; margin-top: 12px; margin-bottom: 0; font-style: italic;">Note: Please select your slot. Once select it cannot be undone.</p>
+                                <p style="font-size: 12px; text-align: justify; color: red; margin-top: 0; margin-bottom: 0; font-style: italic;">*You can select one or multiple dates as per your convenience.</p>
                             </div>
                         </div>
                     </div>
@@ -95,6 +97,17 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-lg-6" id="remainingClassBox">
+                                        <div class="d-flex w-100 bookingBox align-items-center">
+                                            <div class="iconBook">
+                                                <i class="fas fa-id-card-alt"></i>
+                                            </div>
+                                            <div class="boxInfo">
+                                                <h3 id="course_class">15 Dec, 2024</h3>
+                                                <h4>Remaining booking</h4>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div id="booking_details" class="mt-30 mb-50">
@@ -102,6 +115,9 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                                 <div id="booking-details" class="mt-10 mb-10"></div>
                             </div>
                             <div id="emptySlotmsg"></div>
+                            <div class="col-lg-12 mb-50" id="additionalInfo">
+                                <textarea class="form-control" id="additional_info" name="additional_info" rows="3" placeholder="Additional Information"></textarea>
+                            </div>
                             <div class="text-center">
                                 <button class="enrollbtn" id="confirm-booking">Confirm Book Slot</button>
                                 <input type="hidden" id="course_id" name="course_id" value="<?= $course_id; ?>">
@@ -155,7 +171,9 @@ const totalClasses = <?= $course_class ?>;
 
 $(function() {
     $("#confirm-booking").hide();
+    $("#additionalInfo").hide();
     $(".bookingDetails").hide();
+    $("#remainingClassBox").hide();
     const calendarElement = $('#calendar');
     const today = new Date();
     let selectedDate = null;
@@ -200,7 +218,6 @@ $(function() {
             const date = new Date(year, month, day);
             let dayElement = $('<div></div>').text(day);
 
-            //if (date < today.setHours(0, 0, 0, 0)) {
             if (date < today.setHours(0, 0, 0, 0) || date.getDay() === 0 || date.getDay() === 6) {
                 dayElement.addClass('disabled');
             } else {
@@ -259,22 +276,32 @@ $(function() {
             slotElement.addClass('selected');
             $('#selected_times').val(JSON.stringify(selectedSlots));
             $('#selected_dates').val(JSON.stringify(selectedDates));
-            updateBookingDetails(formattedDate, formattedSDate);
+            let remainingClasses = totalClasses - selectedSlots.length;
+            updateBookingDetails();
             if (currentClass < totalClasses) {
                 currentClass++;
                 $('#calendar-container').show();
                 $('#slot-container').hide();
                 $('#confirm-booking').show();
+                $('#additionalInfo').show();
+                $("#remainingClassBox").show();
+                if (remainingClasses > 1) {
+                    $('#course_class').text(remainingClasses + ' Classes');
+                } else if (remainingClasses === 1) {
+                    $('#course_class').text(remainingClasses + ' Class');
+                } else {
+                    $('#course_class').text('All Classes Booked');
+                }
             } else {
                 $('#confirm-booking').show();
+                $('#additionalInfo').show();
             }
         }
     }
 
-    function updateBookingDetails(formattedDate, formattedSDate) {
-        var user_id = $("#user_id").val();
-        var course_id = $("#course_id").val();
+    function updateBookingDetails() {
         $("#datetimeboxInfo").hide();
+        $("#remainingClassBox").show();
         if (selectedSlots.length > 0) {
             $(".bookingDetails").show();
             $("#emptySlotmsg").hide()
@@ -294,18 +321,30 @@ $(function() {
             if (indexToRemove > -1) {
                 selectedSlots.splice(indexToRemove, 1);
                 selectedDates.splice(indexToRemove, 1);
-                $('#calendar-container').show();
-                $('#slot-container').hide();
+                $('#selected_times').val(JSON.stringify(selectedSlots));
+                $('#selected_dates').val(JSON.stringify(selectedDates));
+                remainingClasses = totalClasses - selectedSlots.length;
+                if(remainingClasses > 0) {
+                    $('#course_class').text(remainingClasses > 1 ? `${remainingClasses} Classes` : `${remainingClasses} Class`);
+                } else {
+                    $('#course_class').text('All Classes Booked');
+                }
+                updateBookingDetails();
+                //renderSlots(new Date().toLocaleDateString('default', { day: '2-digit', month: 'short', year: 'numeric' }), new Date().toISOString().split('T')[0]);
+                renderCalendar(today.getMonth(), today.getFullYear());
             }
 
             if (selectedSlots.length === 0) {
-                $('#calendar-container').show(); // Show calendar for new selection
+                $('#calendar-container').show();
                 $('#slot-container').hide();
                 $(".bookingDetails").hide();
-                $('#confirm-booking').hide(); // Hide confirmation button until new slots are selected
+                $('#confirm-booking').hide();
+                $('#additionalInfo').hide();
+                $("#remainingClassBox").hide();
+                $("#datetimeboxInfo").show();
                 $("#emptySlotmsg").text('All slots have been removed. Please select a new date and time.').css('color', 'red').show();
             }
-            updateBookingDetails();
+            //updateBookingDetails();
         });
     }
 
@@ -314,7 +353,6 @@ $(function() {
         $('#calendar-container').show();
     });
 
-    // Set the initial date on load
     const formattedDate = today.toLocaleDateString('default', { day: '2-digit', month: 'short', year: 'numeric' });
     const formattedSDate = today.toISOString().split('T')[0];
     $('#selected_date').val(formattedSDate);

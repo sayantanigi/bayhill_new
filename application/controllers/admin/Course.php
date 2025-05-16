@@ -38,7 +38,7 @@ class Course extends CI_Controller {
                 $image  = '';
             }
             $data = array(
-                'course_code' => random_int(100000, 999999),
+                'course_code' => time(),
                 'course_name' => strip_tags($this->input->post('course_name')),
                 'course_short_description' => htmlspecialchars($this->input->post('course_short_description')),
                 'course_description' => htmlspecialchars($this->input->post('course_description')),
@@ -51,7 +51,7 @@ class Course extends CI_Controller {
                 'pincode' => strip_tags($this->input->post('pincode')),
                 'course_duration' => strip_tags($this->input->post('course_duration')),
                 'course_class' => strip_tags($this->input->post('course_class')),
-                // 'class_duration' => strip_tags($this->input->post('class_duration')),
+                //'class_duration' => strip_tags($this->input->post('class_duration')),
                 'course_price' => strip_tags($this->input->post('course_price')),
                 'offer_price' => strip_tags($this->input->post('offer_price')),
                 'course_image' => $image,
@@ -113,7 +113,7 @@ class Course extends CI_Controller {
                 'pincode' => strip_tags($this->input->post('pincode')),
                 'course_duration' => strip_tags($this->input->post('course_duration')),
                 'course_class' => strip_tags($this->input->post('course_class')),
-                // 'class_duration' => strip_tags($this->input->post('class_duration')),
+                //'class_duration' => strip_tags($this->input->post('class_duration')),
                 'course_price' => strip_tags($this->input->post('course_price')),
                 'offer_price' => strip_tags($this->input->post('offer_price')),
                 'course_image' => $image,

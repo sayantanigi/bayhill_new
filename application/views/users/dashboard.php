@@ -65,16 +65,24 @@
                             $getBookingSlots = $this->db->query("SELECT * FROM booking_details WHERE booking_id = '".@$getBookingData->id."'")->result();
                             if($course->course_class > count($getBookingSlots)) { ?>
                             <div class="package-card__body__btn text-center">
-                                <a href="<?= base_url() ?>booking_slot?ctitle=<?= base64_encode($course->course_name)?>&uid=<?= base64_encode($_SESSION['bayhill']['user_id'])?>&bookingid=<?= base64_encode($getBookingData->id)?>" class="drivschol-btn w-100">Book slot for pending classes</a>
-                            </div>
-                            <?php } else { ?>
-                            <div class="col-lg-12 col-md-12 wow fadeInUp" style="text-align: center;margin-top: 15px;border: 1px solid #f59b24;border-radius: 18px;">
+                                <a href="<?= base_url() ?>booking_slot?course_code=<?= base64_encode($course->course_code)?>&uid=<?= base64_encode($_SESSION['bayhill']['user_id'])?>&bookingid=<?= base64_encode($getBookingData->id)?>" class="drivschol-btn w-100">Book slot for pending classes</a>
+                                <div class="col-lg-12 col-md-12 wow fadeInUp" style="text-align: center;margin-top: 15px;border: 1px solid #f59b24;border-radius: 18px;">
                                 <?php
                                 if(!empty($getBookingSlots)) {
                                     $i = 1;
                                     foreach ($getBookingSlots as $slot) { ?>
                                     <p style="margin: 0px;font-size: 14px;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time; ?></p>
                                 <?php $i++; } } ?>
+                                </div>
+                            </div>
+                            <?php } else { ?>
+                            <div class="col-lg-12 col-md-12 wow fadeInUp" style="text-align: center;margin-top: 15px;border: 1px solid #f59b24;border-radius: 18px;">
+                            <?php
+                            if(!empty($getBookingSlots)) {
+                                $i = 1;
+                                foreach ($getBookingSlots as $slot) { ?>
+                                <p style="margin: 0px;font-size: 14px;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time; ?></p>
+                            <?php $i++; } } ?>
                             </div>
                             <?php }
                         } else { ?>

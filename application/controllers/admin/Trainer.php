@@ -110,6 +110,7 @@ class Trainer extends CI_Controller {
                 'coverImage' => $cimage,
                 'skills' => $serialized_data,
                 'status' => $this->input->post('status'),
+                'email_verify_status' => $this->input->post('email_verify_status'),
                 'password' => md5($this->input->post('password')),
                 'created_at' => date('Y-m-d H:i:s')
             );
@@ -389,6 +390,7 @@ class Trainer extends CI_Controller {
                 'image' => $pimage,
                 'coverImage' => $cimage,
                 'status' => $this->input->post('status'),
+                'email_verify_status' => $this->input->post('email_verify_status'),
             );
             $result = $this->Adminmodel->update($data, 'users', array('id' => $id));
             if ($result) {
