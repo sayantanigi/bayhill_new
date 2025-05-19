@@ -1,7 +1,21 @@
 <section class="courseListpnl">
     <div class="container">
-        <h2 class="subtitle wow fadeInUp">Course List</h2>
-        <p style="color: #EC2526; font-style: italic;">*CANCELLATIONS FEES OF $60 APPLY IF CANCELLATION ISN’T MADE 48 HOURS PRIOR TO YOUR SCHEDULED CLASS</p>
+        <div class="row">
+            <div class="col-lg-8 col-md-12 wow fadeInUp">
+                <h2 class="subtitle wow fadeInUp">Course List</h2>
+                <p style="color: #EC2526; font-style: italic;">*CANCELLATION FEE OF $60 APPLY IF CANCELLATION IS NOT MADE 48 HOURS PRIOR TO YOUR SCHEDULED CLASS</p>
+            </div>
+            <div class="col-lg-4 col-md-6 wow fadeInUp animated">
+                <div class="package-card">
+                    <div class="package-card__body">
+                        <p id="teens" class="inner_p">Different amount other then listed packages</p>
+                        <div class="package-card__body__btn text-center">
+                            <a href="<?= base_url("payservice")?>" class="drivschol-btn w-100">Pay Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <h3 class="maintitle mb-4 wow fadeInUp">Driving Course Details and Offerings</h3>
         <div id="loader" style="display:none; text-align: center; position: absolute; z-index: 1; width: 100%;">
             <img src="<?= base_url() ?>assets/images/loader.gif" alt="Loading...">

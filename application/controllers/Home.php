@@ -547,7 +547,7 @@ class Home extends CI_Controller {
         }
         echo $html;
     }
-    /*public function faq() {
+    public function faq() {
         $data = array(
             'title' => 'Bay Hill Driving School',
             'page' => 'FAQ',
@@ -560,7 +560,7 @@ class Home extends CI_Controller {
         $this->load->view('header', $data);
         $this->load->view('frontend/faq');
         $this->load->view('footer');
-    }*/
+    }
     public function driveredfaq() {
         $data = array(
             'title' => 'Bay Hill Driving School',
@@ -768,5 +768,57 @@ class Home extends CI_Controller {
             $this->session->set_flashdata('error', 'Invalid login credential. Please login with valid credential');
             redirect('login');
         }
+    }
+    public function payservice() {
+        $data = array(
+            'title' => 'Bay Hill Driving School',
+            'page' => 'Pay Service',
+            'subpage' => 'Pay Service'
+        );
+        $this->load->view('header', $data);
+        $this->load->view('frontend/customservice');
+        $this->load->view('footer');
+    }
+    public function payservice_process() {
+        $postData = $this->input->post();
+        $user_data = array(
+            'unique_code' => strtotime(date('Y-m-d h:i:s')),
+            'user_type' => $postData['user_type'],
+            'first_name' => $postData['first_name'],
+            'last_name' => $postData['last_name'],
+            'phone' => $postData['phone'],
+            'email' => $postData['email'],
+            'dob' => $postData['dob'],
+            'gender' => $postData['gender'],
+            'permit' => $postData['permit'],
+            'username' => $postData['username'],
+            'password' => base64_encode($postData['password']),
+            'status' => '1',
+            'email_verify_status' => '1',
+            'created_at' => date('Y-m-d h:i:s')
+        );
+        $this->db->insert('users', $user_data);
+        $insert_id = $this->db->insert_id();
+        $payservice_data = array(
+            'user_id' => $insert_id,
+            'service' => $postData['service'],
+            'amount' => $postData['amount'],
+            'paidBy' => $postData['paidBy'],
+            'card_number' => $postData['card_number'],
+            'cvv' => $postData['cvv'],
+            'expiry_date' => $postData['expiry_date']
+        );
+        $this->db->insert('payservice_data', $payservice_data);
+        $payservice_id = $this->db->insert_id();
+        if($payservice_id > 0) {
+            $this->session->set_flashdata('message', 'Payment successful, You have successfully registered with us. Please continue with login process.');
+            redirect('payservice');
+        } else {
+            $this->session->set_flashdata('error', 'Payment unsuccessful, Please try again later.');
+            redirect('payservice');
+        }
+        $this->load->view('header');
+        $this->load->view('frontend/customservice');
+        $this->load->view('footer');
     }
 }
