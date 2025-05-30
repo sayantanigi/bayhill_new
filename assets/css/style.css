@@ -5166,8 +5166,8 @@ a:visited {
 }
 .main-menu .main-menu__list li ul li.current > a,
 .main-menu .main-menu__list li ul li:hover > a {
-  background-color: var(--drivschol-gray2, #F5F5F5);
-  color: var(--theme-primary, #EC2526);
+      background-color: #014599;
+    color: #ffffff;
 }
 .main-menu .main-menu__list li ul li.current > a::after,
 .main-menu .main-menu__list li ul li:hover > a::after {
@@ -7487,10 +7487,10 @@ body.megamenu-popup-active .mobile-nav__content {
 }
 .testimonials-card__top__designation {
   margin-top: 20px;
-  text-align: center;
+  text-align: left;
   margin-left: auto;
   margin-right: auto;
-  font-size: 15px;
+  font-size: 14px;
   font-style: normal;
   font-weight: 400;
   line-height: 1.6;
@@ -16099,7 +16099,7 @@ body.boxed-wrapper .contact-two__left__shape {
   width: 100%;
   position: relative;
 }
-.imgbox:after{
+/*.imgbox:after{
   width: 100%;
   height: 100%;
   position: absolute;
@@ -16108,18 +16108,19 @@ body.boxed-wrapper .contact-two__left__shape {
   background: #00000069;
   z-index: 1;
   content: '';
-}
+}*/
 .slidebanner{
   overflow: hidden;
   border-radius: 40px;
 }
 .bnr-content {
   position: absolute;
-  bottom: 75px;
+  bottom: 30px;
   padding: 20px 20px;
   width: 100%;
   text-align: center;
   z-index: 9;
+  background: #00000075;
 }
 .bnr-content h2{
   color: #fff;
@@ -16138,6 +16139,7 @@ body.boxed-wrapper .contact-two__left__shape {
   position: absolute;
   bottom: 40px;
   right: 90px;
+  display: none;
 }
 #bannerslide .owl-nav .owl-next{
   width: 40px;
@@ -16897,17 +16899,43 @@ body.boxed-wrapper .contact-two__left__shape {
   padding: 80px 0;
 }
 .faqpnl .accordion-item{
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   border: 0;
   box-shadow: 0 5px 15px #00000012;
   border-radius: 10px;
   overflow: hidden;
 }
 .faqpnl .accordion-item .accordion-button{
-  font-weight: 600;
-  padding: 22px;
-  font-size: 18px;
+  font-weight: 700;
+  padding: 18px 22px;
+  font-size: 16px;
+  background: #014599;
+  color: #fff;
 }
+.faqpnl .accordion-item .accordion-button:not(.collapsed){
+  background: #e20612;
+}
+.faqpnl .accordion-button::after{
+      background-color: #ffffff;
+    border-radius: 50%;
+    background-size: 14px;
+    background-position: center;
+}
+.blinking-text {
+  animation: blink 2s infinite;
+  color: #fbff00;
+  font-weight: bold;
+}
+
+@keyframes blink {
+  0%, 50%, 100% {
+    opacity: 1;
+  }
+  25%, 75% {
+    opacity: 0;
+  }
+}
+
 .listBoxcourse li{
   margin-bottom: 6px;
   font-size: 14px;
@@ -17008,6 +17036,7 @@ body.boxed-wrapper .contact-two__left__shape {
   position: relative;
   text-align: center;
   color: #fff;
+  z-index: 0;
 }
 .enrollBg:after{
   position: absolute;
@@ -17264,6 +17293,7 @@ body.boxed-wrapper .contact-two__left__shape {
   border-radius: 8px;
   box-shadow: 0 8px 15px #0000003d;
   border: 0;
+  z-index: 99;
 }
 .zipbox input[type="text"]{
   width: 170px;
@@ -17294,6 +17324,17 @@ body.boxed-wrapper .contact-two__left__shape {
   border-radius: 50%;
   object-fit: contain;
 }
+.chooselession label{
+   padding: 8px 14px;
+    border-radius: 30px;
+    background: #ffffff;
+    font-weight: 600;
+    border: 2px solid #014599;
+    color: #014599;
+    width: 100%;
+    text-align: center;
+    transition: all .3s;
+}
 .chooselession input[type="radio"]+label{
       padding: 8px 14px;
     border-radius: 30px;
@@ -17313,4 +17354,39 @@ body.boxed-wrapper .contact-two__left__shape {
   background-color: #e20612;
   color: #fff;
   border-color: #e20612;
+}
+.leftLinkbox .linkdesign{
+  width: 46%;
+}
+.lessondropdown{
+  display: none;
+  box-shadow: 0px 10px 60px 0px rgba(0, 0, 0, 0.07);
+  padding: 8px;
+  position: absolute;
+  top: 60px;
+  z-index: 1;
+  background: #fff;
+  width: 100%;
+}
+.lessondropdown li a{
+  font-size: 14px;
+  line-height: 26px;
+  font-weight: 700;
+  border-radius: 4px;
+  display: flex;
+  text-transform: capitalize;
+  padding: 10px 20px;
+  transition: 400ms;
+  line-height: normal;
+  letter-spacing: 0;
+}
+.lessondropdown li a:hover{
+  background-color: #014599;
+    color: #ffffff;
+}
+.choseoptionlesion:hover .lessondropdown{
+  display: block;
+}
+.lessondropdown .subnav{
+
 }

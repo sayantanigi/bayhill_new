@@ -99,6 +99,7 @@ $(document).ready(function() {
         var cvv = $('#cvv').val();
         var expiryDate = $('#expiry_date').val();
         var terms = $('#terms').is(':checked');
+
         // Card number validation (Luhn algorithm)
         function luhnCheck(cardNumber) {
             let sum = 0;
@@ -116,6 +117,7 @@ $(document).ready(function() {
             }
             return sum % 10 === 0;
         }
+
         // Validate card number
         if (cardNumber === ''  || cardNumber.length !== 16 || !luhnCheck(cardNumber)) {
             $('#vld_card_number').text('Please enter a valid 16-digit card number').css('color', 'red').show();
@@ -125,6 +127,7 @@ $(document).ready(function() {
         } else {
             $('#card_number').css('border', '1px solid green');
         }
+
         // Validate CVV (3 or 4 digits)
         if (cvv === '' || !/^\d{3,4}$/.test(cvv)) {
             $('#vld_cvv').text('Please enter a valid CVV').css('color', 'red').show();
@@ -134,6 +137,7 @@ $(document).ready(function() {
         } else {
             $('#cvv').css('border', '1px solid green');
         }
+
         // Validate expiry date (MM/YYYY)
         if (expiryDate === '' || !/^\d{2}\/\d{4}$/.test(expiryDate)) {
             $('#vld_expiry_date').text('Please enter a valid expiry date in MM/YYYY format.').css('color', 'red').show();

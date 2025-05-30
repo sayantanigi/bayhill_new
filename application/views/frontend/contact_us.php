@@ -1,7 +1,115 @@
 <?php $site_setting = $this->db->query("select * from  settings")->row(); ?>
-<section class="innerBanner" style="background-image: url(<?= base_url() ?>/assets/images/bg-cover-01.jpg);">
+<!-- <section class="innerBanner" style="background-image: url(<?= base_url() ?>/assets/images/bg-cover-01.jpg);">
     <div class="container">
         <h2 class="text-center title text-white">Contact Us</h2>
+    </div>
+</section> -->
+<section class="position-relative bg-light">
+    <div class="bannerform">
+        <div class="container">
+            <div class="row g-5 align-items-center">
+                <div class="col-lg-6 order-lg-2">
+                    <div class="slidebanner">
+                        <div class="owl-carousel owl-theme" id="bannerslide">
+                            <div class="item">
+                                <div class="imgbox">
+                                    <img src="assets/images/serv-bg-05.jpg"/>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="imgbox">
+                                    <img src="assets/images/serv-bg-03.jpg"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="bannercontent">
+                        <div class="boxcontent">
+                            <h3>California Online Drivers Education</h3>
+                            <p>DMV Approved Online Drivers ED License # E416</p>
+                        </div>
+                        <div class="bannerenroll mt-4">
+                            <form action="student-information-form.html">
+                                <div class="px-4">
+                                    <div class="d-flex align-items-center gap-3 mb-3">
+                                        <div>
+                                            <img src="assets/images/icon-tick.png" width="32"/>
+                                        </div>
+                                        <p class="mb-0">DMV Certificate of Completion for Driver's ED</p>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-3 mb-3">
+                                        <div>
+                                            <img src="assets/images/icon-tick.png" width="32"/>
+                                        </div>
+                                        <p class="mb-0">Self Paced Lessons – No Timers</p>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-3 mb-3">
+                                        <div>
+                                            <img src="assets/images/icon-tick.png" width="32"/>
+                                        </div>
+                                        <p class="mb-0">DMV Practice Tests at no extra cost</p>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-3 mb-3">
+                                        <div>
+                                            <img src="assets/images/icon-tick.png" width="32"/>
+                                        </div>
+                                        <p class="mb-0">Fast Shipping of DMV Certificate</p>
+                                    </div>
+                                </div>
+                                <a href="https://driversedforyou.com/" target="_blank" class="btnenroll mt-4 btn py-0">Enroll Now</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="py-4 bg-primary">
+    <div class="container">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-6">
+                <div class="testimonials-two__carousel drivschol-owl__carousel drivschol-owl__carousel--with-shadow drivschol-owl__carousel--basic-nav owl-carousel owl-theme p-0" data-owl-options='{
+                        "items": 1,
+                        "margin": 0,
+                        "smartSpeed": 700,
+                        "loop":true,
+                        "autoplay": true,
+                        "nav":false,
+                        "URLhashListener":true,
+                        "dots":false,
+                        
+                        "responsive": {
+                            "0": {
+                                "items": 1
+                            },
+                            "500": {
+                                "items": 1
+                            }
+                        }
+                    }'>
+                    <div class="testimonials-two__carousel__item h4 fw-bold text-center text-white justify-content-center" data-hash="item1">DMV Practice Tests at no extra cost</div>
+                    <div class="testimonials-two__carousel__item h4 fw-bold text-center text-white justify-content-center" data-hash="item2">DMV Certificate of Completion</div>
+                    <div class="testimonials-two__carousel__item h4 fw-bold text-center text-white justify-content-center" data-hash="item3">FAST Shipping of DMV Certificate</div>
+
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="d-md-flex align-items-center text-center gap-4 text-white justify-content-center">
+                    <div class="mb-3 mb-md-0">
+                        <button class="btn btn-warning fw-bold py-2 px-4 rounded-pill">Register Now</button>
+                    </div>
+                    <div class="mb-3 mb-md-0">
+                        <h2 class="mb-0 fw-bold text-white">$24.99</h2>
+                    </div>
+                    <div>
+                        <h3 class="mb-0 blinking-text h5 text-center"> No Hidden<br> Charges</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 <section class="contactPnl enrollPnl ">
@@ -45,8 +153,16 @@
                     </div>
                 </form>
             </div>
-            <div class="col-lg-4 mt-50">
-                <div class="d-flex contactInfobox align-items-center">
+            <div class="col-lg-4">
+                <div class="d-flex contactInfobox align-items-center  mb-2">
+                    <div class="boxIconcontact bg-gradient">
+                        <img src="<?= base_url() ?>assets/images/icon-01.svg">
+                    </div>
+                    <div>
+                        <a href="#"> 800 648 3650</a>
+                    </div>
+                </div>
+                <div class="d-flex contactInfobox align-items-center  mb-2">
                     <div class="boxIconcontact bg-gradient">
                         <img src="<?= base_url() ?>assets/images/icon-01.svg">
                     </div>
@@ -54,7 +170,7 @@
                         <a href="#"><?= $site_setting->phone ?></a>
                     </div>
                 </div>
-                <div class="d-flex contactInfobox align-items-center">
+                <div class="d-flex contactInfobox align-items-center  mb-2">
                     <div class="boxIconcontact bg-gradient">
                         <img src="<?= base_url() ?>assets/images/icon-02.svg">
                     </div>
@@ -62,14 +178,54 @@
                         <a href="#"><?= $site_setting->email ?></a>
                     </div>
                 </div>
-                <!-- <div class="d-flex contactInfobox align-items-center">
+                <div class="d-flex contactInfobox align-items-center  mb-2">
                     <div class="boxIconcontact bg-gradient">
                         <img src="<?= base_url() ?>assets/images/icon-03.svg">
                     </div>
                     <div>
-                        <a href="#"><?= $site_setting->address ?></a>
+                        <a href="#"> 3769 Peralta Blvd ,Suite # A, Fremont CA</a>
                     </div>
-                </div> -->
+                </div>
+                <div class="d-flex contactInfobox align-items-center  mb-2">
+                    <div class="boxIconcontact bg-gradient">
+                        <img src="<?= base_url() ?>assets/images/icon-01.svg">
+                    </div>
+                    <div>
+                        <a href="#"> 510 943 4301</a>
+                    </div>
+                </div>
+                <div class="d-flex contactInfobox align-items-center  mb-2">
+                    <div class="boxIconcontact bg-gradient">
+                        <img src="<?= base_url() ?>assets/images/icon-03.svg">
+                    </div>
+                    <div>
+                        <a href="#"> 4457 Willow Rd, Pleasanton CA 94588</a>
+                    </div>
+                </div>
+                <div class="d-flex contactInfobox align-items-center  mb-2">
+                    <div class="boxIconcontact bg-gradient">
+                        <img src="<?= base_url() ?>assets/images/icon-01.svg">
+                    </div>
+                    <div>
+                        <a href="#"> 925 464 2899</a>
+                    </div>
+                </div>
+                <div class="d-flex contactInfobox align-items-center  mb-2">
+                    <div class="boxIconcontact bg-gradient">
+                        <img src="<?= base_url() ?>assets/images/icon-03.svg">
+                    </div>
+                    <div>
+                        <a href="#"> 97 E Brokaw Rd, ,San Jose CA</a>
+                    </div>
+                </div>
+                <div class="d-flex contactInfobox align-items-center  mb-2">
+                    <div class="boxIconcontact bg-gradient">
+                        <img src="<?= base_url() ?>assets/images/icon-01.svg">
+                    </div>
+                    <div>
+                        <a href="#"> 408 384 4458</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

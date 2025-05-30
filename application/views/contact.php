@@ -29,12 +29,7 @@
 <div class="contact-form-section section-padding-02">
 
     <div class="container">
-
-
-
-        <!-- Contact Form Start -->
-
-        <div class="contact-form-wrap">
+		<div class="contact-form-wrap">
 
             <form method="POST" class="contact-form" id="submitform">
 

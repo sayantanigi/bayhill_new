@@ -370,7 +370,7 @@ $("#registrationForm").submit(function (e) {
     var cvv = $('#cvv').val();
     var expiryDate = $('#expiry_date').val();
 
-    if (cardNumber === '' || cardNumber.length !== 16 || !luhnCheck(cardNumber)) {
+    if (cardNumber === ''  || cardNumber.length !== 16 || !luhnCheck(cardNumber)) {
         $('#vld_card_number').text('Please enter a valid 16-digit card number').css('color', 'red').show();
         $('#card_number').focus().css('border', '1px solid red');
         setTimeout(function () { $("#vld_card_number").hide(); }, 5000);
@@ -442,7 +442,7 @@ $("#registrationForm").submit(function (e) {
         }
     }
 
-    if ($('#password').val() != $('#conpassword').val()) {
+    if ($('#password').val() !== $('#conpassword').val()) {
         $('#vld_conpassword').text('Password Mismatch').css('color', 'red').show();
         $('#conpassword').focus().css('border', '1px solid red');
         setTimeout(function () { $("#vld_conpassword").hide(); }, 5000);

@@ -45,6 +45,7 @@
                     </div>
                     <div class="package-card__body">
                         <h3 class="package-card__body__title"><?= $course->course_name; ?></h3>
+                        <h3 class="package-card__body__title"><?= $course->course_name1; ?></h3>
                         <div class="pt-3">
                             <ul class="listBoxcourse">
                                 <?php

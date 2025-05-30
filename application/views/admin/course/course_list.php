@@ -56,7 +56,7 @@ p strong{font-weight: 600 !important; color: black !important;}
                                                 <tr>
                                                     <td><?= $key + 1 ?></td>
                                                     <!-- <td><?= @$v->course_code;?></td> -->
-                                                    <td><?= ucwords(@$v->course_name);?></td>
+                                                    <td><?= @$v->course_name." ".@$v->course_name1;?></td>
                                                     <td>
                                                         <?= @$v->course_duration; ?>
                                                         <?= ($v->course_duration == 1) ? " Hour" : " Hours";?>

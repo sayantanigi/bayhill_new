@@ -10,7 +10,7 @@ $site_setting = $this->db->query("select * from  settings")->row();
 
     <div class="container">
 
-        <h3 class="maintitle mb-5 text-white wow fadeInUp">" Since 2010 , our commitment to serving the Bay Area community with diligence and dedication "</h3>
+        <h3 class="mb-5 text-white wow fadeInUp animated h3 fw-bold text-center">" Bay Area’s trusted choice since 2010, driven by excellence and community care."</h3>
 
         <div class="row align-items-center ">
 
@@ -26,9 +26,9 @@ $site_setting = $this->db->query("select * from  settings")->row();
 
                     <div>
 
-                        <h5 class="fw-semibold text-warning"> Ready to get behind the wheel?</h5>
+                        <h5 class="fw-semibold text-warning"> Schedule Your Driving Lessons Online 24/7!</h5>
 
-                        <p class="text-white">Call us and we’ll help to schedule your lessons at desired date and time based on the availability, free pick-up and drop-off.</p>
+                        <p class="text-white">Schedule your Driving Lessons online 24/7 at your preferred date and time based on availability, including free pick-up and drop-off.</p>
 
                     </div>
 
@@ -294,7 +294,7 @@ $site_setting = $this->db->query("select * from  settings")->row();
 
         <div class="sec-title2  text-center wow fadeInUp" data-wow-duration='300ms'>
 
-            <h3 class="maintitle ">Google Review</h3>
+            <h3 class="maintitle "><a href="https://g.page/r/CRwffcsmrin8EAE/review" target="_blank"><img src="<?= base_url(); ?>assets/images/google-review.png" height="100"></a></h3>
 
         </div>
 
@@ -744,6 +744,43 @@ with only 2 points deduction. This is all possible because my instructors are ve
     </div>
 
 </section>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const wordLimit = 38;
+    const testimonials = document.querySelectorAll(".testimonials-card__top__designation");
+
+    testimonials.forEach(paragraph => {
+        const fullText = paragraph.textContent.trim();
+        const words = fullText.split(/\s+/);
+
+        if (words.length <= wordLimit) return;
+
+        const shortText = words.slice(0, wordLimit).join(" ") + "...";
+        const showMoreBtn = document.createElement("a");
+        showMoreBtn.href = "#";
+        showMoreBtn.className = "show-more-btn";
+        showMoreBtn.style.color = "#007bff";
+        showMoreBtn.style.display = "inline-block";
+        showMoreBtn.style.marginTop = "0px";
+        showMoreBtn.style.marginLeft = "10px";
+        showMoreBtn.textContent = " Show More";
+
+        let expanded = false;
+
+        // Replace text with short version initially
+        paragraph.textContent = shortText;
+        paragraph.appendChild(showMoreBtn);
+
+        showMoreBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            expanded = !expanded;
+            paragraph.textContent = expanded ? fullText : shortText;
+            paragraph.appendChild(showMoreBtn);
+            showMoreBtn.textContent = expanded ? " Show Less" : " Show More";
+        });
+    });
+});
+</script>
 
 <section class="yelpreview  wow fadeInUp">
 
@@ -751,7 +788,8 @@ with only 2 points deduction. This is all possible because my instructors are ve
 
         <div class="sec-title2  text-center wow fadeInUp" data-wow-duration='300ms'>
 
-            <h3 class="maintitle text-white">Yelp Review</h3>
+            <h3 class="maintitle text-white"><a href="https://www.yelp.com/biz/bay-hill-driving-school-fremont#reviews
+" target="_blank"> <img src="<?= base_url(); ?>assets/images/yelp-review.png" height="140"> </a></h3>
 
         </div>
 
@@ -1134,7 +1172,7 @@ Samson W.</a>
 
             <div class="col-lg-8">
 
-                <div class="linkBox mb-4  wow fadeInUp">
+                <div class="linkBox mb-4  wow fadeInUp leftLinkbox">
 
                     <span class="linkboxtitle">DMV Useful Links</span>
 
@@ -1154,7 +1192,7 @@ Samson W.</a>
 
                 </div>
 
-                <div class="linkBox  wow fadeInUp">
+                <div class="linkBox  wow fadeInUp leftLinkbox">
 
                     <span class="linkboxtitle">Useful Video Links For New Drivers</span>
 

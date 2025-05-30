@@ -1,8 +1,8 @@
-<section class="innerBanner" style="background-image: url(./assets/images/innerbanner.jpg);">
+<!-- <section class="innerBanner" style="background-image: url(./assets/images/innerbanner.jpg);">
     <div class="container">
         <h2 class="text-center title">FAQ</h2>
     </div>
-</section>
+</section> -->
 <section class="pt-5 pb-0 bg-light">
     <div class="container">
         <div class="row align-items-center">
@@ -18,6 +18,50 @@
             </div>
             <div class="col-lg-5 text-center">
                 <img src="<?= base_url(); ?>assets/images/faq.png">
+            </div>
+        </div>
+    </div>
+</section>
+<section class="py-4 bg-primary">
+    <div class="container">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-6">
+                <div class="testimonials-two__carousel drivschol-owl__carousel drivschol-owl__carousel--with-shadow drivschol-owl__carousel--basic-nav owl-carousel owl-theme p-0" data-owl-options='{
+                        "items": 1,
+                        "margin": 0,
+                        "smartSpeed": 700,
+                        "loop":true,
+                        "autoplay": true,
+                        "nav":false,
+                        "URLhashListener":true,
+                        "dots":false,
+                        
+                        "responsive": {
+                            "0": {
+                                "items": 1
+                            },
+                            "500": {
+                                "items": 1
+                            }
+                        }
+                    }'>
+                    <div class="testimonials-two__carousel__item h4 fw-bold text-center text-white justify-content-center" data-hash="item1">Clean & well maintained Vehicles</div>
+                    <div class="testimonials-two__carousel__item h4 fw-bold text-center text-white justify-content-center" data-hash="item2">Free pick-up and drop-off</div>
+                    <div class="testimonials-two__carousel__item h4 fw-bold text-center text-white justify-content-center" data-hash="item3">Expereinced Instructors</div>
+                    <div class="testimonials-two__carousel__item h4 fw-bold text-center text-white justify-content-center" data-hash="item4">Private one-on-one lessons</div>
+
+
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="d-md-flex align-items-center text-center gap-4 text-white justify-content-center">
+                    <div class="mb-3 mb-md-0">
+                        <button class="btn btn-warning fw-bold py-2 px-4 rounded-pill">Register Now</button>
+                    </div>
+                    <div>
+                        <h3 class="mb-0 blinking-text h5 text-center"> In-Car <br> Driving Lessons</h3>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

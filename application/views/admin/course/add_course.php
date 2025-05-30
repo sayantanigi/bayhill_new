@@ -62,8 +62,13 @@ body{margin-top:20px}
                                 <div class="card shadow rounded">
                                     <div class="card-body">
                                         <div class="form-group mb-2">
-                                            <label class="fw-semibold  text-black">Course Name</label>
+                                            <label class="fw-semibold  text-black">Course Heading</label>
                                             <input type="text" class="form-control" name="course_name" id="course_name" required autocomplete="off">
+                                        </div>
+                                        <small id="course_error"></small>
+                                        <div class="form-group mb-2">
+                                            <label class="fw-semibold  text-black">Course Sub Heading</label>
+                                            <input type="text" class="form-control" name="course_name1" id="course_name" required autocomplete="off">
                                         </div>
                                         <small id="course_error"></small>
                                         <div class="form-group mb-2">

@@ -3,7 +3,6 @@
         <div class="container">
             <div class="row g-5 align-items-center">
                 <div class="col-lg-6 order-lg-2">
-
                     <div class="slidebanner">
                     <div class="owl-carousel owl-theme" id="bannerslide">
                         <div class="item">
@@ -56,12 +55,12 @@
                                 <div class="row px-4 pb-3 formbanner">
                                     <div class="col-lg-12">
                                         <div class="d-flex gap-3 chooselession mb-3">
-                                            <div>
-                                                <input type="radio" id="teenLession" name="lesson_type" value="1">
+                                            <div class="flex-fill">
+                                                <!-- <input type="radio" id="teenLession" name="lesson_type" value="1"> -->
                                                 <label for="teenLession">Teen Driving Lessons</label>
                                             </div>
-                                            <div>
-                                                <input type="radio" id="adultLession" name="lesson_type" value="2">
+                                            <div class="flex-fill">
+                                                <!-- <input type="radio" id="adultLession" name="lesson_type" value="2"> -->
                                                 <label for="adultLession">Adult Driving Lessons</label>
                                             </div>
                                         </div>
@@ -75,25 +74,45 @@
                                         <input type="hidden" id="course_type" name="course_type" value="">
                                     </div>
                                     <div class="col-lg-6">
-                                        <div class="input-group mb-3 dropdown">
-                                            <a href="javascript:void(0);" target="_blank" class="d-block w-100" id="search_course" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <div class="input-group driveraddbtn">
-                                                    <span class="input-group-text">
-                                                        <img src="assets/images/icon/car-icon.png" />
-                                                    </span>
-                                                    <div class="flex-fill">Driving Lessons</div>
-                                                    <div class="pe-3"><i class="fas fa-angle-down"></i></div>
-                                                </div>
-                                            </a>
-                                            <div class="dropdown-menu zipformsrch">
-                                                <h3 class="h6 fw-bold mb-3">Enter Your Zip Code Below to Get Started <span style="color: red;">*</span></h3>
-                                                <div class="zipbox mb-3">
-                                                    <input type="text" placeholder="Zip Code" id="zipcode" name="pincode" class="zipcode" required/>
-                                                    <div id="errmsgpin"></div>
-                                                </div>
-                                                <input class="btn btn-secondary mb-3 text-white fe-semibold rounded-0 flex-fill findZipcode" type="submit" value="View Packages">
-                                                <p>Already purchased a lesson package? </p>
-                                                <p><a href="<?= base_url('login')?>" class="text-decoration-underline">Sign in to book your next lesson</a></p>
+                                        <div class="input-group mb-3 ">
+                                            <div class="position-relative flex-fill choseoptionlesion">
+                                                <a href="javascript:void(0);" class="d-block w-100 " >
+                                                    <div class="input-group driveraddbtn">
+                                                        <span class="input-group-text">
+                                                            <img src="assets/images/icon/car-icon.png" />
+                                                        </span>
+                                                        <div class="flex-fill">Driving Lessons</div>
+                                                        <div class="pe-3"><i class="fas fa-angle-down"></i></div>
+                                                    </div>
+                                                </a>
+                                                <ul class="lessondropdown">
+                                                    <li class="dropdown subnav">
+                                                        <a href="#" id="search_course" type="button" data-bs-toggle="dropdown" aria-expanded="false">Teen Driving Lessons</a>
+                                                        <div class="dropdown-menu zipformsrch">
+                                                            <h3 class="h6 fw-bold mb-3">Enter Your Zip Code Below to Get Started <span style="color: red;">*</span></h3>
+                                                            <div class="zipbox mb-3">
+                                                                <input type="text" placeholder="Zip Code" id="zipcode" name="pincode" class="zipcode"/>
+                                                                <div id="errmsgpin"></div>
+                                                            </div>
+                                                            <input class="btn btn-secondary mb-3 text-white fe-semibold rounded-0 flex-fill findZipcode" type="submit" value="View Packages">
+                                                            <p>Already purchased a lesson package? </p>
+                                                            <p><a href="<?= base_url('login')?>" class="text-decoration-underline">Sign in to book your next lesson</a></p>
+                                                        </div>
+                                                    </li>
+                                                    <li class="dropdown subnav">
+                                                        <a href="#" type="button" data-bs-toggle="dropdown" aria-expanded="false">Adult Driving Lessons</a>
+                                                        <div class="dropdown-menu zipformsrch">
+                                                            <h3 class="h6 fw-bold mb-3">Enter Your Zip Code Below to Get Started <span style="color: red;">*</span></h3>
+                                                            <div class="zipbox mb-3">
+                                                                <input type="text" placeholder="Zip Code" id="zip_code" name="pin_code" class="zip_code"/>
+                                                                <div id="errmsg_pin"></div>
+                                                            </div>
+                                                            <input class="btn btn-secondary mb-3 text-white fe-semibold rounded-0 flex-fill find_Zipcode" type="submit" value="View Packages">
+                                                            <p>Already purchased a lesson package? </p>
+                                                            <p><a href="<?= base_url('login')?>" class="text-decoration-underline">Sign in to book your next lesson</a></p>
+                                                        </div>
+                                                    </li>
+                                                </ul>
                                             </div>
                                         </div>
                                     </div>
@@ -221,8 +240,14 @@ $('#search_course').on('click', function(){
 });
 $('input[name="lesson_type"]').on('change', function() {
     $('#course_type').val($(this).val());
-  });
+});
 $(document).ready(function() {
+    $('#search_course').click(function() {
+        $('#course_type').val('2');
+    });
+    $('.lessondropdown > li.dropdown.subnav > a').eq(1).click(function() {
+        $('#course_type').val('1');
+    });
     var checkbox = $('label.switch input[type="checkbox"]');
     function getValueBasedOnCheckbox() {
         var value;

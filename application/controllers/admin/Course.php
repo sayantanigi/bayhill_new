@@ -40,6 +40,7 @@ class Course extends CI_Controller {
             $data = array(
                 'course_code' => time(),
                 'course_name' => strip_tags($this->input->post('course_name')),
+                'course_name1' => strip_tags($this->input->post('course_name1')),
                 'course_short_description' => htmlspecialchars($this->input->post('course_short_description')),
                 'course_description' => htmlspecialchars($this->input->post('course_description')),
                 'address' => strip_tags($this->input->post('address')),
@@ -102,6 +103,7 @@ class Course extends CI_Controller {
             }
             $data = array(
                 'course_name' => strip_tags($this->input->post('course_name')),
+                'course_name1' => strip_tags($this->input->post('course_name1')),
                 'course_short_description' => htmlspecialchars($this->input->post('course_short_description')),
                 'course_description' => htmlspecialchars($this->input->post('course_description')),
                 'address' => strip_tags($this->input->post('address')),

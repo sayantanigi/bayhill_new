@@ -86,7 +86,11 @@ class Home extends CI_Controller {
     }
     public function getcourselistbyzipcode(){
         if ($this->input->server('REQUEST_METHOD') === 'POST') {
-            $pincode = $this->input->post('pincode');
+            if(!empty($this->input->post('pincode'))) {
+                $pincode = $this->input->post('pincode');
+            } else {
+                $pincode = $this->input->post('pin_code');
+            }
             $course_type = $this->input->post('course_type');
 		}
         redirect('courses?pincode='.$pincode.'&course_type='.base64_encode($course_type));

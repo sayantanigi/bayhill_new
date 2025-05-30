@@ -1,8 +1,8 @@
-<section class="innerBanner" style="background-image: url(./assets/images/innerbanner.jpg);">
+<!-- <section class="innerBanner" style="background-image: url(./assets/images/innerbanner.jpg);">
     <div class="container">
         <h2 class="text-center title">FAQ</h2>
     </div>
-</section>
+</section> -->
 <section class="pt-5 pb-0 bg-light">
     <div class="container">
         <div class="row align-items-center">
@@ -18,6 +18,51 @@
             </div>
             <div class="col-lg-5 text-center">
                 <img src="<?= base_url(); ?>assets/images/faq.png">
+            </div>
+        </div>
+    </div>
+</section>
+<section class="py-4 bg-primary">
+    <div class="container">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-6">
+                <div class="testimonials-two__carousel drivschol-owl__carousel drivschol-owl__carousel--with-shadow drivschol-owl__carousel--basic-nav owl-carousel owl-theme p-0" data-owl-options='{
+                        "items": 1,
+                        "margin": 0,
+                        "smartSpeed": 700,
+                        "loop":true,
+                        "autoplay": true,
+                        "nav":false,
+                        "URLhashListener":true,
+                        "dots":false,
+                        
+                        "responsive": {
+                            "0": {
+                                "items": 1
+                            },
+                            "500": {
+                                "items": 1
+                            }
+                        }
+                    }'>
+                    <div class="testimonials-two__carousel__item h4 fw-bold text-center text-white justify-content-center" data-hash="item1">DMV Practice Tests at no extra cost</div>
+                    <div class="testimonials-two__carousel__item h4 fw-bold text-center text-white justify-content-center" data-hash="item2">DMV Certificate of Completion</div>
+                    <div class="testimonials-two__carousel__item h4 fw-bold text-center text-white justify-content-center" data-hash="item3">FAST Shipping of DMV Certificate</div>
+
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="d-md-flex align-items-center text-center gap-4 text-white justify-content-center">
+                    <div class="mb-3 mb-md-0">
+                        <button class="btn btn-warning fw-bold py-2 px-4 rounded-pill">Register Now</button>
+                    </div>
+                    <div class="mb-3 mb-md-0">
+                        <h2 class="mb-0 fw-bold text-white">$24.99</h2>
+                    </div>
+                    <div>
+                        <h3 class="mb-0 blinking-text h5 text-center"> No Hidden<br> Charges</h3>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

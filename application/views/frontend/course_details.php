@@ -1,7 +1,7 @@
 <section class="courseListpnl">
     <div class="container">
         <div class="cstm_class">
-            <h4 class="fw-bold text-danger"><?= $getcourseData->course_name; ?></h4>
+            <h4 class="fw-bold text-danger"><?= $getcourseData->course_name." ".$getcourseData->course_name1; ?></h4>
             <div class="col-lg-2">
                 <div class="px-3 py-2 border rounded ">
                     <p class="mb-0 text-warning fw-bold">Only:</p>
