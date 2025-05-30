@@ -10,11 +10,13 @@ class Dashboard extends CI_Controller {
 	public function index() {
         $loggedinUID = $_SESSION['bayhill']['user_id'];
         $getPurchasedCourseList = $this->db->query("SELECT * FROM booking WHERE user_id = '".$loggedinUID."'")->result();
+        $getPurchasedCourseListCount = $this->db->query("SELECT count(id) as count FROM booking WHERE user_id = '".$loggedinUID."'")->row();
         $data = array(
             'title' => 'Bay Hill Driving School',
             'page' => 'User Dashboard',
             'subpage' => 'User Dashboard',
-            'getPurchasedCourseList' => $getPurchasedCourseList
+            'getPurchasedCourseList' => $getPurchasedCourseList,
+            'getPurchasedCourseListCount' => $getPurchasedCourseListCount
         );
         $this->load->view('header', $data);
 		$this->load->view('users/dashboard');
@@ -131,6 +133,19 @@ class Dashboard extends CI_Controller {
             $this->session->set_flashdata('error', 'Old password is incorrect.');
         }
         redirect('change-password');
+    }
+    public function changePickupAddress() {
+        $booking_id = $this->input->post('booking_id');
+        $pickup_address = $this->input->post('pickup_address');
+        $data = array(
+            'pickup_address' => $pickup_address
+        );
+        $this->db->where('id', $booking_id);
+        if ($this->db->update('booking', $data)) {
+            echo json_encode(array('status' => 'success', 'message' => 'Pickup address updated successfully.'));
+        } else {
+            echo json_encode(array('status' => 'error', 'message' => 'Failed to update pickup address.'));
+        }
     }
     public function logout() {
 	    unset($_SESSION['bayhill']);

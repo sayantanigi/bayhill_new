@@ -10,7 +10,6 @@
                                 <img src="<?= base_url(); ?>assets/images/img-01.jpg" />
                                 <div class="bnr-content">
                                     <h2>Expert driving lessons for teens - build skills and confidence from day one</h2>
-
                                 </div>
                             </div>
                         </div>
