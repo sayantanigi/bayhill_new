@@ -143,7 +143,8 @@
                                 <div class="row mb-3">
                                     <label for="example-text-input" class="col-sm-2 col-form-label">SMTP Password :</label>
                                     <div class="col-sm-10">
-                                        <input type="password" class="form-control" name="smtp_pass" id="smtp_pass" value="<?= $data->smtp_pass ?>" autocomplete="off">
+                                        <input type="password" class="form-control" name="smtp_pass" id="smtp_pass" value="<?= base64_decode($data->smtp_pass) ?>" autocomplete="off">
+                                        <span toggle="#smtp_pass" class="fa fa-fw fa-eye field-icon toggle-password" style="position:absolute; top:50%; right:30px; transform:translateY(-50%); cursor:pointer;"></span>
                                     </div>
                                 </div>
                                 <hr>
@@ -175,4 +176,19 @@ function removeRow(element) {
     const row = element.parentElement.parentElement;
     row.remove();
 }
+document.addEventListener('DOMContentLoaded', function() {
+    let toggle = document.querySelector('.toggle-password');
+    let input = document.querySelector('#smtp_pass');
+    toggle.addEventListener('click', function() {
+        if (input.type === "password") {
+            input.type = "text";
+            toggle.classList.remove('fa-eye');
+            toggle.classList.add('fa-eye-slash');
+        } else {
+            input.type = "password";
+            toggle.classList.remove('fa-eye-slash');
+            toggle.classList.add('fa-eye');
+        }
+    });
+});
 </script>
