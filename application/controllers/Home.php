@@ -154,7 +154,7 @@ class Home extends CI_Controller {
             'page' => 'Registration',
             'subpage' => 'Registration',
             'course_id' => @$getcourseData->id,
-            'course_title' => @$getcourseData->course_name,
+            'course_title' => @$getcourseData->course_name." ".@$getcourseData->course_name1,
             'course_week' => @$getcourseData->course_week,
             'class_week' => @$getcourseData->class_week,
             'offer_price' => @$getcourseData->offer_price,
@@ -198,14 +198,16 @@ class Home extends CI_Controller {
             );
             $this->db->insert('users', $user_data);
             $insert_id = $this->db->insert_id();
-            $get_setting = $this->db->query('SELECT * FROM settings');
+            $get_setting = $this->db->query('SELECT * FROM settings')->row();
             $getUserData = $this->db->query("SELECT * FROM users WHERE id = '".$insert_id."'")->row();
             $fullName = $getUserData->first_name." ".$getUserData->last_name;
+            $dt = new DateTime($getUserData->created_at);
+            $formatted = $dt->format('F j, Y h:i A');
             if(isset($get_setting->phone)) {
                 $phone = " / ".$get_setting->phone;
             }
             if(!empty($insert_id)) {
-                $message = "<body><div style='width:600px;margin: 0 auto;background: #fff; border: 1px solid #e6e6e6;'><div style='padding: 30px 30px 15px 30px;box-sizing: border-box;'><img src='cid:Logo' style='width:100px;float: right;margin-top: 0 auto;'><h3 style='padding-top:40px; line-height: 30px;'>Greetings from<span style='font-weight: 900;font-size: 25px;color: #014599; display: block;'>$get_setting->title</span></h3><p style='font-size: 17px; margin: 0;'>Hello $fullName,</p><p style='font-size: 17px; margin: 5px 0 0 0;'>Thank you for registration on $get_setting->title.</p><p style='font-size: 17px; margin: 5px 0 0 0;'>We're excited to have you with us.</p><p style='font-size: 17px; margin: 5px 0 0 0;'><b>Registration Details:</b></p><ul style='font-size: 16px; margin: 5px 0 15px 20px; padding: 0; list-style: none;'><li><b>Name:</b>$fullName</li><li><b>Email:</b>@$getUserData->email</li><li><b>Mobile:</b>@$getUserData->phone</li><li><b>Date of Registration:</b>@$getUserData->created_at</li></ul><p style='font-size: 17px; margin: 5px 0 0 0;'><b>Login Details:</b></p><ul style='font-size: 16px; margin: 5px 0 15px 20px; padding: 0; list-style: none;'><li><b>Username:</b>$getUserData->username</li><li><b>Password:</b>".base64_decode($getUserData->password)."</li></ul><p style='font-size: 17px; margin: 5px 0 0 0;'>You’re all set! You’ll receive further updates and important information shortly.</p><p style='font-size: 17px; margin: 10px 0 0 0;'>If you have any questions, feel free to reply to this email or contact us at <b>$get_setting->email $phone</b>.</p><p style='font-size: 17px; margin: 5px 0 0 0;'>Thank you!</p><p style='font-size: 17px; margin: 5px 0 0 0; list-style: none;'>Sincerly</p><p style='list-style: none;margin: 5px 0 0 0;font-size: 15px;'><b>$get_setting->title</b></p><p style='list-style: none;margin: 5px 0 0 0;font-size: 10px;'><b>Visit us:</b> <span>$get_setting->address</span></p><p style='list-style: none;margin: 5px 0 0 0;font-size: 10px;'><b>Email us:</b> <span>$get_setting->email</span></p><p style='list-style: none;margin: 5px 0 0 0;font-size: 10px;'><b>Call us:</b> <span>$get_setting->phone</span></p></div><table style='width: 100%;'><tr><td style='height:30px;width:100%; background: red;padding: 10px 0px; font-size:13px; color: #fff; text-align: center;'>Copyright &copy; <?=date('Y')?> $get_setting->title. All rights reserved.</td></tr></table></body>";
+                $message = "<body><div style='width:600px;margin: 0 auto;background: #fff; border: 1px solid #e6e6e6;'><div style='padding: 30px 30px 15px 30px;box-sizing: border-box;'><img src='cid:Logo' style='width:100px;float: right;margin-top: 0 auto;'><h3 style='padding-top:40px; line-height: 30px;'>Greetings from<span style='font-weight: 900;font-size: 25px;color: #014599; display: block;'>$get_setting->title</span></h3><p style='font-size: 17px; margin: 0;'>Hello $fullName,</p><p style='font-size: 17px; margin: 5px 0 0 0;'>Thank you for registration on $get_setting->title.</p><p style='font-size: 17px; margin: 5px 0 0 0;'>We're excited to have you with us.</p><p style='font-size: 17px; margin: 5px 0 0 0;'><b>Registration Details:</b></p><ul style='font-size: 16px; margin: 5px 0 15px 20px; padding: 0; list-style: none;'><li><b>Name: </b>$fullName</li><li><b>Email: </b>$getUserData->email</li><li><b>Mobile: </b> $getUserData->phone</li><li><b>Date of Registration: </b> $formatted</li></ul><p style='font-size: 17px; margin: 5px 0 0 0;'><b>Login Details:</b></p><ul style='font-size: 16px; margin: 5px 0 15px 20px; padding: 0; list-style: none;'><li><b>Username:</b>$getUserData->username</li><li><b>Password:</b>".base64_decode($getUserData->password)."</li></ul><p style='font-size: 17px; margin: 5px 0 0 0;'>You’re all set! You’ll receive further updates and important information shortly.</p><p style='font-size: 17px; margin: 10px 0 0 0;'>If you have any questions, feel free to reply to this email or contact us at <b>$get_setting->email $phone</b>.</p><p style='font-size: 17px; margin: 5px 0 0 0;'>Thank you!</p><p style='font-size: 17px; margin: 5px 0 0 0; list-style: none;'>Sincerly</p><p style='list-style: none;margin: 5px 0 0 0;font-size: 15px;'><b>$get_setting->title</b></p><p style='list-style: none;margin: 5px 0 0 0;font-size: 10px;'><b>Visit us:</b> <span>$get_setting->address</span></p><p style='list-style: none;margin: 5px 0 0 0;font-size: 10px;'><b>Email us:</b> <span>$get_setting->email</span></p><p style='list-style: none;margin: 5px 0 0 0;font-size: 10px;'><b>Call us:</b> <span>$get_setting->phone</span></p></div><table style='width: 100%;'><tr><td style='height:30px;width:100%; background: red;padding: 10px 0px; font-size:13px; color: #fff; text-align: center;'>Copyright &copy; <?=date('Y')?> $get_setting->title. All rights reserved.</td></tr></table></body>";
                 require 'vendor/autoload.php';
                 $mail = new PHPMailer(true);
                 try {
@@ -228,7 +230,7 @@ class Home extends CI_Controller {
                     $mail->send();
                 } catch (Exception $e) {
                     echo $e->getMessage(); //Boring error messages from anything else!
-                    exit();
+                    //exit();
                 }
                 if(!empty($course_code)) {
                     redirect('booking_slot?course_code='.base64_encode($course_code).'&uid='.base64_encode($insert_id));
@@ -377,34 +379,32 @@ class Home extends CI_Controller {
                 $this->session->set_flashdata('message', 'Payment successful');
                 $getTransactionID = $this->db->query("SELECT * FROM booking WHERE id = '".$booking_id."'")->row();
                 $trxID = $getTransactionID->transaction_id;
-                $get_setting = $this->db->query('SELECT * FROM settings');
+                $get_setting = $this->db->query('SELECT * FROM settings')->row();
                 $getUserData = $this->db->query("SELECT * FROM users WHERE id = '".$user_id."'")->row();
                 $fullName = $getUserData->first_name." ".$getUserData->last_name;
-                $getCourseData = $this->db->query()->row();
+                $getBookingData = $this->db->query("SELECT * FROM booking WHERE id = '".$booking_id."'")->row();
+                $course_id = $getBookingData->course_id;
+                $getCourseData = $this->db->query("SELECT * FROM courses WHERE id = '".@$course_id."'")->row();
                 $courseName = $getCourseData->course_name." ".$getCourseData->course_name1;
-                $getBookedSlotData = $this->db->query("SELECT * FROM booking_details WHERE id = '".$booking_id."'")->row();
-                $data = [];
+                $getBookedSlotData = $this->db->query("SELECT * FROM booking_details WHERE booking_id = '".$booking_id."'")->result();
+                $data = '';
                 $i = 1;
                 foreach ($getBookedSlotData as $value) {
-                    $data .= "<li>Slot-<?= $i. :".date('d-m-Y', strtotime($value->booking_date))." ".$value->booking_time."</li>";
+                    $data .= "<li>Slot-".$i.":  ".date('d-m-Y', strtotime($value->booking_date))." ".$value->booking_time."</li>";
+                    $i++;
                 }
                 $url = base_url('dashboard');
                 if(!empty($trxID)) {
-                    $message = "
-                    <body>
-                        <div style='width:600px;margin: 0 auto;background: #fff; border: 1px solid #e6e6e6;'><div style='padding: 30px 30px 15px 30px;box-sizing: border-box;'>
-                        <img src='cid:Logo' style='width:100px;float: right;margin-top: 0 auto;'>
-                        <h3 style='padding-top:40px; line-height: 30px;'>Greetings from<span style='font-weight: 900;font-size: 25px;color: #014599; display: block;'>$get_setting->title</span></h3>
-                        <p style='font-size: 17px; margin: 0;'>Hello $fullName,</p><p style='font-size: 17px; margin: 5px 0 0 0;'>Success! Your Purchase Was Successful.</p><p>Thank you for purchasing the <b><?= $courseName; ?></b>! You're now officially enrolled and ready to start your learning journey.</p><ul style='font-size: 16px; margin: 5px 0 15px 20px; padding: 0; list-style: none;'>$data</ul><p style='font-size: 17px; margin: 5px 0 0 0;'><p>You can access the course content immediately by visiting your <a style='color: #104597;' href=$url><b>dashboard</b></a>. We’re excited to have you on board and can’t wait to help you achieve your goals!</p></p><p style='font-size: 17px; margin: 5px 0 0 0;'>Thank you!</p><p style='font-size: 17px; margin: 5px 0 0 0; list-style: none;'>Sincerly</p><p style='list-style: none;margin: 5px 0 0 0;font-size: 15px;'><b>$get_setting->title</b></p><p style='list-style: none;margin: 5px 0 0 0;font-size: 10px;'><b>Visit us:</b> <span>$get_setting->address</span></p><p style='list-style: none;margin: 5px 0 0 0;font-size: 10px;'><b>Email us:</b> <span>$get_setting->email</span></p><p style='list-style: none;margin: 5px 0 0 0;font-size: 10px;'><b>Call us:</b> <span>$get_setting->phone</span></p></div><table style='width: 100%;'><tr><td style='height:30px;width:100%; background: red;padding: 10px 0px; font-size:13px; color: #fff; text-align: center;'>Copyright &copy; <?=date('Y')?> $get_setting->title. All rights reserved.</td></tr></table></div></body>";
+                    $message = "<body><div style='width:600px;margin: 0 auto;background: #fff; border: 1px solid #e6e6e6;'><div style='padding: 30px 30px 15px 30px;box-sizing: border-box;'><img src='cid:Logo' style='width:100px;float: right;margin-top: 0 auto;'><h3 style='padding-top:40px; line-height: 30px;'>Greetings from<span style='font-weight: 900;font-size: 25px;color: #014599; display: block;'>$get_setting->title</span></h3><p style='font-size: 17px; margin: 0;'>Hello $fullName,</p><p style='font-size: 17px; margin: 5px 0 0 0;'>Success! Your Purchase Was Successful.</p><p>Thank you for purchasing the <b>$courseName;</b>! You're now officially enrolled and ready to start your learning journey.</p><ul style='font-size: 16px; margin: 5px 0 15px 20px; padding: 0; list-style: none;'> $data </ul><p style='font-size: 17px; margin: 5px 0 0 0;'><p>You can access the course content immediately by visiting your <a style='color: #104597;' href=$url><b>dashboard</b></a>. We’re excited to have you on board and can’t wait to help you achieve your goals!</p></p><p style='font-size: 17px; margin: 5px 0 0 0;'>Thank you!</p><p style='font-size: 17px; margin: 5px 0 0 0; list-style: none;'>Sincerly</p><p style='list-style: none;margin: 5px 0 0 0;font-size: 15px;'><b>$get_setting->title</b></p><p style='list-style: none;margin: 5px 0 0 0;font-size: 10px;'><b>Visit us: </b> <span>$get_setting->address</span></p><p style='list-style: none;margin: 5px 0 0 0;font-size: 10px;'><b>Email us: </b> <span>$get_setting->email</span></p><p style='list-style: none;margin: 5px 0 0 0;font-size: 10px;'><b>Call us: </b> <span>$get_setting->phone</span></p></div><table style='width: 100%;'><tr><td style='height:30px;width:100%; background: red;padding: 10px 0px; font-size:13px; color: #fff; text-align: center;'>Copyright &copy; <?=date('Y')?> $get_setting->title. All rights reserved.</td></tr></table></div></body>";
                     require 'vendor/autoload.php';
                     $mail = new PHPMailer(true);
                     try {
                         //Server settings
                         $mail->CharSet = 'UTF-8';
-                        $mail->SetFrom('info@bayhilldrivingschool.com', $get_setting->title);
-                        $mail->AddAddress($_POST['email']);
+                        $mail->SetFrom($get_setting->smtp_email, $get_setting->title);
+                        $mail->AddAddress($getUserData->email);
                         $mail->IsHTML(true);
-                        $mail->Subject = 'Registration Confirmation From '.$get_setting->title;
+                        $mail->Subject = 'Course Purchased from '.$get_setting->title;
                         $mail->AddEmbeddedImage('uploads/logos/'.$get_setting->logo, 'Logo');
                         $mail->Body = $message;
                         //Send email via SMTP
@@ -417,7 +417,8 @@ class Home extends CI_Controller {
                         $mail->Password = base64_decode($get_setting->smtp_pass);
                         $mail->send();
                     } catch (Exception $e) {
-                        //echo $e->getMessage(); //Boring error messages from anything else!
+                        echo $e->getMessage(); //Boring error messages from anything else!
+                        //exit();
                     }
                     redirect('complete-payment?trxID='.base64_encode($trxID).'&course_code='.base64_encode($course_code));
                 } else {
@@ -435,12 +436,14 @@ class Home extends CI_Controller {
     public function complete_payment() {
         $trxID = base64_decode($this->input->get('trxID', true));
         $course_code = base64_decode($this->input->get('course_code', true));
+        $getCourseData = $this->db->query("SELECT * FROM courses WHERE course_code = '".@$course_code."'")->row();
+        $courseName = $getCourseData->course_name." ".$getCourseData->course_name1;
         $data = array(
             'title' => 'Bay Hill Driving School',
             'page' => 'Complete Payment',
             'subpage' => 'Complete Payment',
             'trxID' => $trxID,
-            'course_code' => $course_code
+            'course_title' => $courseName
         );
         $data['DMV_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '1'")->row();
         $data['Video_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '2'")->row();
