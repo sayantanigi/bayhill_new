@@ -106,7 +106,6 @@ class Home extends CI_Controller {
             $query .= " AND course_type = '".$course_type."'";
         }
         $query .= " ORDER BY id DESC";
-
         $course_list = $this->db->query($query)->result();
         $data = array(
             'title' => 'Bay Hill Driving School',
@@ -249,22 +248,16 @@ class Home extends CI_Controller {
                 'additional_info' => $additional_info,
             );
             $this->db->insert('booking', $bookingData);
-
             $booking_id = $this->db->insert_id();
-
             $selected_date = $this->input->post('selected_dates', true);
             $selected_date = json_decode($selected_date, true);
             $selectedDate = implode(", ", $selected_date);
-
             $selected_time = $this->input->post('selected_times', true);
             $selected_time = json_decode($selected_time, true);
             $selectedTime = implode(", ", $selected_time);
-
             $dates = explode(", ", $selectedDate);
             $times = explode(", ", $selectedTime);
-
             $output = [];
-
             for ($i = 0; $i < count($dates); $i++) {
                 $bookingDetailsData = array(
                     'booking_id' => $booking_id,
@@ -284,20 +277,15 @@ class Home extends CI_Controller {
             $user_id = $this->input->post('user_id', true);
             $trainer_id = $this->input->post('trainer_id', true);
             $booking_id = $this->input->post('booking_id', true);
-
             $selected_date = $this->input->post('selected_dates', true);
             $selected_date = json_decode($selected_date, true);
             $selectedDate = implode(", ", $selected_date);
-
             $selected_time = $this->input->post('selected_times', true);
             $selected_time = json_decode($selected_time, true);
             $selectedTime = implode(", ", $selected_time);
-
             $dates = explode(", ", $selectedDate);
             $times = explode(", ", $selectedTime);
-
             $output = [];
-
             for ($i = 0; $i < count($dates); $i++) {
                 $bookingDetailsData = array(
                     'booking_id' => $booking_id,
@@ -632,7 +620,6 @@ class Home extends CI_Controller {
             );
             $result = $this->Mymodel->add('contact',$data);
             $insert_id = $this->db->insert_id();
-
             $get_setting = $this->db->query("SELECT * FROM settings WHERE settingId = '1'")->row();
             if(!empty($get_setting->smtp_host)) {
                 if(!empty($insert_id)) {

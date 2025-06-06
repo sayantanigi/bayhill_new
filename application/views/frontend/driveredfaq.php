@@ -35,7 +35,7 @@
                         "nav":false,
                         "URLhashListener":true,
                         "dots":false,
-                        
+
                         "responsive": {
                             "0": {
                                 "items": 1
@@ -54,7 +54,7 @@
             <div class="col-lg-6">
                 <div class="d-md-flex align-items-center text-center gap-4 text-white justify-content-center">
                     <div class="mb-3 mb-md-0">
-                        <button class="btn btn-warning fw-bold py-2 px-4 rounded-pill">Register Now</button>
+                        <a href="#usefullLinks" class="btn btn-warning fw-bold py-2 px-4 rounded-pill">Useful Links</a>
                     </div>
                     <div class="mb-3 mb-md-0">
                         <h2 class="mb-0 fw-bold text-white">$24.99</h2>
@@ -89,19 +89,6 @@
                 <div class="accordion-body">No FAQ Available</div>
             </div>
             <?php } ?>
-        </div>
-    </div>
-</section>
-<section class="whychoose" style="background-image: url(<?= base_url(); ?>assets/images/bg-cover-01.jpg);">
-    <div class="container">
-        <div class="row g-5 justify-content-center align-items-center">
-            <div class="col-lg-10 text-center">
-                <h2 class="maintitle text-white mb-4">Why Take California Driver Ed With Us?</h2>
-                <p>Bay Hill Driving School, established in 2010, offers high-quality driver education designed to help you become a safe and confident driver in California. Our DMV-approved instructors are fully licensed and bring years of behind-the-wheel experience, providing patient, supportive training for both teens and adults. We pride ourselves on professional, courteous instruction tailored to your needs—whether you're just starting out, brushing up your skills, or preparing for the DMV driving test.</p>
-                <div class="mt-5">
-                    <a href="<?= base_url('faq'); ?>" class="enrollbtn text-uppercase">Course FAQ</a>
-                </div>
-            </div>
         </div>
     </div>
 </section>

@@ -10,6 +10,7 @@
                                 <img src="<?= base_url(); ?>assets/images/img-01.jpg" />
                                 <div class="bnr-content">
                                     <h2>Expert driving lessons for teens - build skills and confidence from day one</h2>
+
                                 </div>
                             </div>
                         </div>
@@ -183,7 +184,7 @@
                 </h2>
             </div>
             <div>
-                <a href="#" class="enrollbtn mt-lg-0" data-bs-toggle="modal" data-bs-target="#lessonsModal">Enroll Now</a>
+                <a href="<?= base_url('registration')?>" class="enrollbtn mt-lg-0" data-bs-toggle="modal" data-bs-target="#lessonsModal">Enroll Now</a>
             </div>
         </div>
     </div>

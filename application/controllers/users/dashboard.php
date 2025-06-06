@@ -46,9 +46,7 @@ class Dashboard extends CI_Controller {
             $config['allowed_types'] = 'jpg|jpeg|png';
             $config['max_size'] = 2048; // 2MB
             $config['file_name'] = uniqid() . '_' . $_FILES['profile_pic']['name'];
-
             $this->load->library('upload', $config);
-
             if ($this->upload->do_upload('profile_pic')) {
                 $fileData = $this->upload->data();
                 $profile_pic = $fileData['file_name'];
@@ -62,7 +60,6 @@ class Dashboard extends CI_Controller {
                 redirect('profile-settings');
             }
         }
-
         $data = array(
             'first_name' => $this->input->post('first_name'),
             'last_name' => $this->input->post('last_name'),
@@ -83,7 +80,6 @@ class Dashboard extends CI_Controller {
         if ($profile_pic) {
             $data['image'] = $profile_pic;
         }
-
         $this->db->where('id', $user_id);
         if ($this->db->update('users', $data)) {
             $this->session->set_flashdata('message', 'Profile updated successfully.');
@@ -110,12 +106,10 @@ class Dashboard extends CI_Controller {
         $old_password = $this->input->post('old_password');
         $new_password = $this->input->post('new_password');
         $confirm_password = $this->input->post('confirm_password');
-
         if ($new_password !== $confirm_password) {
             $this->session->set_flashdata('error', 'New password and confirm password do not match.');
             redirect('change-password');
         }
-
         // Check if old password is correct
         $user = $this->db->get_where('users', ['id' => $user_id])->row();
         if (base64_encode($old_password) === $user->password) {
@@ -146,6 +140,59 @@ class Dashboard extends CI_Controller {
         } else {
             echo json_encode(array('status' => 'error', 'message' => 'Failed to update pickup address.'));
         }
+    }
+    public function course_note() {
+        $booking_id = $this->input->post('booking_id');
+        $course_note = $this->input->post('course_note');
+        $data = array(
+            'course_note' => $course_note
+        );
+        $this->db->where('id', $booking_id);
+        if ($this->db->update('booking', $data)) {
+            echo json_encode(array('status' => 'success', 'message' => 'Note updated successfully.'));
+        } else {
+            echo json_encode(array('status' => 'error', 'message' => 'Failed to update note.'));
+        }
+    }
+    public function BookigData() {
+        $booking_id = $this->input->post('booking_id');
+        $course_id = $this->input->post('courseId');
+        $course = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'")->row();
+        $getBookingData = $this->db->query("SELECT * FROM booking WHERE user_id = '".@$_SESSION['bayhill']['user_id']."' AND course_id = '".@$course_id."'")->row();
+        if(!empty($getBookingData->transaction_id)){
+            $getBookingSlots = $this->db->query("SELECT * FROM booking_details WHERE booking_id = '".@$getBookingData->id."'")->result();
+            if($course->course_class > count($getBookingSlots)) { ?>
+            <div class="package-card__body__btn text-center" style="margin-top: 10px; !important;">
+                <a href="<?= base_url() ?>booking_slot?course_code=<?= base64_encode($course->course_code)?>&uid=<?= base64_encode($_SESSION['bayhill']['user_id'])?>&bookingid=<?= base64_encode($getBookingData->id)?>" class="drivschol-btn w-100">Book slot for pending classes</a>
+                <div class="col-lg-12 col-md-12" style="text-align: center; margin-top: 15px;border: 1px solid #f59b24;border-radius: 18px; display: block !important; visibility: visible !important;">
+                    <div style="margin-left: 10px;">
+                    <?php
+                    if(!empty($getBookingSlots)) {
+                        $i = 1;
+                        foreach ($getBookingSlots as $slot) { ?>
+                        <p style="margin: 0px;font-size: 14px;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time; ?></p>
+                    <?php $i++; } } ?>
+                    </div>
+                </div>
+            </div>
+            <?php } else { ?>
+            <div class="col-lg-12 col-md-12" style="text-align: center; margin-top: 15px;border: 1px solid #f59b24;border-radius: 18px; display: block !important; visibility: visible !important;">
+                <div style="margin-left: 10px;">
+                <?php
+                if(!empty($getBookingSlots)) {
+                    $i = 1;
+                    foreach ($getBookingSlots as $slot) { ?>
+                    <p style="margin: 0px;font-size: 14px;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time; ?></p>
+                <?php $i++; } } ?>
+                </div>
+            </div>
+            <?php }
+        } else { ?>
+        <div class="package-card__body__btn text-center" style="margin-top: 10px; !important;">
+            <a href="javascript:void(0)" onclick="completePayment(<?= @$getBookingData->id ?>)" class="drivschol-btn w-100">Book slot for pending classes</a>
+        </div>
+        <div class="completePayment_<?= @$getBookingData->id ?>" style="display: none;text-align: left; margin-top: 20px; color: #ed1c24; font-size: 15px;">Please complete your payment first for this course to book pending slots.</div>
+        <?php }
     }
     public function logout() {
 	    unset($_SESSION['bayhill']);
