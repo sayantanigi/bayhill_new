@@ -16169,6 +16169,7 @@ body.boxed-wrapper .contact-two__left__shape {
 }
 .bannerform{
   padding: 30px 0;
+  background: #eee;
 }
 /* .bannerform{
   position: absolute;
@@ -16239,6 +16240,7 @@ body.boxed-wrapper .contact-two__left__shape {
   box-shadow:0 6px 30px #00000030;
   border-radius: 15px;
   /* overflow: hidden; */
+  background: #fff;
 }
 .btnenroll{
   height: 60px;
@@ -17379,6 +17381,7 @@ body.boxed-wrapper .contact-two__left__shape {
   transition: 400ms;
   line-height: normal;
   letter-spacing: 0;
+  color: #000;
 }
 .lessondropdown li a:hover{
   background-color: #014599;
@@ -17389,4 +17392,24 @@ body.boxed-wrapper .contact-two__left__shape {
 }
 .lessondropdown .subnav{
 
+}
+.purchased-table tr th{
+      background: #eee;
+    font-weight: 800;
+    color: #000;
+}
+.purchased-table .btn-primary{
+    background: #014599;
+    border-color: #014599;
+}
+@media(min-width:1199px){
+  .purchased-table tr th{
+    padding: 14px;
+  }
+  .purchased-table tr td{
+    padding: 14px;
+  }
+}
+.purchased-table .dropdown-menu .dropdown-item{
+  font-size: 14px;
 }

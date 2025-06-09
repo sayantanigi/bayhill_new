@@ -30,23 +30,8 @@ if ($dob) {
         <div class="row">
             <div class="col-lg-8 col-md-12 wow fadeInUp">
                 <h2 class="subtitle mb-0 wow fadeInUp">Welcome, <?= $_SESSION['bayhill']['first_name']." ".$_SESSION['bayhill']['last_name']?></h2>
-                <h3 class="maintitle mb-0 wow fadeInUp">Your Purchased Course List</h3>
-                <p class="mb-0" style="color: #EC2526; font-style: italic; font-size: 13px;">*CANCELLATIONS FEES OF $60 APPLY IF CANCELLATION ISN’T MADE 48 HOURS PRIOR TO YOUR SCHEDULED CLASS</p>
-                <p class="mb-1 mt-4 fw-bold" style="#000; ">Purchased Course Count: <?= @$getPurchasedCourseListCount->count; ?></p>
-            </div>
-            <div class="col-lg-4 col-md-6 wow fadeInUp animated">
-                <div class="package-card" style="height: 38%; margin-top: 30px;">
-                    <div class="package-card__body" style="padding: 8px 15px 8px 15px;">
-                        <div class="package-card__body__btn text-center" style="margin-top: 0px; !important;" style="margin-top: 10px; !important;">
-                            <form action="<?= base_url()?>getcourselistbyzipcode" method="POST">
-                                <input class="btn btn-secondary mb-0 text-white fe-semibold rounded-0 flex-fill findZipcode w-100" type="submit" value="Add Another Package"style="border-radius: 30px !important; background-color: #014599;">
-                                <input type="hidden" name="pincode" value="<?= $pincode; ?>">
-                                <input type="hidden" name="course_type" value="<?= $category; ?>">
-                            </form>
-                            <!-- <a href="<?= base_url("payservice")?>" class="drivschol-btn w-100">Pay Now</a> -->
-                        </div>
-                    </div>
-                </div>
+                <h3 class="maintitle mb-0 wow fadeInUp">Your Assigned Course List</h3>
+                <p class="mb-1 mt-4 fw-bold" style="#000; ">Assigned Course Count: <?= @$getPurchasedCourseListCount->count; ?></p>
             </div>
         </div>
         <div class="mt-3 purchased-table">
@@ -55,7 +40,7 @@ if ($dob) {
                     <tr>
                         <th>Course Name</th>
                         <th>Status</th>
-                        <th>Trainer</th>
+                        <th>Booking Details</th>
                         <th>Payment</th>
                         <th width="120"></th>
                     </tr>
@@ -124,7 +109,7 @@ if ($dob) {
                         </td>
                     </tr>
                     <?php } } else { ?>
-                    <div class="col-lg-12 col-md-12 wow fadeInUp">No course purchased yet.</div>
+                    <div class="col-lg-12 col-md-12 wow fadeInUp">No course assigned yet.</div>
                     <?php } ?>
                 </tbody>
             </table>
@@ -233,7 +218,7 @@ if ($dob) {
                 </div>
             </div>
             <?php } } else { ?>
-            <div class="col-lg-12 col-md-12 wow fadeInUp">No course purchased yet.</div>
+            <div class="col-lg-12 col-md-12 wow fadeInUp">No course assigned yet.</div>
             <?php } ?>
         </div>
     </div>

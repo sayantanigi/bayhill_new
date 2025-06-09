@@ -837,7 +837,11 @@ class Home extends CI_Controller {
             );
             $this->session->set_userdata($data);
             $this->session->set_flashdata('message', 'You have successfully logged in.');
-            redirect('dashboard');
+            if($chechUser->user_type == '1') {
+                redirect('dashboard');
+            } else {
+                redirect('trainer/trainer-dashboard');
+            }
         } else {
             $this->session->set_flashdata('error', 'Invalid login credential. Please login with valid credential');
             redirect('login');

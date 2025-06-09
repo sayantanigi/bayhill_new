@@ -35,7 +35,7 @@
             </div>
             <div class="col-lg-6">
                 <div class="videoBg position-relative wow fadeInRight" data-wow-delay="500ms">
-                        <img src="assets/images/carimg.gif" />
+                        <img src="<?= base_url(); ?>assets/images/carimg.gif" />
                     </div>
             </div>
             <div class="col-lg-12">
@@ -616,6 +616,7 @@
                                         <li><a href="<?= base_url('driver-ed-faq')?>">FAQ Drivers Ed</a></li>
                                         <li><a href="<?= base_url('driving-school-faq')?>">FAQ Driving School</a></li>
                                         <li><a href="<?= base_url('/')?>">In-Car Driving Lessons</a></li>
+                                        <li><a href="<?= base_url('login')?>">Trainer Login</a></li>
                                     </ul>
                                 </div>
                             </div>

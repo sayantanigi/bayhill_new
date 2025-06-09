@@ -9,17 +9,17 @@ class Dashboard extends CI_Controller {
 	}
 	public function index() {
         $loggedinUID = $_SESSION['bayhill']['user_id'];
-        $getPurchasedCourseList = $this->db->query("SELECT * FROM booking WHERE user_id = '".$loggedinUID."' ORDER BY id DESC")->result();
-        $getPurchasedCourseListCount = $this->db->query("SELECT count(id) as count FROM booking WHERE user_id = '".$loggedinUID."'")->row();
+        //$getPurchasedCourseList = $this->db->query("SELECT * FROM booking WHERE user_id = '".$loggedinUID."' ORDER BY id DESC")->result();
+        //$getPurchasedCourseListCount = $this->db->query("SELECT count(id) as count FROM booking WHERE user_id = '".$loggedinUID."'")->row();
         $data = array(
             'title' => 'Bay Hill Driving School',
-            'page' => 'User Dashboard',
-            'subpage' => 'User Dashboard',
-            'getPurchasedCourseList' => $getPurchasedCourseList,
-            'getPurchasedCourseListCount' => $getPurchasedCourseListCount
+            'page' => 'Trainer Dashboard',
+            'subpage' => 'Trainer Dashboard',
+            //'getPurchasedCourseList' => $getPurchasedCourseList,
+            //'getPurchasedCourseListCount' => $getPurchasedCourseListCount
         );
         $this->load->view('header', $data);
-		$this->load->view('users/dashboard');
+		$this->load->view('trainer/dashboard');
 		$this->load->view('footer');
 	}
     public function profile_settings() {
@@ -34,12 +34,11 @@ class Dashboard extends CI_Controller {
             'state_list' => $state_list
         );
         $this->load->view('header', $data);
-        $this->load->view('users/profile_settings');
+        $this->load->view('trainer/profile_settings');
 		$this->load->view('footer');
     }
     public function update_profile() {
         $user_id = $this->input->post('user_id');
-        // Handle file upload
         $profile_pic = '';
         if (!empty($_FILES['profile_pic']['name'])) {
             $config['upload_path'] = 'uploads/student/profilePic/';
@@ -50,14 +49,13 @@ class Dashboard extends CI_Controller {
             if ($this->upload->do_upload('profile_pic')) {
                 $fileData = $this->upload->data();
                 $profile_pic = $fileData['file_name'];
-                // Optionally, delete old file here if you want
                 $old_pic = $this->db->get_where('users', ['id' => $user_id])->row()->image;
                 if ($old_pic && file_exists('uploads/student/profilePic/'.$old_pic)) {
                     unlink('uploads/student/profilePic/'.$old_pic);
                 }
             } else {
                 $this->session->set_flashdata('error', $this->upload->display_errors());
-                redirect('profile-settings');
+                redirect('trainer/profile-settings');
             }
         }
         $data = array(
@@ -86,7 +84,7 @@ class Dashboard extends CI_Controller {
         } else {
             $this->session->set_flashdata('error', 'Failed to update profile.');
         }
-        redirect('profile-settings');
+        redirect('trainer/profile-settings');
     }
     public function change_password() {
         $loggedinUID = $_SESSION['bayhill']['user_id'];
@@ -98,7 +96,7 @@ class Dashboard extends CI_Controller {
             'getUserDetails' => $getUserDetails,
         );
         $this->load->view('header', $data);
-        $this->load->view('users/change_password');
+        $this->load->view('trainer/change_password');
 		$this->load->view('footer');
     }
     public function update_password() {
@@ -108,7 +106,7 @@ class Dashboard extends CI_Controller {
         $confirm_password = $this->input->post('confirm_password');
         if ($new_password !== $confirm_password) {
             $this->session->set_flashdata('error', 'New password and confirm password do not match.');
-            redirect('change-password');
+            redirect('trainer/change-password');
         }
         // Check if old password is correct
         $user = $this->db->get_where('users', ['id' => $user_id])->row();
@@ -126,33 +124,7 @@ class Dashboard extends CI_Controller {
         } else {
             $this->session->set_flashdata('error', 'Old password is incorrect.');
         }
-        redirect('change-password');
-    }
-    public function changePickupAddress() {
-        $booking_id = $this->input->post('booking_id');
-        $pickup_address = $this->input->post('pickup_address');
-        $data = array(
-            'pickup_address' => $pickup_address
-        );
-        $this->db->where('id', $booking_id);
-        if ($this->db->update('booking', $data)) {
-            echo json_encode(array('status' => 'success', 'message' => 'Pickup address updated successfully.'));
-        } else {
-            echo json_encode(array('status' => 'error', 'message' => 'Failed to update pickup address.'));
-        }
-    }
-    public function course_note() {
-        $booking_id = $this->input->post('booking_id');
-        $course_note = $this->input->post('course_note');
-        $data = array(
-            'course_note' => $course_note
-        );
-        $this->db->where('id', $booking_id);
-        if ($this->db->update('booking', $data)) {
-            echo json_encode(array('status' => 'success', 'message' => 'Note updated successfully.'));
-        } else {
-            echo json_encode(array('status' => 'error', 'message' => 'Failed to update note.'));
-        }
+        redirect('trainer/change-password');
     }
     public function BookigData() {
         $booking_id = $this->input->post('booking_id');

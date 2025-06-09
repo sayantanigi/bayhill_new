@@ -35,7 +35,7 @@ p strong{font-weight: 600 !important; color: black !important;}
                                             <th>Student Name</th>
                                             <th>Trainer Name</th>
                                             <th>Booking Date</th>
-                                            <th>Booking Time</th>
+                                            <!-- <th>Booking Time</th> -->
                                             <th>Transaction Data</th>
                                             <th>Payment Status</th>
                                             <th class="text-center">Action</th>
@@ -49,7 +49,7 @@ p strong{font-weight: 600 !important; color: black !important;}
                                                     <td>
                                                         <?php
                                                         $courseData = $this->db->query("SELECT * FROM courses WHERE id = '".@$v->course_id."'")->row();
-                                                        echo @$courseData->course_name;
+                                                        echo "<p>".@$courseData->course_name."</br>".@$courseData->course_name1."</p>";
                                                         ?>
                                                     </td>
                                                     <td>
@@ -78,7 +78,7 @@ p strong{font-weight: 600 !important; color: black !important;}
                                                         }
                                                         ?>
                                                     </td>
-                                                    <td><?= @$v->booking_time; ?></td>
+                                                    <!-- <td><?= @$v->booking_time; ?></td> -->
                                                     <td>
                                                         <p style="margin: 0px;"><b>Transaction ID: </b><?= @$v->transaction_id;?></p>
                                                         <p style="margin: 0px;"><b>Transaction Date: </b><?= @$v->transaction_date;?></p>

@@ -88,6 +88,13 @@ $route['change-password'] = 'users/dashboard/change_password';
 $route['updatePassword'] = 'users/dashboard/update_password';
 $route['logout'] = 'users/dashboard/logout';
 
+$route['trainer/trainer-dashboard'] = 'trainer/dashboard';
+$route['trainer/profile-settings'] = 'trainer/dashboard/profile_settings';
+$route['trainer/saveProfileData'] = 'trainer/dashboard/update_profile';
+$route['trainer/change-password'] = 'trainer/dashboard/change_password';
+$route['trainer/updatePassword'] = 'trainer/dashboard/update_password';
+$route['trainer/logout'] = 'trainer/dashboard/logout';
+
 //admin
 $route['admin'] = 'admin/login';
 $route['userLogin'] = 'user/login';

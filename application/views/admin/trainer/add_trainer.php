@@ -310,7 +310,7 @@ body{margin-top:20px}
                                         </div>
                                     </div>
                                 </div>
-                                <!-- <div class="card shadow rounded">
+                                <div class="card shadow rounded">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="container">
@@ -387,7 +387,7 @@ body{margin-top:20px}
                                             </div>
                                         </div>
                                     </div>
-                                </div> -->
+                                </div>
                             </div>
                         </div>
                     </form>

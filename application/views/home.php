@@ -195,27 +195,26 @@
 #errmsg_pin{ margin-top: 5px;}
 </style>
 <script>
-    const checkbox = document.querySelector('.switch input');
-    const teenLabel = document.querySelectorAll('.textlesson')[0];
-    const adultLabel = document.querySelectorAll('.textlesson')[1];
-    const courseTypeInput = document.getElementById('course_type');
-    function updateLabels() {
-        if (checkbox.checked) {
-            teenLabel.classList.remove('active');
-            adultLabel.classList.add('active');
-            courseTypeInput.value = 'adult';
-        } else {
-            teenLabel.classList.add('active');
-            adultLabel.classList.remove('active');
-            courseTypeInput.value = 'teen';
-        }
+const checkbox = document.querySelector('.switch input');
+const teenLabel = document.querySelectorAll('.textlesson')[0];
+const adultLabel = document.querySelectorAll('.textlesson')[1];
+const courseTypeInput = document.getElementById('course_type');
+function updateLabels() {
+    if (checkbox.checked) {
+        teenLabel.classList.remove('active');
+        adultLabel.classList.add('active');
+        courseTypeInput.value = 'adult';
+    } else {
+        teenLabel.classList.add('active');
+        adultLabel.classList.remove('active');
+        courseTypeInput.value = 'teen';
     }
-    // Initialize on page load
-    updateLabels();
-    // Update on toggle
-    checkbox.addEventListener('change', updateLabels);
-</script>
-<script>
+}
+// Initialize on page load
+updateLabels();
+// Update on toggle
+checkbox.addEventListener('change', updateLabels);
+
 $('#enroll_now').click(function () {
     lesson_type = $('#drivinglesson').val();
     if (lesson_type == '') {
@@ -231,6 +230,7 @@ $('#enroll_now').click(function () {
         }
     }
 })
+
 $('#search_course').on('click', function(){
     var zip = $('#zipcode').val();
     if ($('.d-block.w-100').hasClass('show')) {
@@ -238,9 +238,11 @@ $('#search_course').on('click', function(){
         $('#errmsgpin').html('');
     }
 });
+
 $('input[name="lesson_type"]').on('change', function() {
     $('#course_type').val($(this).val());
 });
+
 $(document).ready(function() {
     $('#search_course').click(function() {
         $('#course_type').val('2');
@@ -267,6 +269,7 @@ $(document).ready(function() {
     $('#course_type').val(initialValue);
     $('#courseType').val(initialValue);
 });
+
 $('.zipcode').on('input', function(){
     var pincode = $(this).val();
     var course_type = $('#course_type').val();
@@ -293,6 +296,7 @@ $('.zipcode').on('input', function(){
         $('.findZipcode').prop('disabled', false);
     }
 });
+
 $('.zip_code').on('input', function(){
     var pincode = $(this).val();
     var course_type = $('#courseType').val();

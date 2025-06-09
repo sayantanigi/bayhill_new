@@ -77,7 +77,8 @@
                             </li>
                             <li><a href="<?= base_url('contact') ?>" class="<?= (current_url() == base_url('contact')) ? 'active' : '' ?>">Contact</a></li>
                             <li class="btn-login">
-                                <?php if(!empty($_SESSION['bayhill']['user_id'])) { ?>
+                                <?php if(!empty($_SESSION['bayhill']['user_id'])) {
+                                    if($_SESSION['bayhill']['user_type'] == '1') { ?>
                                     <li class="dropdown">
                                         <a href="javascript:void(0)">
                                             <?php $getuser = $this->db->query("SELECT * FROM users WHERE id = '".$_SESSION['bayhill']['user_id']."'")->row(); ?>
@@ -90,7 +91,20 @@
                                             <li><a href="<?= base_url('logout') ?>"><i class="fas fa-power-off me-2"></i> Logout </a></li>
                                         </ul>
                                     </li>
-                                <?php } else { ?>
+                                    <?php } else { ?>
+                                    <li class="dropdown">
+                                        <a href="javascript:void(0)">
+                                            <?php $getuser = $this->db->query("SELECT * FROM users WHERE id = '".$_SESSION['bayhill']['user_id']."'")->row(); ?>
+                                            <span class="dashroundimg" style="color: #fff;">Hi <?= $getuser->first_name.' '.$getuser->last_name?>,</span> <i class="fas fa-angle-down ms-2" style="color: #fff;"></i>
+                                        </a>
+                                        <ul class="sub-menu">
+                                            <li><a href="<?= base_url('trainer/trainer-dashboard') ?>">Dashboard </a></li>
+                                            <li><a href="<?= base_url('trainer/profile-settings') ?>">Profile Settings </a></li>
+                                            <li><a href="<?= base_url('trainer/change-password') ?>">Change Password </a></li>
+                                            <li><a href="<?= base_url('trainer/logout') ?>"><i class="fas fa-power-off me-2"></i> Logout </a></li>
+                                        </ul>
+                                    </li>
+                                <?php } } else { ?>
                                 <a href="<?= base_url('login') ?>" class="active" data-bs-toggle="tooltip" data-bs-title="Returning Students">Login</a>
                                 <?php } ?>
                             </li>
