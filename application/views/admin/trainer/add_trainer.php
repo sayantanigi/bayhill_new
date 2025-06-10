@@ -72,21 +72,21 @@ body{margin-top:20px}
                                         </div>
                                         <div class="form-group mb-2">
                                             <label class="fw-semibold  text-black">First Name <span style="color:red">*</span></label>
-                                            <input type="text" class="form-control" name="fname" id="fname" required autocomplete="off">
+                                            <input type="text" class="form-control" name="fname" id="fname" placeholder="Enter Instructor's First Name" required autocomplete="off">
                                         </div>
                                         <small id="fname_error"></small>
                                         <div class="form-group mb-2">
                                             <label class="fw-semibold  text-black">Last Name <span style="color:red">*</span></label>
-                                            <input type="text" class="form-control" name="lname" id="lname" required autocomplete="off">
+                                            <input type="text" class="form-control" name="lname" id="lname" placeholder="Enter Instructor's Last Name" required autocomplete="off">
                                         </div>
                                         <small id="lname_error"></small>
                                         <div class="form-group mb-2">
                                             <label class="fw-semibold  text-black">Username *</label>
-                                            <input type="text" class="form-control" name="username"  id="username" required autocomplete="off">
+                                            <input type="text" class="form-control" name="username"  id="username" placeholder="Enter Instructor's Username" required autocomplete="off">
                                         </div>
                                         <div class="form-group mb-2">
                                             <label class="fw-semibold  text-black">Email <span style="color:red">*</span></label>
-                                            <input type="email" class="form-control" name="email" id="email" required autocomplete="off">
+                                            <input type="email" class="form-control" name="email" id="email" placeholder="Enter Instructor's Valid Email" required autocomplete="off">
                                         </div>
                                         <small id="email_error"></small>
                                         <div class="form-row mb-3 mt-3">
@@ -114,10 +114,10 @@ body{margin-top:20px}
                                         <small id="gender_error"></small>
                                         <div class="form-group mb-2">
                                             <label class="fw-semibold  text-black">Phone <span style="color:red">*</span></label>
-                                            <input type="text" class="form-control" name="phone" required id="phone" autocomplete="off">
+                                            <input type="text" class="form-control" name="phone" required id="phone" placeholder="Enter Instructor's Phone" autocomplete="off">
                                         </div>
                                         <small id="phone_error"></small>
-                                        <div class="form-group mb-2">
+                                        <!-- <div class="form-group mb-2">
                                             <label class="fw-semibold  text-black">Parents First Name</label>
                                             <input type="text" class="form-control" name="pfirst_name" id="pfirst_name"  autocomplete="off">
                                         </div>
@@ -132,10 +132,10 @@ body{margin-top:20px}
                                         <div class="form-group mb-2">
                                             <label class="fw-semibold  text-black">Parents Phone Number</label>
                                             <input type="text" class="form-control" name="phone_2" id="phone_2"  autocomplete="off">
-                                        </div>
+                                        </div> -->
                                         <div class="form-group mb-2">
                                             <label class="fw-semibold  text-black">Address</label>
-                                            <input type="text" class="form-control" name="address" id="autocomplete" value="">
+                                            <input type="text" class="form-control" name="address" id="autocomplete" placeholder="Enter Your Address" value="">
                                             <input type="hidden" placeholder="Near"  name="latitude" id="latitude" >
                                             <input type="hidden" placeholder="Near" name="longitude" id="longitude" >
                                         </div>
@@ -143,43 +143,39 @@ body{margin-top:20px}
                                         <div class="form-group mb-2">
                                             <div class="row">
                                                 <div class="col-sm-6">
-                                                    <label class="fw-semibold text-black">Country</label>
-                                                    <select class="form-control form-select" id="country" name="country">
-                                                        <option value="">Select Country</option>
-                                                        <?php
-                                                        $country_list = $this->db->query("SELECT * FROM countries WHERE flag = '1'")->result();
-                                                        foreach($country_list as $val) {?>
-                                                            <option value="<?php echo $val->id; ?>"><?php echo $val->name;?></option>
-                                                        <?php } ?>
-                                                    </select>
-                                                </div>
-                                                <div class="col-sm-6">
                                                     <label class="fw-semibold text-black">State</label>
-                                                    <select class="form-control" name="state" id="state">
-                                                        <option value="">Select Country</option>
+                                                    <select class="form-control form-select" name="state" id="state">
+                                                        <?php
+                                                        $state_list = $this->db->query("SELECT * FROM states WHERE id = '1416'")->result();
+                                                        if($state_list){
+                                                        foreach ($state_list as $state) { ?>
+                                                        <option value="<?= $state->id?>"><?= $state->name?></option>
+                                                        <?php } } ?>
                                                     </select>
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <label class="fw-semibold text-black">City</label>
-                                                    <select class="form-control" name="city" id="city">
-                                                        <option value="">Select State</option>
-                                                    </select>
+                                                    <input type="text" class="form-control" placeholder="Enter Your City" name="city" id="city" />
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <label class="fw-semibold text-black">Zip Code</label>
                                                     <input type="text" class="form-control" name="pincode" id="pincode">
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label class="fw-semibold text-black">Designation</label>
+                                                    <input type="text" class="form-control" name="degree"  id="degree"  autocomplete="off">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group mb-2">
                                             <div class="row">
                                                 <div class="col-sm-6">
-                                                    <label class="fw-semibold text-black">Background With Degrees</label>
-                                                    <input type="text" class="form-control" name="degree"  id="degree"  autocomplete="off">
+                                                    <label class="fw-semibold text-black">Driving Instructor Certificates</label>
+                                                    <input type="text" class="form-control" name="certificates" id="certificates" placeholder="Enter Driving Instructor Certificates" autocomplete="off">
                                                 </div>
                                                 <div class="col-sm-6">
-                                                    <label class="fw-semibold text-black">Certificates</label>
-                                                    <input type="text" class="form-control" name="certificates"  id="certificates"  autocomplete="off">
+                                                    <label class="fw-semibold text-black">Instructor License Number <span style="color:red">*</span></label>
+                                                    <input type="text" class="form-control" name="licensenumber" id="licensenumber" placeholder="Enter Instructor License Number" autocomplete="off">
                                                 </div>
                                             </div>
                                         </div>
@@ -187,11 +183,11 @@ body{margin-top:20px}
                                             <div class="row">
                                                 <div class="col-sm-6">
                                                     <label class="fw-semibold text-black">Languages</label>
-                                                    <input type="text" class="form-control" name="languages"  id="languages"  autocomplete="off">
+                                                    <input type="text" class="form-control" name="languages" id="languages" placeholder="Enter Driving Instructor Languages" autocomplete="off">
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <label class="fw-semibold text-black">Experience</label>
-                                                    <input type="text" class="form-control" name="experience"  id="experience"  autocomplete="off">
+                                                    <input type="text" class="form-control" name="experience" id="experience" placeholder="Enter Driving Instructor Experience" autocomplete="off">
                                                 </div>
                                             </div>
                                         </div>
@@ -234,6 +230,10 @@ body{margin-top:20px}
                                                 <option value="0">Inactive</option>
                                             </select>
                                             <small id="status_error"></small>
+                                        </div>
+                                        <div class="form-group mb-2">
+                                            <label class="fw-semibold text-black">Expiration date <span style="color:red">*</span></label>
+                                            <input type="date" class="form-control" name="expiration_date" id="expiration_date" required autocomplete="off">
                                         </div>
                                         <div class="form-group mb-2">
                                             <label class="fw-semibold text-black">Password <span style="color:red">*</span></label>

@@ -65,14 +65,19 @@ class Dashboard extends CI_Controller {
             'phone' => $this->input->post('phone'),
             'dob' => $this->input->post('dob'),
             'gender' => $this->input->post('gender'),
-            'pfirst_name' => $this->input->post('pfirst_name'),
-            'plast_name' => $this->input->post('plast_name'),
-            'pemail' => $this->input->post('pemail'),
-            'phone_2' => $this->input->post('pphone'),
+            // 'pfirst_name' => $this->input->post('pfirst_name'),
+            // 'plast_name' => $this->input->post('plast_name'),
+            // 'pemail' => $this->input->post('pemail'),
+            // 'phone_2' => $this->input->post('pphone'),
             'address' => $this->input->post('address'),
             'state' => $this->input->post('state'),
             'city' => $this->input->post('city'),
             'zipcode' => $this->input->post('zipcode'),
+            'certificates' => $this->input->post('certificates'),
+            'licensenumber' => $this->input->post('licensenumber'),
+            'languages' => $this->input->post('languages'),
+            'experience' => $this->input->post('experience'),
+            'expiration_date' => $this->input->post('expiration_date'),
         );
         // Update profile picture only if a new one was uploaded
         if ($profile_pic) {

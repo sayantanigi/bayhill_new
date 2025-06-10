@@ -118,7 +118,7 @@ body{margin-top:20px}
                                             <input type="text" class="form-control" name="phone"  id="phone" required autocomplete="off" value="<?= @$result->phone ?>">
                                         </div>
                                         <?php echo form_error('phone', '<small class="" style="color:red;">', '</small>'); ?>
-                                        <div class="form-group mb-2">
+                                        <!-- <div class="form-group mb-2">
                                             <label class="fw-semibold  text-black">Parents First Name</label>
                                             <input type="text" class="form-control" name="pfirst_name" id="pfirst_name"  autocomplete="off" value="<?= @$result->pfirst_name ?>">
                                         </div>
@@ -133,7 +133,7 @@ body{margin-top:20px}
                                         <div class="form-group mb-2">
                                             <label class="fw-semibold  text-black">Parents Phone Number</label>
                                             <input type="text" class="form-control" name="phone_2" id="phone_2"  autocomplete="off" value="<?= @$result->phone_2 ?>">
-                                        </div>
+                                        </div> -->
                                         <div class="form-group mb-2">
                                             <label class="fw-semibold  text-black">Street Address</label>
                                             <input type="text" class="form-control" name="address"  id="address"  autocomplete="off" value="<?= @$result->address ?>">
@@ -144,46 +144,39 @@ body{margin-top:20px}
                                         <div class="form-group mb-2">
                                             <div class="row">
                                                 <div class="col-sm-6">
-                                                    <label class="fw-semibold  text-black">Country</label>
-                                                    <select class="form-control form-select" id="country" name="country">
-                                                        <option value="">Select Country</option>
-                                                        <?php
-                                                        $country_list = $this->db->query("SELECT * FROM countries WHERE flag = '1'")->result();
-                                                        foreach($country_list as $val) {?>
-                                                            <option value="<?php echo $val->id; ?>" <?php if(@$val->id == @$result->country) {echo "selected"; }?>><?php echo $val->name;?></option>
-                                                        <?php } ?>
-                                                    </select>
-                                                    <input type="hidden" id="select_country_dropdown" value="<?php echo @$result->country; ?>">
-                                                </div>
-                                                <div class="col-sm-6">
                                                     <label class="fw-semibold  text-black">State</label>
-                                                    <select class="form-control" name="state" id="state">
-                                                        <option value="">Select Country</option>
+                                                    <select class="form-control form-select" name="state" id="state">
+                                                        <?php
+                                                        $state_list = $this->db->query("SELECT * FROM states WHERE id = '1416'")->result();
+                                                        if($state_list){
+                                                        foreach ($state_list as $state) { ?>
+                                                        <option value="<?= $state->id?>"><?= $state->name?></option>
+                                                        <?php } } ?>
                                                     </select>
-                                                    <input type="hidden" class="form-control" id="select_state_dropdown" value="<?= @$result->state ?>">
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <label class="fw-semibold  text-black">City</label>
-                                                    <select class="form-control" name="city" id="city">
-                                                        <option value="">Select State</option>
-                                                    </select>
-                                                    <input type="hidden" id="select_city_dropdown" value="<?= @$result->city ?>">
+                                                    <input type="text" class="form-control" name="city" id="city" value="<?= @$result->city ?>"/>
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <label class="fw-semibold  text-black">Zipcode</label>
                                                     <input type="text" class="form-control" name="pincode" id="pincode" value="<?= @$result->zipcode ?>">
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label class="fw-semibold  text-black">Background With Degrees</label>
+                                                    <input type="text" class="form-control" name="degree" id="degree"  autocomplete="off" value="<?= @$result->degree ?>">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group mb-2">
                                             <div class="row">
                                                 <div class="col-sm-6">
-                                                    <label class="fw-semibold  text-black">Background With Degrees</label>
-                                                    <input type="text" class="form-control" name="degree" id="degree"  autocomplete="off" value="<?= @$result->degree ?>">
+                                                    <label class="fw-semibold  text-black">Driving Instructor Certificates</label>
+                                                    <input type="text" class="form-control" name="certificates" id="certificates" autocomplete="off" value="<?= @$result->certificates ?>">
                                                 </div>
                                                 <div class="col-sm-6">
-                                                    <label class="fw-semibold  text-black">Certificates</label>
-                                                    <input type="text" class="form-control" name="certificates" id="certificates"  autocomplete="off" value="<?= @$result->certificates ?>">
+                                                    <label class="fw-semibold text-black">Instructor License Number <span style="color:red">*</span></label>
+                                                    <input type="text" class="form-control" name="licensenumber" id="licensenumber" placeholder="Enter Instructor License Number" value="<?= @$result->licensenumber ?>">
                                                 </div>
                                             </div>
                                         </div>
@@ -255,6 +248,10 @@ body{margin-top:20px}
                                                 <option value="0" <?php if(@$result->status == '0'){echo "selected";}?>>Inactive</option>
                                             </select>
                                             <small id="status_error"></small>
+                                        </div>
+                                        <div class="form-group mb-2">
+                                            <label class="fw-semibold text-black">Expiration date <span style="color:red">*</span></label>
+                                            <input type="date" class="form-control" name="expiration_date" id="expiration_date" required value="<?= @$result->expiration_date ?>">
                                         </div>
                                         <div class="form-group mt-3 mb-2">
                                             <button class="btn btn-success text-uppercase px-5 shadow" type="submit">Submit</button>
@@ -453,6 +450,7 @@ body{margin-top:20px}
         </div>
     </div>
 </div>
+<script src="<?= base_url() ?>assets/plugins/smt-img-upld/js/singleimage-uploader.js"></script>
 <script>
 $(document).ready(function () {
     $('#about').summernote({
@@ -460,6 +458,7 @@ $(document).ready(function () {
         height: 200
     });
 });
+
 $(document).on('keyup', '#fname', function (e) {
     var fname = $(this).val();
     if (fname) {
@@ -469,6 +468,7 @@ $(document).on('keyup', '#fname', function (e) {
         $("#first_name").text('First Name');
     }
 });
+
 $(document).on('keyup', '#lname', function (e) {
     var lname = $(this).val();
     if (lname) {
@@ -478,6 +478,7 @@ $(document).on('keyup', '#lname', function (e) {
         $("#last_name").text('Last Name');
     }
 });
+
 $(document).on('keyup', '#email', function (e) {
     var email = $(this).val();
     if (email) {
@@ -486,6 +487,7 @@ $(document).on('keyup', '#email', function (e) {
         $("#individual_email").text('Email');
     }
 });
+
 $(document).on('keyup', '#phone', function (e) {
     var phone = $(this).val();
     if (phone) {
@@ -494,6 +496,7 @@ $(document).on('keyup', '#phone', function (e) {
         $("#individual_phone").text('phone');
     }
 });
+
 $(document).on('change', '#sport', function (e) {
     var sport = $(this).val();
     $.ajax({
@@ -505,6 +508,7 @@ $(document).on('change', '#sport', function (e) {
         }
     });
 });
+
 $(document).on('change', '#userstatus', function (e) {
     var status = $(this).val();
     if (status == 1) {
@@ -514,21 +518,21 @@ $(document).on('change', '#userstatus', function (e) {
         $("#individual_status").text('Inactive');
     }
 });
+
 upload_pimage.onchange = evt => {
     const [file] = upload_pimage.files
     if (file) {
         pblah.src = URL.createObjectURL(file)
     }
 }
+
 upload_cimage.onchange = evt => {
     const [file] = upload_cimage.files
     if (file) {
         cblah.src = URL.createObjectURL(file)
     }
 }
-</script>
-<script src="<?= base_url() ?>assets/plugins/smt-img-upld/js/singleimage-uploader.js"></script>
-<script>
+
 $(document).ready(function () {
     $(function() {
         $("#starting_date").datepicker({
@@ -554,39 +558,6 @@ $(document).ready(function () {
             $("#repeat_month").val("0");
         }
     })
-    if($('#select_country_dropdown').val() != '') {
-        var country_name = $('#select_country_dropdown').val();
-        $.ajax({
-            url: "<?php echo base_url()?>Home/states_by_country",
-            type: "POST",
-            data: {
-                country_id: country_name
-            },
-            cache: false,
-            success: function(result){
-                //console.log(result);
-                $("#state").html(result);
-                $("#state").val(state_name);
-            }
-        });
-    }
-
-    if($('#select_state_dropdown').val() != '') {
-        var state_name = $('#select_state_dropdown').val();
-        $.ajax({
-            url: "<?php echo base_url()?>Home/cities_by_state",
-            type: "POST",
-            data: {
-                state_id: state_name
-            },
-            cache: false,
-            success: function(result){
-                console.log(result);
-                $("#city").html(result);
-                $("#city").val($('#select_city_dropdown').val());
-            }
-        });
-    }
 });
 
 $('#submit-button').on('click', function() {
@@ -734,13 +705,7 @@ $('#submit_buttonDate').on('click', function() {
         setInterval(function () {
             $('#errspecificdate').empty();
         }, 5000);
-    } /*else if(fromtimedate === 0){
-        $('#errfromtimedate').text('Please enter from time');
-        setInterval(function () {
-            $('#errfromtimedate').empty();
-        }, 5000);
-    }*/
-    else if(timeZone === ''){
+    } else if(timeZone === ''){
         $('#validateerrschedule').text('Please enter your timezone');
         setInterval(function () {
             $('#validateerrschedule').empty();
@@ -861,35 +826,4 @@ function removeRow(element) {
     const row = element.parentElement.parentElement;
     row.remove();
 }
-$('#country').on('change', function() {
-    var country_name = this.value;
-    $.ajax({
-        url: "<?php echo base_url()?>Home/states_by_country",
-        type: "POST",
-        data: {
-            country_id: country_name
-        },
-        cache: false,
-        success: function(result){
-            //console.log(result);
-            $("#state").html(result);
-            $('#city').html('<option value="">Select State First</option>');
-        }
-    });
-});
-
-$('#state').on('change', function() {
-    var state_name = this.value;
-    $.ajax({
-        url: "<?php echo base_url()?>Home/cities_by_state",
-        type: "POST",
-        data: {
-            state_id: state_name
-        },
-        cache: false,
-        success: function(result){
-            $("#city").html(result);
-        }
-    });
-});
 </script>

@@ -58,16 +58,7 @@ p strong{font-weight: 600 !important; color: black !important;}
                                                     <td><?= @$v->email; ?></td>
                                                     <td><?= @$v->phone; ?></td>
                                                     <td><?= @$v->address; ?></td>
-                                                    <td>
-                                                        <?php
-                                                        $getcity = $this->db->query("SELECT * FROM cities WHERE id = '".@$v->city."'")->row();
-                                                        if (!empty($getcity)) {
-                                                            echo $getcity->name;
-                                                        } else {
-                                                            echo 'N/A';
-                                                        }
-                                                        ?>
-                                                    </td>
+                                                    <td><?= $v->city; ?></td>
                                                     <td><?= @$v->zipcode; ?></td>
                                                     <td>
                                                         <div class="form-check mb-3 mt-3">

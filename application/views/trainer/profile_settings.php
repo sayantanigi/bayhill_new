@@ -59,6 +59,31 @@
                             </select>
                             <div id="vld_gender"></div>
                         </div>
+
+                        <div class="col-lg-4 col-md-6 mb-3">
+                            <label class="mb-2">Driving Instructor Certificates <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" placeholder="Enter your certificates" name="certificates" id="certificates" value="<?= @$getUserDetails->certificates; ?>"/>
+                        </div>
+                        <div class="col-lg-4 col-md-6 mb-3">
+                            <label class="mb-2">Instructor License Number <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" placeholder="Enter your License Number" name="licensenumber" id="licensenumber" value="<?= @$getUserDetails->licensenumber; ?>"/>
+                        </div>
+                        <div class="col-lg-4 col-md-6 mb-3">
+                            <label class="mb-2">Languages <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" placeholder="Enter your languages" name="languages" id="languages" value="<?= @$getUserDetails->languages; ?>"/>
+                            <div id="vld_certificates"></div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 mb-3">
+                            <label class="mb-2">Experience <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" placeholder="Enter your Experience" name="experience" id="experience" value="<?= @$getUserDetails->experience; ?>"/>
+                            <div id="vld_certificates"></div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 mb-3">
+                            <label class="mb-2">Expiration date <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" placeholder="Enter Expiration date" name="expiration_date" id="expiration_date" value="<?= @$getUserDetails->expiration_date; ?>"/>
+                            <div id="vld_certificates"></div>
+                        </div>
+
                         <div class="col-lg-6">
                             <label class="mb-2">Profile Picture <span class="text-danger">*</span></label>
                             <input type="file" class="form-control" name="profile_pic" id="profile_pic" accept=".jpg, .jpeg, .png"/>
@@ -66,31 +91,8 @@
                         <div class="col-lg-2 mb-3">
                             <div id="vld_profile_pic"></div>
                             <div class="profilepic">
-                                <img id="profile_pic_preview" src="<?= !empty(@$getUserDetails->image) && file_exists('uploads/student/profilePic/'.@$getUserDetails->image) ? base_url('uploads/student/profilePic/'.@$getUserDetails->image) : base_url('assets/images/profile_default.png'); ?>" alt="Profile Picture" style="width: 100px; height: 100px; border-radius: 50%;">
+                                <img id="profile_pic_preview" src="<?= !empty(@$getUserDetails->image) && file_exists('uploads/trainer/profilePic/'.@$getUserDetails->image) ? base_url('uploads/trainer/profilePic/'.@$getUserDetails->image) : base_url('assets/images/profile_default.png'); ?>" alt="Profile Picture" style="width: 100px; height: 100px; border-radius: 50%;">
                             </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <h2 class="subtitle wow fadeInUp mt-4" style="margin-bottom: 0px;">Contact Information</h2>
-                        </div>
-                        <div class="col-lg-6 col-md-6 mb-3">
-                            <label class="mb-2 pfirst_namelbl">Parents First Name</label>
-                            <input type="text" class="form-control" placeholder="Parents First Name" name="pfirst_name" id="pfirst_name" value="<?= @$getUserDetails->pfirst_name;?>"/>
-                            <div id="vld_pfirst_name"></div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 mb-3">
-                            <label class="mb-2 plast_namelbl">Parents Last Name</label>
-                            <input type="text" class="form-control" placeholder="Parents Last Name" name="plast_name" id="plast_name" value="<?= @$getUserDetails->plast_name;?>"/>
-                            <div id="vld_plast_name"></div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 mb-3">
-                            <label class="mb-2 pemaillbl">Parents Email</label>
-                            <input type="email" class="form-control" placeholder="Parents Email" name="pemail" id="pemail" value="<?= @$getUserDetails->pemail;?>"/>
-                            <div id="vld_pemail"></div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 mb-3">
-                            <label class="mb-2 pphonelbl">Parents Phone Number</label>
-                            <input type="text" class="form-control" placeholder="Parents Phone Number" name="pphone" id="pphone" value="<?= @$getUserDetails->phone_2; ?>"/>
-                            <div id="vld_pphone"></div>
                         </div>
                         <div class="col-lg-12">
                             <h2 class="subtitle wow fadeInUp mt-4">Address Information</h2>
