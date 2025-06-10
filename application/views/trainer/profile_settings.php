@@ -113,8 +113,15 @@
                         </div>
                         <div class="col-lg-4 col-md-6 mb-3">
                             <label class="mb-2">City <span class="text-danger">*</span> </label>
-                            <?php $getcityData = $this->db->query("SELECT * FROM cities WHERE id = '".@$getUserDetails->city."'")->row(); ?>
-                            <input type="text" class="form-control" placeholder="Enter Your City" name="city" id="city" value="<?= @$getcityData->name; ?>"/>
+                            <?php
+                            if(is_numeric(@$getUserDetails->city)) {
+                                $getcityData = $this->db->query("SELECT * FROM cities WHERE id = '".@$getUserDetails->city."'")->row();
+                                $city = @$getcityData->name;
+                            } else {
+                                $city = @$getUserDetails->city;
+                            }
+                            ?>
+                            <input type="text" class="form-control" placeholder="Enter Your City" name="city" id="city" value="<?= @$city; ?>"/>
                             <div id="vld_city"></div>
                         </div>
                         <div class="col-lg-4 col-md-6 mb-3">
