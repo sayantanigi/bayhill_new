@@ -35,6 +35,8 @@ body{margin-top:20px}
 .files:before{bottom:10px;width:100%;height:57px;color:#2ea591;font-weight:600;text-transform:capitalize}
 .jobsites{padding: 0px !important; margin: 0px !important;}
 .table tr {box-shadow: unset !important; border-color: unset !important; border-style: hidden !important; border-width: 0px !important;}
+input.valid { border-color: green; }
+input.invalid { border-color: red; }
 </style>
 <div class="main-content">
     <div class="page-content">
@@ -72,21 +74,22 @@ body{margin-top:20px}
                                         </div>
                                         <div class="form-group mb-2">
                                             <label class="fw-semibold  text-black">First Name <span style="color:red">*</span></label>
-                                            <input type="text" class="form-control" name="fname" id="fname" placeholder="Enter Instructor's First Name" required autocomplete="off">
+                                            <input type="text" class="form-control" name="fname" id="fname" placeholder="Enter Driving Instructor First Name" required autocomplete="off">
                                         </div>
                                         <small id="fname_error"></small>
                                         <div class="form-group mb-2">
                                             <label class="fw-semibold  text-black">Last Name <span style="color:red">*</span></label>
-                                            <input type="text" class="form-control" name="lname" id="lname" placeholder="Enter Instructor's Last Name" required autocomplete="off">
+                                            <input type="text" class="form-control" name="lname" id="lname" placeholder="Enter Driving Instructor Last Name" required autocomplete="off">
                                         </div>
                                         <small id="lname_error"></small>
                                         <div class="form-group mb-2">
                                             <label class="fw-semibold  text-black">Username *</label>
-                                            <input type="text" class="form-control" name="username"  id="username" placeholder="Enter Instructor's Username" required autocomplete="off">
+                                            <input type="text" class="form-control" name="username" id="username" placeholder="Enter Driving Instructor Username" required autocomplete="off">
                                         </div>
+                                        <small id="username_error"></small>
                                         <div class="form-group mb-2">
                                             <label class="fw-semibold  text-black">Email <span style="color:red">*</span></label>
-                                            <input type="email" class="form-control" name="email" id="email" placeholder="Enter Instructor's Valid Email" required autocomplete="off">
+                                            <input type="email" class="form-control" name="email" id="email" placeholder="Enter Driving Instructor Valid Email" required autocomplete="off">
                                         </div>
                                         <small id="email_error"></small>
                                         <div class="form-row mb-3 mt-3">
@@ -100,6 +103,7 @@ body{margin-top:20px}
                                                 <div class="col-sm-6">
                                                     <label class="fw-semibold  text-black">Gender</label>
                                                     <select class="form-control" name="gender" id="gender">
+                                                        <option value="">Select Gender</option>
                                                         <option value="Male">Male</option>
                                                         <option value="Female">Female</option>
                                                         <option value="Other">Other</option>
@@ -114,7 +118,7 @@ body{margin-top:20px}
                                         <small id="gender_error"></small>
                                         <div class="form-group mb-2">
                                             <label class="fw-semibold  text-black">Phone <span style="color:red">*</span></label>
-                                            <input type="text" class="form-control" name="phone" required id="phone" placeholder="Enter Instructor's Phone" autocomplete="off">
+                                            <input type="text" class="form-control" name="phone" required id="phone" placeholder="Enter Driving Instructor Phone" autocomplete="off" maxlength="12">
                                         </div>
                                         <small id="phone_error"></small>
                                         <!-- <div class="form-group mb-2">
@@ -135,7 +139,7 @@ body{margin-top:20px}
                                         </div> -->
                                         <div class="form-group mb-2">
                                             <label class="fw-semibold  text-black">Address</label>
-                                            <input type="text" class="form-control" name="address" id="autocomplete" placeholder="Enter Your Address" value="">
+                                            <input type="text" class="form-control" name="address" id="autocomplete" placeholder="Enter Driving Instructor Address" value="">
                                             <input type="hidden" placeholder="Near"  name="latitude" id="latitude" >
                                             <input type="hidden" placeholder="Near" name="longitude" id="longitude" >
                                         </div>
@@ -155,15 +159,15 @@ body{margin-top:20px}
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <label class="fw-semibold text-black">City</label>
-                                                    <input type="text" class="form-control" placeholder="Enter Your City" name="city" id="city" />
+                                                    <input type="text" class="form-control" name="city" id="city" placeholder="Enter Driving Instructor City" />
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <label class="fw-semibold text-black">Zip Code</label>
-                                                    <input type="text" class="form-control" name="pincode" id="pincode">
+                                                    <input type="text" class="form-control" name="pincode" id="pincode" placeholder="Enter Driving Instructor Zip Code" autocomplete="off">
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <label class="fw-semibold text-black">Designation</label>
-                                                    <input type="text" class="form-control" name="degree"  id="degree"  autocomplete="off">
+                                                    <input type="text" class="form-control" name="degree"  id="degree" placeholder="Enter Driving Instructor Designation" autocomplete="off">
                                                 </div>
                                             </div>
                                         </div>
@@ -197,10 +201,10 @@ body{margin-top:20px}
                                                     <tr class="color">
                                                         <th><label class="fw-semibold text-black">Skills</label></th>
                                                         <th></th>
-                                                        <th style="text-align: end;"><button type="button" class="btn btn-info addMoreBtn" onclick="add_row()">Add Skill</button></th>
+                                                        <th style="text-align: end;"><button type="button" class="btn btn-info addMoreBtn" onclick="add_rowSkills()">Add Skill</button></th>
                                                     </tr>
                                                 </table>
-                                                <table id="clonetable_feedback1" style="width: 100%;">
+                                                <table id="clonetable_feedbackSkill" style="width: 100%;">
                                                     <tr>
                                                         <td style="width: 45%;">
                                                             <input type="text" name="skills[]" id="skills1" class="form-control" placeholder="Skill Name">
@@ -296,6 +300,11 @@ body{margin-top:20px}
                                                         </div>
                                                         <div class="mt-3" style="margin-top: 5px !important;">
                                                             <div class="tx-11 font-weight-bold mb-0 ">
+                                                                <b>Username: </b><p class="text-muted" id="individual_username" style="display: contents"></p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="mt-3" style="margin-top: 5px !important;">
+                                                            <div class="tx-11 font-weight-bold mb-0 ">
                                                                 <b>Email: </b><p class="text-muted" id="individual_email" style="display: contents"></p>
                                                             </div>
                                                         </div>
@@ -320,7 +329,7 @@ body{margin-top:20px}
                                                     <p style="color:red; margin: 0;" class="" id="validateerrscheduletotime"></p>
                                                     <p style="color:red; margin: 0;" class="" id="errstartingdate"></p>
                                                     <div class="form-group">
-                                                        <h5 class="control-label" style="text-align: center; font-size: 15px;">Weekly Schedule</h5>
+                                                        <!-- <h5 class="control-label" style="text-align: center; font-size: 15px;">Weekly Schedule</h5>
                                                         <?php
                                                         date("Y-m-d", strtotime("+1 week"));
                                                         $startDate = date('Y-m');
@@ -336,7 +345,8 @@ body{margin-top:20px}
                                                                 <option value="<?= @$zone->value?>"><?= $zone->name?></option>
                                                                 <?php } ?>
                                                             </select>
-                                                        </div>
+                                                        </div> -->
+                                                        <input type="hidden" id="timeZone" name="timeZone" value="America/Los_Angeles"></select>
                                                         <?php
                                                         for($i = 0; $i < count($data); $i++) {
                                                         $value = explode('.', $data[$i]); ?>
@@ -396,6 +406,7 @@ body{margin-top:20px}
         </div>
     </div>
 </div>
+<script src="<?= base_url() ?>assets/plugins/smt-img-upld/js/singleimage-uploader.js"></script>
 <script>
 $(document).ready(function () {
     $('#about').summernote({
@@ -403,13 +414,16 @@ $(document).ready(function () {
         height: 200
     });
 });
+
 $(document).on('change', '#salutation', function (e) {
     var salutation = $(this).val();
     $("#sltation").text(salutation);
     $("#sltatn").text(salutation);
 });
+
 $(document).on('keyup', '#fname', function (e) {
-    var fname = $(this).val();
+    var fname = $(this).val().replace(/[^a-zA-Z]/g, '');
+    $(this).val(fname);
     if (fname) {
         $("#first_name").text(fname);
         $("#f-name").text(fname);
@@ -417,8 +431,10 @@ $(document).on('keyup', '#fname', function (e) {
         $("#first_name").text('First Name');
     }
 });
+
 $(document).on('keyup', '#lname', function (e) {
-    var lname = $(this).val();
+    var lname = $(this).val().replace(/[^a-zA-Z]/g, '');
+    $(this).val(lname);
     if (lname) {
         $("#last_name").text(lname);
         $("#l-name").text(lname);
@@ -426,6 +442,7 @@ $(document).on('keyup', '#lname', function (e) {
         $("#last_name").text('Last Name');
     }
 });
+
 $(document).on('keyup', '#email', function (e) {
     var email = $(this).val();
     if (email) {
@@ -454,25 +471,78 @@ $(document).on('keyup', '#email', function (e) {
         $("#individual_email").text('Email');
     }
 });
-$(document).on('keyup', '#phone', function (e) {
-    var phone = $(this).val();
-    if (phone) {
-        $("#individual_phone").text(phone);
+
+$(document).on('keyup', '#username', function (e) {
+    var username = $(this).val();
+    if (username) {
+        $("#individual_username").text(username);
+        $.ajax({
+            type: "POST",
+            url: "<?= base_url('admin/trainer/check_trainer_username') ?>",
+            data: {trainer_username: username},
+            success: function(response) {
+                response = JSON.parse(response);
+                if(response.status == 'success') {
+                    $('#username_error').fadeIn().html(response.message).css({'color':'green','margin-bottom':'5px'});
+                    $("#addTrainerButton").prop("disabled", false);
+                } else {
+                    $('#username_error').fadeIn().html(response.message).css({'color':'red','margin-bottom':'5px'});
+                    setTimeout(function(){
+                        $("#passerrormsg").html("");
+                    },10000);
+                    $("#username").focus();
+                    $("#addTrainerButton").prop("disabled", true);
+                    return false;
+                }
+            }
+        })
     } else {
-        $("#individual_phone").text('phone');
+        $("#individual_email").text('Email');
     }
 });
-$(document).on('change', '#sport', function (e) {
-    var sport = $(this).val();
-    $.ajax({
-        type: 'POST',
-        url: '<?php echo base_url('admin/users/getSport_byId'); ?>',
-        data: {sportId: sport},
-        success: function (data) {
-            $("#individual_sport").text(data);
-        }
-    });
+
+$(document).on('keyup', '#phone', function (e) {
+    var value = $(this).val();
+    value = value.replace(/(?!^\+)\D/g, '');
+    $(this).val(value);
+    var valid = /^\+?\d{10,12}$/.test(value);
+    if (value && valid) {
+        $("#individual_phone").text(value);
+        $(this).removeClass('invalid').addClass('valid');
+        $("#addTrainerButton").prop("disabled", false);
+    } else {
+        $("#individual_phone").text('phone');
+        $(this).removeClass('valid').addClass('invalid');
+        $("#addTrainerButton").prop("disabled", true);
+    }
 });
+
+$(document).on('keyup', '#city', function (e) {
+    var city = $(this).val().replace(/[^a-zA-Z]/g, '');
+    $(this).val(city);
+    if (city) {
+        $("#city").text(city);
+        $("#addTrainerButton").prop("disabled", false);
+    } else {
+        $("#city").text('Enter Driving Instructor City');
+        $("#addTrainerButton").prop("disabled", true);
+    }
+});
+
+$(document).on('keyup', '#pincode', function (e) {
+    var value = $(this).val();
+    value = value.replace(/(?!^\+)\D/g, '');
+    $(this).val(value);
+    var valid = /^\+?\d{5,5}$/.test(value);
+    if (value && valid) {
+        $(this).removeClass('invalid').addClass('valid');
+        $("#addTrainerButton").prop("disabled", false);
+    } else {
+        $(this).removeClass('valid').addClass('invalid');
+        $("#addTrainerButton").prop("disabled", true);
+    }
+});
+
 $(document).on('change', '#userstatus', function (e) {
     var status = $(this).val();
     if (status == 1) {
@@ -482,21 +552,21 @@ $(document).on('change', '#userstatus', function (e) {
         $("#individual_status").text('Inactive');
     }
 });
+
 upload_pimage.onchange = evt => {
     const [file] = upload_pimage.files
     if (file) {
         pblah.src = URL.createObjectURL(file)
     }
 }
+
 upload_cimage.onchange = evt => {
     const [file] = upload_cimage.files
     if (file) {
         cblah.src = URL.createObjectURL(file)
     }
 }
-</script>
-<script src="<?= base_url() ?>assets/plugins/smt-img-upld/js/singleimage-uploader.js"></script>
-<script>
+
 $(document).ready(function () {
     $('#confirm_password').on('keyup', function () {
         if ($('#password').val() == $('#confirm_password').val()) {
@@ -536,6 +606,7 @@ $(document).ready(function () {
         }
     })
 });
+
 <?php
 for($i = 0; $i < count($data); $i++) {
     $value = explode('.', $data[$i]); ?>
@@ -572,20 +643,20 @@ function remove(row) {
     }
 }
 
-$("#add_rowdate1").click(function() {
-    var y = document.getElementById('clonetable_feedbackdate1');
-    var new_row = y.rows[0].cloneNode(true);
-    var len = y.rows.length;
-    new_number=Math.round(Math.exp(Math.random()*Math.log(10000000-0+1)))+0;
-    var inp0 = new_row.cells[0].getElementsByTagName('input')[0];
-    inp0.value = '';
-    inp0.id = 'service'+(len+1);
-    var inp1 = new_row.cells[1].getElementsByTagName('input')[0];
-    inp1.value = '';
-    inp1.id = 'service'+(len+1);
-    var submit_btn =$('#submit').val();
-    y.appendChild(new_row);
-})
+// $("#add_rowdate1").click(function() {
+//     var y = document.getElementById('clonetable_feedbackdate1');
+//     var new_row = y.rows[0].cloneNode(true);
+//     var len = y.rows.length;
+//     new_number=Math.round(Math.exp(Math.random()*Math.log(10000000-0+1)))+0;
+//     var inp0 = new_row.cells[0].getElementsByTagName('input')[0];
+//     inp0.value = '';
+//     inp0.id = 'service'+(len+1);
+//     var inp1 = new_row.cells[1].getElementsByTagName('input')[0];
+//     inp1.value = '';
+//     inp1.id = 'service'+(len+1);
+//     var submit_btn =$('#submit').val();
+//     y.appendChild(new_row);
+// })
 
 function removesdate1(row) {
     var y=document.getElementById('purchaseTableclonedate1');
@@ -598,10 +669,9 @@ function removesdate1(row) {
 }
 
 let rowCount = 1;
-
-function add_row() {
+function add_rowSkills() {
     rowCount++;
-    const table = document.getElementById("clonetable_feedback1");
+    const table = document.getElementById("clonetable_feedbackSkill");
     const row = table.insertRow();
     row.innerHTML = `<td style="width: 45%;"><input type="text" name="skills[]" id="skills${rowCount}" class="form-control" placeholder="Skill Name"></td><td style="width: 45%;"><input type="text" name="rating[]" id="rating${rowCount}" class="form-control" placeholder="Rate (Ex: 91)"></td><td><a href="javascript:void(0)" title="Delete" class="text-danger" onclick="return removeRow(this)">X</a></td>`;
 }
@@ -610,36 +680,4 @@ function removeRow(element) {
     const row = element.parentElement.parentElement;
     row.remove();
 }
-
-$('#country').on('change', function() {
-    var country_name = this.value;
-    $.ajax({
-        url: "<?php echo base_url()?>Home/states_by_country",
-        type: "POST",
-        data: {
-            country_id: country_name
-        },
-        cache: false,
-        success: function(result){
-            //console.log(result);
-            $("#state").html(result);
-            $('#city').html('<option value="">Select State First</option>');
-        }
-    });
-});
-
-$('#state').on('change', function() {
-    var state_name = this.value;
-    $.ajax({
-        url: "<?php echo base_url()?>Home/cities_by_state",
-        type: "POST",
-        data: {
-            state_id: state_name
-        },
-        cache: false,
-        success: function(result){
-            $("#city").html(result);
-        }
-    });
-});
 </script>

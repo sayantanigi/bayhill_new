@@ -5,6 +5,8 @@
 small > p{color:red;}
 p strong{font-weight: 600 !important; color: black !important;}
 .sa-confirm-button-container button{background-color: #146c43 !important; border-color: #146c43 !important;}
+.loaderData{display: block !important; background: #00000096 !important;}
+.loaderDatastatus{display: block !important;}
 </style>
 <div class="main-content">
     <div class="page-content">
@@ -188,9 +190,10 @@ function assignTrainer() {
 
     var bookingIdInput = selectElement.closest('tr').querySelector('input[type="hidden"]');
     var bookingId = bookingIdInput.value;
-
+    $("#preloader").addClass('loaderData');
+    $("#status").addClass('loaderDatastatus');
     $.ajax({
-        url: '<?= base_url()?>admin/course/assign_trainer', // Update with your URL
+        url: '<?= base_url()?>admin/course/assign_trainer',
         type: 'POST',
         data: {
             booking_id: bookingId,
@@ -198,9 +201,13 @@ function assignTrainer() {
         },
         success: function(response) {
             if (response == 1) {
+                $("#preloader").removeClass('loaderData');
+                $("#status").removeClass('loaderDatastatus');
                 alert("Trainer assigned successfully.");
-                location.reload(); // Reload the page to reflect changes
+                location.reload();
             } else {
+                $("#preloader").removeClass('loaderData');
+                $("#status").removeClass('loaderDatastatus');
                 alert("Failed to assign trainer: " + response.message);
             }
         },

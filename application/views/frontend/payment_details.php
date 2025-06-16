@@ -24,7 +24,7 @@ $site_setting = $this->db->query("select * from  settings")->row();
                             <div class="courseBlock mb-5">
                                 <div class="courseBlockcontent w-100">
                                     <img src="assets/images/serviceicon/serv-01.png" class="courblockicon">
-                                    <h2><a href="#"><?= $getCourse->course_name; ?></a></h2>
+                                    <h2><a href="#"><?= $getCourse->course_name."<br>".$getCourse->course_name1; ?></a></h2>
                                     <p>Course Duration: <span><?= $getCourse->course_duration; ?></span></p>
                                     <p>Course Classes: <span><?= $getCourse->course_class; ?></span></p>
                                     <p>Course Price: <span>$ <?= $getCourse->offer_price; ?></span></p>

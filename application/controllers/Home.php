@@ -154,7 +154,7 @@ class Home extends CI_Controller {
             'page' => 'Registration',
             'subpage' => 'Registration',
             'course_id' => @$getcourseData->id,
-            'course_title' => @$getcourseData->course_name." ".@$getcourseData->course_name1,
+            'course_title' => @$getcourseData->course_name."<br>".@$getcourseData->course_name1,
             'course_week' => @$getcourseData->course_week,
             'class_week' => @$getcourseData->class_week,
             'offer_price' => @$getcourseData->offer_price,
@@ -254,13 +254,13 @@ class Home extends CI_Controller {
             'title' => 'Bay Hill Driving School',
             'page' => 'Booking Information',
             'subpage' => 'Booking Information',
-            'user_id' => $user_id,
-            'course_id' => $getcourseData->id,
+            'user_id' => @$user_id,
+            'course_id' => @$getcourseData->id,
             'booking_id' => @$booking_id,
-            'course_title' => $getcourseData->course_name,
-            'course_duration' => $getcourseData->course_duration,
-            'course_class' => $getcourseData->course_class,
-            'offer_price' => $getcourseData->offer_price
+            'course_title' => @$getcourseData->course_name."<br>".@$getcourseData->course_name1,
+            'course_duration' => @$getcourseData->course_duration,
+            'course_class' => @$getcourseData->course_class,
+            'offer_price' => @$getcourseData->offer_price
         );
         $data['DMV_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '1'")->row();
         $data['Video_links'] = $this->db->query("SELECT * FROM usefull_link WHERE id = '2'")->row();
@@ -499,9 +499,9 @@ class Home extends CI_Controller {
         $this->load->view('footer');
     }
     public function instructor_slot() {
-        $course_title = base64_decode($this->input->get('course_title', true));
+        $course_code = base64_decode($this->input->get('course_code', true));
         $user_id = base64_decode($this->input->get('uid', true));
-        $getcourseData = $this->db->query("SELECT * FROM courses WHERE course_name LIKE '%".$course_title."%'")->row();
+        $getcourseData = $this->db->query("SELECT * FROM courses WHERE course_code = '".$course_code."'")->row();
         $instructorID = base64_decode($this->input->get('insid', true));
         $data = array(
             'title' => 'Bay Hill Driving School',
@@ -509,7 +509,7 @@ class Home extends CI_Controller {
             'subpage' => 'Instructor Slot',
             'user_id' => $user_id,
             'course_id' => $getcourseData->id,
-            'course_title' => $getcourseData->course_name,
+            'course_title' => @$getcourseData->course_name."<br>".@$getcourseData->course_name1,
             'course_week' => $getcourseData->course_week,
             'class_week' => $getcourseData->class_week,
             'offer_price' => $getcourseData->offer_price,

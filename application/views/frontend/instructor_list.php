@@ -20,7 +20,7 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                     </div>
                     <div class="team-card__content">
                         <h3 class="team-card__title">
-                            <a href="<?= base_url()?>instructor-details?ctitle=<?= base64_encode($getCourse->course_name); ?>&insid=<?= base64_encode($instructor->id)?>"> <?= $instructor->salutation." ".$instructor->first_name." ".$instructor->last_name?></a>
+                            <a href="<?= base_url()?>instructor-details?course_code=<?= base64_encode($getCourse->course_code); ?>&insid=<?= base64_encode($instructor->id)?>"> <?= $instructor->salutation." ".$instructor->first_name." ".$instructor->last_name?></a>
                         </h3>
                         <div class="d-flex justify-content-between relative">
                             <div>
@@ -45,10 +45,10 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                                     if($totalTCount > 3) { ?>
                                     <a href="javascript:void(0)" class="btn btn-sm btn-danger">Already Booked</a>
                                     <?php } else { ?>
-                                    <a href="<?= base_url()?>instructor-slot?ctitle=<?= base64_encode($getCourse->course_name)?>&uid=<?= base64_encode($user_id)?>&insid=<?= base64_encode($instructor->id)?>" class="btn btn-sm btn-danger">Book Now</a>
+                                    <a href="<?= base_url()?>instructor-slot?course_code=<?= base64_encode($getCourse->course_code); ?>&uid=<?= base64_encode($user_id)?>&insid=<?= base64_encode($instructor->id)?>" class="btn btn-sm btn-danger">Book Now</a>
                                     <?php } ?>
                                 <?php } else { ?>
-                                <a href="<?= base_url()?>instructor-slot?ctitle=<?= base64_encode($getCourse->course_name)?>&uid=<?= base64_encode($user_id)?>&insid=<?= base64_encode($instructor->id)?>" class="btn btn-sm btn-danger">Book Now</a>
+                                <a href="<?= base_url()?>instructor-slot?course_code=<?= base64_encode($getCourse->course_code); ?>&uid=<?= base64_encode($user_id)?>&insid=<?= base64_encode($instructor->id)?>" class="btn btn-sm btn-danger">Book Now</a>
                                 <?php } ?>
                             </div>
                         </div>

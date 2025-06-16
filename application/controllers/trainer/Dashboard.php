@@ -9,14 +9,14 @@ class Dashboard extends CI_Controller {
 	}
 	public function index() {
         $loggedinUID = $_SESSION['bayhill']['user_id'];
-        //$getPurchasedCourseList = $this->db->query("SELECT * FROM booking WHERE user_id = '".$loggedinUID."' ORDER BY id DESC")->result();
-        //$getPurchasedCourseListCount = $this->db->query("SELECT count(id) as count FROM booking WHERE user_id = '".$loggedinUID."'")->row();
+        $getAssignedCourseList = $this->db->query("SELECT * FROM booking WHERE trainer_id = '".$loggedinUID."' ORDER BY id DESC")->result();
+        $getAssignedCourseListCount = $this->db->query("SELECT count(id) as count FROM booking WHERE trainer_id = '".$loggedinUID."'")->row();
         $data = array(
             'title' => 'Bay Hill Driving School',
             'page' => 'Trainer Dashboard',
             'subpage' => 'Trainer Dashboard',
-            //'getPurchasedCourseList' => $getPurchasedCourseList,
-            //'getPurchasedCourseListCount' => $getPurchasedCourseListCount
+            'getAssignedCourseList' => $getAssignedCourseList,
+            'getAssignedCourseListCount' => $getAssignedCourseListCount
         );
         $this->load->view('header', $data);
 		$this->load->view('trainer/dashboard');
@@ -135,41 +135,45 @@ class Dashboard extends CI_Controller {
         $booking_id = $this->input->post('booking_id');
         $course_id = $this->input->post('courseId');
         $course = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'")->row();
-        $getBookingData = $this->db->query("SELECT * FROM booking WHERE user_id = '".@$_SESSION['bayhill']['user_id']."' AND course_id = '".@$course_id."'")->row();
+        $getBookingData = $this->db->query("SELECT * FROM booking WHERE trainer_id = '".@$_SESSION['bayhill']['user_id']."' AND course_id = '".@$course_id."'")->row();
         if(!empty($getBookingData->transaction_id)){
-            $getBookingSlots = $this->db->query("SELECT * FROM booking_details WHERE booking_id = '".@$getBookingData->id."'")->result();
-            if($course->course_class > count($getBookingSlots)) { ?>
-            <div class="package-card__body__btn text-center" style="margin-top: 10px; !important;">
-                <a href="<?= base_url() ?>booking_slot?course_code=<?= base64_encode($course->course_code)?>&uid=<?= base64_encode($_SESSION['bayhill']['user_id'])?>&bookingid=<?= base64_encode($getBookingData->id)?>" class="drivschol-btn w-100">Book slot for pending classes</a>
-                <div class="col-lg-12 col-md-12" style="text-align: center; margin-top: 15px;border: 1px solid #f59b24;border-radius: 18px; display: block !important; visibility: visible !important;">
-                    <div style="margin-left: 10px;">
-                    <?php
-                    if(!empty($getBookingSlots)) {
-                        $i = 1;
-                        foreach ($getBookingSlots as $slot) { ?>
-                        <p style="margin: 0px;font-size: 14px;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time; ?></p>
-                    <?php $i++; } } ?>
-                    </div>
-                </div>
-            </div>
-            <?php } else { ?>
+            $getBookingSlots = $this->db->query("SELECT * FROM booking_details WHERE booking_id = '".@$getBookingData->id."'")->result(); ?>
             <div class="col-lg-12 col-md-12" style="text-align: center; margin-top: 15px;border: 1px solid #f59b24;border-radius: 18px; display: block !important; visibility: visible !important;">
-                <div style="margin-left: 10px;">
+                <div style="margin-left: 10px;display: flex;flex-direction: row;flex-wrap: wrap;justify-content: space-around;">
                 <?php
                 if(!empty($getBookingSlots)) {
                     $i = 1;
-                    foreach ($getBookingSlots as $slot) { ?>
-                    <p style="margin: 0px;font-size: 14px;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time; ?></p>
+                    foreach ($getBookingSlots as $slot) {
+                        if($slot->status == "1") { ?>
+                    <p style="margin: 0px; font-size: 14px; color:#f59b24;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time."(Pending)"; ?></p>
+                    <select class="form-control" id="class_status" name="class_status" style="width: 20%;margin-top: 0px;padding: 0px;text-align: center;border: 1px solid #000;">
+                        <option value="">Status</option>
+                        <option value="1">Pending</option>
+                        <option value="2">Canceled</option>
+                        <option value="3">Completed</option>
+                    </select>
+                    <?php } else if($slot->status == "2") { ?>
+                    <p style="margin: 0px; font-size: 14px; color:red;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time."(Canceled)"; ?></p>
+                    <?php } else { ?>
+                    <p style="margin: 0px; font-size: 14px; color:green;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time."(Completed)"; ?></p>
+                    <?php } ?>
                 <?php $i++; } } ?>
                 </div>
             </div>
-            <?php }
-        } else { ?>
-        <div class="package-card__body__btn text-center" style="margin-top: 10px; !important;">
-            <a href="javascript:void(0)" onclick="completePayment(<?= @$getBookingData->id ?>)" class="drivschol-btn w-100">Book slot for pending classes</a>
-        </div>
-        <div class="completePayment_<?= @$getBookingData->id ?>" style="display: none;text-align: left; margin-top: 20px; color: #ed1c24; font-size: 15px;">Please complete your payment first for this course to book pending slots.</div>
         <?php }
+    }
+    public function course_note() {
+        $booking_id = $this->input->post('booking_id');
+        $course_note = $this->input->post('course_note');
+        $data = array(
+            'course_notebyins' => $course_note
+        );
+        $this->db->where('id', $booking_id);
+        if ($this->db->update('booking', $data)) {
+            echo json_encode(array('status' => 'success', 'message' => 'Note updated successfully.'));
+        } else {
+            echo json_encode(array('status' => 'error', 'message' => 'Failed to update note.'));
+        }
     }
     public function logout() {
 	    unset($_SESSION['bayhill']);

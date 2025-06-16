@@ -197,9 +197,9 @@ body{margin-top:20px}
                                                 <table class="table jobsites" id="purchaseTableclone1">
                                                     <tr class="color">
                                                         <th><label class="fw-semibold text-black">Skills</label></th>
-                                                        <th style="text-align: end;"><button type="button" class="btn btn-info addMoreBtn" onclick="add_row()" >Add Skill</button></th>
+                                                        <th style="text-align: end;"><button type="button" class="btn btn-info addMoreBtn" onclick="add_rowSkills()" >Add Skill</button></th>
                                                     </tr>
-                                                    <tbody id="clonetable_feedback1">
+                                                    <tbody id="clonetable_feedbackSkill">
                                                         <?php if(!empty(@$result->skills)) {
                                                         $skills = unserialize(@@$result->skills);
                                                         $rows=1;
@@ -334,7 +334,7 @@ body{margin-top:20px}
                                                 <p style="color:red; margin: 0;" class="" id="errstartingdate"></p>
                                                 <form id="myForm">
                                                     <div class="form-group">
-                                                        <h5 class="control-label" style="text-align: center; font-size: 15px;">Weekly Schedule</h5>
+                                                        <!-- <h5 class="control-label" style="text-align: center; font-size: 15px;">Weekly Schedule</h5>
                                                         <?php
                                                         date("Y-m-d", strtotime("+1 week"));
                                                         $startDate = date('Y-m');
@@ -354,7 +354,8 @@ body{margin-top:20px}
                                                                 <option value="<?= $zone->value?>"><?= $zone->name?></option>
                                                                 <?php } } ?>
                                                             </select>
-                                                        </div>
+                                                        </div> -->
+                                                        <input type="hidden" id="timeZone" name="timeZone" value="America/Los_Angeles"></select>
                                                         <?php for($i = 0; $i < count($data); $i++) {
                                                         $value = explode('.', $data[$i]);
                                                         $getavailability = $this->db->query("SELECT * FROM trainer_availability WHERE user_id = '".@$result->id."' AND weekday = '".$value[1]."' AND is_datewise = '0' GROUP BY weekday")->result_array();
@@ -586,9 +587,9 @@ $('#submit-button').on('click', function() {
         var date1 = new Date('1970-01-01T'+$('.getfromtime').val()+':00');
         var date2 = new Date('1970-01-01T'+$('.gettotime').val()+':00');
         var differenceiInms = date2 - date1;
-        var differenceInDays = Math.floor(differenceiInms / (1000 * 60));
-        if(differenceInDays > 60) {
-            $('#validateerrschedule').text('Please select 60 minutes interval slot');
+        var differenceInDays = Math.floor(differenceiInms / (1000 * 120));
+        if(differenceInDays > 120) {
+            $('#validateerrschedule').text('Please select 120 minutes interval slot');
         } else {
             var form_data = $('#myForm').serialize();
             $.ajax({
@@ -815,9 +816,9 @@ function deletedata(id) {
 
 let rowCount = 1;
 
-function add_row() {
+function add_rowSkills() {
     rowCount++;
-    const table = document.getElementById("clonetable_feedback1");
+    const table = document.getElementById("clonetable_feedbackSkill");
     const row = table.insertRow();
     row.innerHTML = `<td style="width: 45%;"><input type="text" name="skills[]" id="skills${rowCount}" class="form-control" placeholder="Skill Name"></td><td style="width: 45%;"><input type="text" name="rating[]" id="rating${rowCount}" class="form-control" placeholder="Rate (Ex: 91)"></td><td><a href="javascript:void(0)" title="Delete" class="text-danger" onclick="return removeRow(this)">X</a></td>`;
 }

@@ -199,21 +199,6 @@ const checkbox = document.querySelector('.switch input');
 const teenLabel = document.querySelectorAll('.textlesson')[0];
 const adultLabel = document.querySelectorAll('.textlesson')[1];
 const courseTypeInput = document.getElementById('course_type');
-function updateLabels() {
-    if (checkbox.checked) {
-        teenLabel.classList.remove('active');
-        adultLabel.classList.add('active');
-        courseTypeInput.value = 'adult';
-    } else {
-        teenLabel.classList.add('active');
-        adultLabel.classList.remove('active');
-        courseTypeInput.value = 'teen';
-    }
-}
-// Initialize on page load
-updateLabels();
-// Update on toggle
-checkbox.addEventListener('change', updateLabels);
 
 $('#enroll_now').click(function () {
     lesson_type = $('#drivinglesson').val();

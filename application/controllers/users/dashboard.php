@@ -145,7 +145,7 @@ class Dashboard extends CI_Controller {
         $booking_id = $this->input->post('booking_id');
         $course_note = $this->input->post('course_note');
         $data = array(
-            'course_note' => $course_note
+            'course_notebyuser' => $course_note
         );
         $this->db->where('id', $booking_id);
         if ($this->db->update('booking', $data)) {
@@ -169,8 +169,14 @@ class Dashboard extends CI_Controller {
                     <?php
                     if(!empty($getBookingSlots)) {
                         $i = 1;
-                        foreach ($getBookingSlots as $slot) { ?>
-                        <p style="margin: 0px;font-size: 14px;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time; ?></p>
+                        foreach ($getBookingSlots as $slot) {
+                        if($slot->status == "1") { ?>
+                        <p style="margin: 0px; font-size: 14px; color:#f59b24;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time."(Pending)"; ?></p>
+                        <?php } else if($slot->status == "2") { ?>
+                        <p style="margin: 0px; font-size: 14px; color:red;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time."(Canceled)"; ?></p>
+                        <?php } else { ?>
+                        <p style="margin: 0px; font-size: 14px; color:green;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time."(Completed)"; ?></p>
+                        <?php } ?>
                     <?php $i++; } } ?>
                     </div>
                 </div>
@@ -181,8 +187,14 @@ class Dashboard extends CI_Controller {
                 <?php
                 if(!empty($getBookingSlots)) {
                     $i = 1;
-                    foreach ($getBookingSlots as $slot) { ?>
-                    <p style="margin: 0px;font-size: 14px;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time; ?></p>
+                    foreach ($getBookingSlots as $slot) {
+                        if($slot->status == "1") { ?>
+                        <p style="margin: 0px; font-size: 14px; color:#f59b24;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time."(Pending)"; ?></p>
+                        <?php } else if($slot->status == "2") { ?>
+                        <p style="margin: 0px; font-size: 14px; color:red;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time."(Canceled)"; ?></p>
+                        <?php } else { ?>
+                        <p style="margin: 0px; font-size: 14px; color:green;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time."(Completed)"; ?></p>
+                        <?php } ?>
                 <?php $i++; } } ?>
                 </div>
             </div>
