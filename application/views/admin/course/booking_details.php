@@ -73,7 +73,7 @@ p strong{font-weight: 600 !important; color: black !important;}
                                         <tr>
                                             <th>Trainer Details</th>
                                             <td>
-                                                <?php if(!empty($student_details)) { ?>
+                                                <?php if(!empty($trainer_details)) { ?>
                                                 <p style="margin: 0;"><strong>Name: </strong><?= $trainer_details->salutation." ".$trainer_details->first_name." ".$trainer_details->last_name; ?></p>
                                                 <p style="margin: 0;"><strong>Email: </strong><?= $trainer_details->email; ?></p>
                                                 <p style="margin: 0;"><strong>Phone: </strong><?= $trainer_details->phone; ?></p>
