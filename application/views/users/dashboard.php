@@ -15,6 +15,9 @@ if ($dob) {
     echo "Date of Birth not available.";
 }
 ?>
+<style>
+#bookingData{width: 100%; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-around; margin-bottom: 10px}
+</style>
 <section class="courseListpnl">
     <div class="container">
         <div class="text-success-msg f-20">
@@ -116,7 +119,7 @@ if ($dob) {
                                         <a class="dropdown-item" href="javascript:void(0)" onclick="completePayment(<?= @$getBookingData->id ?>)">Book Slot for pending classes</a></li>
                                         <?php } ?>
                                     <li><a class="dropdown-item" href="javascript:void(0)" onclick="changePickupAddress(<?= @$getBookingData->id; ?>)">Change Pickup Location</a></li>
-                                    <li><a class="dropdown-item" href="javascript:void(0)" onclick="cancelClass(<?= @$getBookingData->id; ?>)">Cancel Class</a></li>
+                                    <li><a class="dropdown-item" href="javascript:void(0)" onclick="cancelClass(<?= @$getBookingData->id ?>, <?= @$course->id ?>)">Cancel Class</a></li>
                                     <li><a class="dropdown-item" href="javascript:void(0)">Reschedule</a></li>
                                     <li><a class="dropdown-item" href="javascript:void(0);" onclick="courseNote(<?= @$getBookingData->id; ?>)">Notes</a></li>
                                 </ul>
@@ -180,7 +183,7 @@ if ($dob) {
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fw-bold fs-5" id="staticBackdropLabel">Booking Data</h1>
+                    <h1 class="modal-title fw-bold fs-5" id="staticBackdropLabel">Booking Details</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -195,12 +198,11 @@ if ($dob) {
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fw-bold fs-5" id="staticBackdropLabel">Booking Data</h1>
+                    <h1 class="modal-title fw-bold fs-5" id="staticBackdropLabel">Booking Details</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="mb-3" id="bookedSlotDataContent">
-                    </div>
+                    <div class="mb-3" id="bookedSlotDatacancelclassContent"></div>
                 </div>
             </div>
             </form>
@@ -208,6 +210,7 @@ if ($dob) {
     </div>
 </section>
 <script>
+
 function completePayment(id) {
     $('.completePayment_'+id).show();
     setTimeout(function () {
@@ -246,7 +249,6 @@ $(document).ready(function() {
         }
         });
     });
-    // Expose the function globally if needed
     window.changePickupAddress = changePickupAddress;
 
     $('#courseNotesubmit').on('submit', function(e) {
@@ -291,9 +293,25 @@ function courseNote(bookingId) {
     $('#staticBackdrop').modal('show');
 }
 
-function cancelClass () {
-    $('#modalCancelClassId').val(bookingId);
+function cancelClass (bookingId, courseId) {
+    //$('#modalCancelClassId').val(bookingId);
     $('#staticBackdropcancelclass').modal('show');
+    $.ajax({
+        url: '<?= base_url("users/Dashboard/BookigDataForCancelClass") ?>',
+        type: 'POST',
+        data: {
+            booking_id: bookingId,
+            courseId: courseId
+        },
+        dataType: 'html',
+        success: function(response) {
+            $('#bookedSlotDatacancelclassContent').empty();
+            $('#bookedSlotDatacancelclassContent').html(response);
+        },
+        error: function() {
+            alert('An error occurred while submitting you note');
+        }
+    });
 }
 
 function bookedSlotData(bookingId, courseId) {
@@ -315,5 +333,33 @@ function bookedSlotData(bookingId, courseId) {
         }
     });
 }
-</script>
+
+function updateBookingStatus(bookingId, status) {
+    $.ajax({
+        url: '<?= base_url("users/Dashboard/updateBookingStatus") ?>',
+        type: 'POST',
+        data: {
+            booking_id: bookingId,
+            status: status
+        },
+        success: function(response) {
+            response = JSON.parse(response);
+            if (response.status === 'success') {
+                $('#updateccmsg').text(response.message).css('color', 'green');
+                setTimeout(function() {
+                    $('#staticBackdropcompletedClass').modal('hide');
+                }, 3000);
+                setTimeout(function() {
+                    location.reload();
+                }, 4000);
+            } else {
+                $('#updateccmsg').text(response.message).css('color', 'red');
+            }
+        },
+        error: function() {
+            $('#updateccmsg').text("An error occurred while updating the booking status.").css('color', 'red');
+        }
+    });
+};
+
 </script>

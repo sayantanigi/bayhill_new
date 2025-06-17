@@ -206,6 +206,51 @@ class Dashboard extends CI_Controller {
         <div class="completePayment_<?= @$getBookingData->id ?>" style="display: none;text-align: left; margin-top: 20px; color: #ed1c24; font-size: 15px;">Please complete your payment first for this course to book pending slots.</div>
         <?php }
     }
+    public function BookigDataForCancelClass() {
+        $booking_id = $this->input->post('booking_id');
+        $course_id = $this->input->post('courseId');
+        $course = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'")->row();
+        $getBookingData = $this->db->query("SELECT * FROM booking WHERE user_id = '".@$_SESSION['bayhill']['user_id']."' AND course_id = '".@$course_id."'")->row();
+        if(!empty($getBookingData->transaction_id)){
+            $getBookingSlots = $this->db->query("SELECT * FROM booking_details WHERE booking_id = '".@$getBookingData->id."'")->result(); ?>
+            <div class="col-lg-12 col-md-12" style="text-align: center; margin-top: 15px;border: 1px solid #f59b24;border-radius: 18px; display: block !important; visibility: visible !important;">
+                <div style="margin-left: 10px;display: flex;flex-direction: row;flex-wrap: wrap;justify-content: space-around;">
+                <?php
+                if(!empty($getBookingSlots)) {
+                    $i = 1;
+                    foreach ($getBookingSlots as $slot) {
+                        if($slot->status == "1") { ?>
+                    <div id="bookingData">
+                        <p style="margin: 0px; font-size: 14px; color:#f59b24;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time."(Pending)"; ?></p>
+                        <select class="form-control" id="class_status" name="class_status" style="width: 20%;margin-top: 0px;padding: 0px;text-align: center;border: 1px solid #000;" onchange="updateBookingStatus(<?= $slot->id; ?>, this.value);">
+                            <option value="">Status</option>
+                            <option value="2">Canceled</option>
+                        </select>
+                        <input type="hidden" name="booking_id" id="booking_id" value="<?= $slot->id; ?>">
+                    </div>
+                    <?php } else if($slot->status == "2") { ?>
+                    <p style="margin: 0px; font-size: 14px; color:red;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time."(Canceled)"; ?></p>
+                    <?php } else { ?>
+                    <p style="margin: 0px; font-size: 14px; color:green;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time."(Completed)"; ?></p>
+                    <?php } ?>
+                <?php $i++; } } ?>
+                </div>
+            </div>
+        <?php }
+    }
+    public function updateBookingStatus() {
+        $booking_id = $this->input->post('booking_id');
+        $status = $this->input->post('status');
+        $data = array(
+            'status' => $status
+        );
+        $this->db->where('id', $booking_id);
+        if ($this->db->update('booking_details', $data)) {
+            echo json_encode(array('status' => 'success', 'message' => 'Booking status updated successfully.'));
+        } else {
+            echo json_encode(array('status' => 'error', 'message' => 'Failed to update booking status.'));
+        }
+    }
     public function logout() {
 	    unset($_SESSION['bayhill']);
         $this->session->set_flashdata('message', 'You have logged out.');

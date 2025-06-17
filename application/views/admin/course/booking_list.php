@@ -113,6 +113,7 @@ p strong{font-weight: 600 !important; color: black !important;}
                                                             <?php } ?>
                                                         </select>
                                                         <?php } ?>
+                                                        <a href="<?= base_url("admin/course/booking_details/".base64_encode(@$v->id))?>" class="btn btn-primary">View</a>
                                                         <input type="hidden" id="booking_id_<?= @$v->id ?>" value="<?= @$v->id ?>">
                                                     </td>
                                                     <td class="text-center"></td>

@@ -121,7 +121,6 @@ class Cms extends CI_Controller {
             if ($this->form_validation->run() == true) {
                 if (!empty($_FILES['upload_image']['name'])) {
 
-
                 } else {
                     $data = array(
                         'heading' => strip_tags($this->input->post('heading')),
@@ -171,7 +170,6 @@ class Cms extends CI_Controller {
             $this->form_validation->set_rules('status', 'Status', 'required|trim');
             if ($this->form_validation->run() == true) {
                 if (!empty($_FILES['upload_image']['name'])) {
-
 
                 } else {
                     $data = array(
@@ -460,7 +458,6 @@ class Cms extends CI_Controller {
             $this->form_validation->set_rules('status', 'Status', 'required|trim');
             if ($this->form_validation->run() == true) {
                 if (!empty($_FILES['upload_image']['name'])) {
-
 
                 } else {
                     $data = array(

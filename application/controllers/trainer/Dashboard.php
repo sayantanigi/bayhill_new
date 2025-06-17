@@ -145,13 +145,16 @@ class Dashboard extends CI_Controller {
                     $i = 1;
                     foreach ($getBookingSlots as $slot) {
                         if($slot->status == "1") { ?>
-                    <p style="margin: 0px; font-size: 14px; color:#f59b24;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time."(Pending)"; ?></p>
-                    <select class="form-control" id="class_status" name="class_status" style="width: 20%;margin-top: 0px;padding: 0px;text-align: center;border: 1px solid #000;">
-                        <option value="">Status</option>
-                        <option value="1">Pending</option>
-                        <option value="2">Canceled</option>
-                        <option value="3">Completed</option>
-                    </select>
+                    <div id="bookingData">
+                        <p style="margin: 0px; font-size: 14px; color:#f59b24;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time."(Pending)"; ?></p>
+                        <select class="form-control" id="class_status" name="class_status" style="width: 20%;margin-top: 0px;padding: 0px;text-align: center;border: 1px solid #000;" onchange="updateBookingStatus(<?= $slot->id; ?>, this.value);">
+                            <option value="">Status</option>
+                            <option value="1">Pending</option>
+                            <option value="2">Canceled</option>
+                            <option value="3">Completed</option>
+                        </select>
+                        <input type="hidden" name="booking_id" id="booking_id" value="<?= $slot->id; ?>">
+                    </div>
                     <?php } else if($slot->status == "2") { ?>
                     <p style="margin: 0px; font-size: 14px; color:red;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time."(Canceled)"; ?></p>
                     <?php } else { ?>
@@ -173,6 +176,19 @@ class Dashboard extends CI_Controller {
             echo json_encode(array('status' => 'success', 'message' => 'Note updated successfully.'));
         } else {
             echo json_encode(array('status' => 'error', 'message' => 'Failed to update note.'));
+        }
+    }
+    public function updateBookingStatus() {
+        $booking_id = $this->input->post('booking_id');
+        $status = $this->input->post('status');
+        $data = array(
+            'status' => $status
+        );
+        $this->db->where('id', $booking_id);
+        if ($this->db->update('booking_details', $data)) {
+            echo json_encode(array('status' => 'success', 'message' => 'Booking status updated successfully.'));
+        } else {
+            echo json_encode(array('status' => 'error', 'message' => 'Failed to update booking status.'));
         }
     }
     public function logout() {

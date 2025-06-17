@@ -10,7 +10,7 @@ class Course extends CI_Controller {
     }
     public function index() {
         $data = array(
-            'title' => 'Bay Hill DS',
+            'title' => 'Bay Hill Driving School',
             'page' => 'Course List',
             'subpage' => 'courses',
         );
@@ -22,7 +22,7 @@ class Course extends CI_Controller {
     }
     public function add_course() {
         $data = array(
-            'title' => 'Bay Hill DS',
+            'title' => 'Bay Hill Driving School',
             'page' => 'Add Course',
             'subpage' => 'courses',
         );
@@ -81,7 +81,7 @@ class Course extends CI_Controller {
     }
     public function edit_course($id) {
         $data = array(
-            'title' => 'Bay Hill DS',
+            'title' => 'Bay Hill Driving School',
             'page' => 'Edit Course',
             'subpage' => 'courses',
         );
@@ -174,7 +174,7 @@ class Course extends CI_Controller {
     }
     public function booking_list() {
         $data = array(
-            'title' => 'Bay Hill DS',
+            'title' => 'Bay Hill Driving School',
             'page' => 'Booking List',
             'subpage' => 'booking',
         );
@@ -262,5 +262,25 @@ class Course extends CI_Controller {
         } catch (Exception $e) {
             echo $e->getMessage();
         }
+    }
+    public function booking_details($booking_id) {
+        $id = base64_decode($booking_id);
+        if(empty($id)){
+            redirect(base_url('admin/course/booking_list'),'refresh');
+        }
+        $data = array(
+            'title' => 'Bay Hill Driving School',
+            'page' => 'Booking Details',
+            'subpage' => 'booking',
+        );
+        $data['booking_data'] = $this->db->query("SELECT * FROM booking WHERE id = '".$id."'")->row();
+        $data['booking_details'] = $this->db->query("SELECT * FROM booking_details WHERE booking_id = '".$data['booking_data']->id."'")->result();
+        $data['course_details'] = $this->db->query("SELECT * FROM courses WHERE id = '".$data['booking_data']->course_id."'")->row();
+        $data['student_details'] = $this->db->query("SELECT * FROM users WHERE id = '".$data['booking_data']->user_id."'")->row();
+        $data['trainer_details'] = $this->db->query("SELECT * FROM users WHERE id = '".$data['booking_data']->trainer_id."'")->row();
+        $this->load->view('admin/header', $data);
+        $this->load->view('admin/sidebar');
+        $this->load->view('admin/course/booking_details');
+        $this->load->view('admin/footer');
     }
 }

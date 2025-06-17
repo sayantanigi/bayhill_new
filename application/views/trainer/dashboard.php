@@ -15,6 +15,9 @@ if ($dob) {
     echo "Date of Birth not available.";
 }
 ?>
+<style>
+#bookingData{width: 100%; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-around; margin-bottom: 10px}
+</style>
 <section class="courseListpnl">
     <div class="container">
         <div class="text-success-msg f-20">
@@ -166,6 +169,7 @@ if ($dob) {
                 <div class="modal-body">
                     <div class="mb-3" id="bookedSlotDataContent">
                     </div>
+                    <p id="updateccmsg" class="text-center"></p>
                 </div>
             </div>
             </form>
@@ -238,9 +242,7 @@ function completedClass (bookingId, courseId) {
     });
 }
 
-$('#class_status').on('change', function() {
-    var status = $(this).val();
-    var bookingId = $(this).closest('.booking-row').data('booking-id');
+function updateBookingStatus(bookingId, status) {
     $.ajax({
         url: '<?= base_url("trainer/Dashboard/updateBookingStatus") ?>',
         type: 'POST',
@@ -249,17 +251,23 @@ $('#class_status').on('change', function() {
             status: status
         },
         success: function(response) {
+            response = JSON.parse(response);
             if (response.status === 'success') {
-                alert('Booking status updated successfully.');
-                location.reload();
+                $('#updateccmsg').text(response.message).css('color', 'green');
+                setTimeout(function() {
+                    $('#staticBackdropcompletedClass').modal('hide');
+                }, 3000);
+                setTimeout(function() {
+                    location.reload();
+                }, 4000);
             } else {
-                alert('Failed to update booking status.');
+                $('#updateccmsg').text(response.message).css('color', 'red');
             }
         },
         error: function() {
-            alert('An error occurred while updating the booking status.');
+            $('#updateccmsg').text("An error occurred while updating the booking status.").css('color', 'red');
         }
     });
-});
-</script>
+};
+
 </script>
