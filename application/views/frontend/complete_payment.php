@@ -1,6 +1,4 @@
-<?php
-$site_setting = $this->db->query("select * from  settings")->row();
-?>
+<?php $site_setting = $this->db->query("select * from  settings")->row(); ?>
 <section class="enrollPnl">
     <div class="container">
         <div class="row g-5">

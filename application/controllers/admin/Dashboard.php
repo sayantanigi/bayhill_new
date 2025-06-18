@@ -101,4 +101,40 @@ class Dashboard extends CI_Controller {
         }
         redirect(base_url('admin/userfull_link'), 'refresh');
     }
+    public function getBookingDetails() {
+        $booking_date = $this->input->post('choosendate');
+        $booking_details = $this->db->query("SELECT * FROM booking_details WHERE booking_date = '".$booking_date."'")->result();
+        if(!empty($booking_details)) {
+            echo '<div class="col-lg-12 col-md-12" style="text-align: center; margin-top: 15px; border: 1px solid #f59b24; border-radius: 18px; display: block !important; visibility: visible !important;"><div style="margin-left: 10px;">';
+            $i = 1;
+            foreach ($booking_details as $value) {
+                $booking_id = $value->booking_id;
+                $getbooking = $this->db->query("SELECT * FROM booking WHERE id = '".$booking_id."'")->row();
+                //course details
+                $getcourseData = $this->db->query("SELECT * FROM courses WHERE id = '".$getbooking->course_id."'")->row();
+                $courseName = @$getcourseData->course_name.' '.$getcourseData->course_name1;
+                //trainer details
+                $gettrainerData = $this->db->query("SELECT * FROM users WHERE id = '".$getbooking->trainer_id."'")->row();
+                $trainerName = @$gettrainerData->salutation.' '.$gettrainerData->first_name.' '.$gettrainerData->last_name;
+                //student details
+                $getstudentData = $this->db->query("SELECT * FROM users WHERE id = '".$getbooking->user_id."'")->row();
+                $studentName = @$getstudentData->salutation.' '.$getstudentData->first_name.' '.$getstudentData->last_name;
+                echo '
+                <div id="bookingData" style="display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center;">
+                    <div class="col-sm-9" style="text-align: start;">
+                        <p style="margin: 0px; font-size: 14px; color:#f59b24;"><b>Course:</b> '.$courseName.'</p>
+                        <p style="margin: 0px; font-size: 14px; color:#f59b24;"><b>Trainer:</b> '.$trainerName.'</p>
+                        <p style="margin: 0px; font-size: 14px; color:#f59b24;"><b>Student:</b> '.$studentName.'</p>
+                        <p style="margin: 0px; font-size: 14px; color:#f59b24;"><b>Date & Time:</b> '.date("d-m-Y", strtotime($value->booking_date)).' '.$value->booking_time.'</p>
+                        <input type="hidden" name="booking_id" id="booking_id" value="'.$value->id.'">
+                    </div>
+                    <div class="col-sm-3">
+                        <a href="'.base_url('admin/course/booking_details/'.base64_encode($booking_id)).'" class="btn btn-success" style="margin-top: 10px;" target="_blank">View Booking</a>
+                    </div>
+                </div><hr style="border: 1px solid #000; color: #000; width: 625px;">';
+                $i++;
+            }
+            echo '</div></div>';
+        }
+    }
 }

@@ -18,6 +18,11 @@
                         </a>
                     </li>
                     <li class="">
+                        <a href="<?= base_url('admin/cms/contact_us') ?>" class="">
+                            <span class="hide-menu">Contact Us</span>
+                        </a>
+                    </li>
+                    <li class="">
                         <a href="<?= base_url('admin/cms/privacy') ?>" class="">
                             <span class="hide-menu">Privacy Policy</span>
                         </a>

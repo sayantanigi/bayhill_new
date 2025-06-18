@@ -4,8 +4,7 @@
         <h3 class="maintitle wow fadeInUp ">Get In Touch With <span class="d-block text-primary"><?= $site_setting->title ?></span></h3>
         <div class="row justify-content-between">
             <div class="col-lg-6">
-                <p class="text-muted mb-5">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                    Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+                <p class="text-muted mb-5"><?= @$contactus->description?></p>
                 <form id="contact_form">
                     <div class="row">
                         <div class="col-lg-6 col-md-6 mb-4">
@@ -41,78 +40,20 @@
                 </form>
             </div>
             <div class="col-lg-4">
-                <div class="d-flex contactInfobox align-items-center  mb-2">
-                    <div class="boxIconcontact bg-gradient">
-                        <img src="<?= base_url() ?>assets/images/icon-01.svg">
-                    </div>
-                    <div>
-                        <a href="#"> 800-648-3650</a>
-                    </div>
-                </div>
-
-                <div class="d-flex contactInfobox align-items-center  mb-2">
-                    <div class="boxIconcontact bg-gradient">
-                        <img src="<?= base_url() ?>assets/images/icon-02.svg">
-                    </div>
-                    <div>
-                        <a href="#"><?= $site_setting->email ?></a>
-                    </div>
-                </div>
+                <?php if(!empty(@$site_setting->other_location_details)) {
+                $other_location_details = @$site_setting->other_location_details;
+                $other_location_details = unserialize($other_location_details);
+                foreach($other_location_details as $key) { ?>
                 <div class="contactInfobox  mb-2">
-                    <div class="d-flex align-items-center mb-2">
-                        <div class="boxIconcontact bg-gradient">
-                            <img src="<?= base_url() ?>assets/images/icon-03.svg">
-                        </div>
-                        <div>
-                            <a href="#"> 3769 Peralta Blvd ,Suite # A, Fremont CA</a>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center ">
-                        <div class="boxIconcontact bg-gradient">
-                            <img src="<?= base_url() ?>assets/images/icon-02.svg">
-                        </div>
-                        <div>
-                            <a href="#">  510-943-4301</a>
-                        </div>
+                    <div class="footer-widget--about">
+                        <ul class="list-unstyled footer-widget__info">
+                            <li><i class="icon-map-pin" aria-hidden="true"></i> <a style="color: #104597; font-size: 18px; font-weight: 700;" href="javascript:void(0)"><?= @$key['company_location']; ?></a></li>
+                            <li><i class="icon-telephone-call-1" aria-hidden="true"></i> <a style="color: #104597; font-size: 18px; font-weight: 700;" href="tel:+ <?= @$key['company_contact']; ?>"><?= @$key['company_contact']; ?></a></li>
+                            <li><i class="icon-envelope" aria-hidden="true"></i> <a style="color: #104597; font-size: 18px; font-weight: 700;" href="mailto: <?= @$site_setting->email; ?>"><?= @$site_setting->email; ?></a></li>
+                        </ul>
                     </div>
                 </div>
-                <div class="contactInfobox  mb-2">
-                    <div class="d-flex align-items-center mb-2">
-                        <div class="boxIconcontact bg-gradient">
-                            <img src="<?= base_url() ?>assets/images/icon-03.svg">
-                        </div>
-                        <div>
-                            <a href="#"> 4457 Willow Rd, Pleasanton CA 94588</a>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center ">
-                        <div class="boxIconcontact bg-gradient">
-                            <img src="<?= base_url() ?>assets/images/icon-02.svg">
-                        </div>
-                        <div>
-                            <a href="#">  925-464-2899</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="contactInfobox  mb-2">
-                    <div class="d-flex align-items-center mb-2">
-                        <div class="boxIconcontact bg-gradient">
-                            <img src="<?= base_url() ?>assets/images/icon-03.svg">
-                        </div>
-                        <div>
-                            <a href="#"> 97 E Brokaw Rd, ,San Jose CA</a>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center ">
-                        <div class="boxIconcontact bg-gradient">
-                            <img src="<?= base_url() ?>assets/images/icon-02.svg">
-                        </div>
-                        <div>
-                            <a href="#">  408-384-4458</a>
-                        </div>
-                    </div>
-                </div>
-
+                <?php } } ?>
             </div>
         </div>
     </div>

@@ -638,33 +638,20 @@
                     <h3 class="footertitle">Contact Us</h3>
                     <div class="footer-widget footer-widget__right">
                         <div class="row">
+                            <?php if(!empty(@$site_setting->other_location_details)) {
+                            $other_location_details = @$site_setting->other_location_details;
+                            $other_location_details = unserialize($other_location_details);
+                            foreach($other_location_details as $key) { ?>
                             <div class="col-lg-6">
                                 <div class="footer-widget--about">
                                     <ul class="list-unstyled footer-widget__info">
-                                        <li> <i class="icon-map-pin" aria-hidden="true"></i> <a href="#">3769 Peralta Blvd ,Suite # A, Fremont CA</a></li>
-                                        <li> <i class="icon-telephone-call-1" aria-hidden="true"></i> <a href="#">510-943-4301</a></li>
-                                        <li> <i class="icon-envelope" aria-hidden="true"></i> <a href="#">Info@bayhilldrivingschool.com</a></li>
+                                        <li><i class="icon-map-pin" aria-hidden="true"></i> <a href="javascript:void(0)"><?= @$key['company_location']; ?></a></li>
+                                        <li><i class="icon-telephone-call-1" aria-hidden="true"></i> <a href="tel:+ <?= @$key['company_contact']; ?>"><?= @$key['company_contact']; ?></a></li>
+                                        <li><i class="icon-envelope" aria-hidden="true"></i> <a href="mailto: <?= @$site_setting->email; ?>"><?= @$site_setting->email; ?></a></li>
                                     </ul>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
-                                <div class="footer-widget--about">
-                                    <ul class="list-unstyled footer-widget__info">
-                                        <li> <i class="icon-map-pin" aria-hidden="true"></i> <a href="#">97 E Brokaw Rd, ,San Jose CA</a></li>
-                                        <li> <i class="icon-telephone-call-1" aria-hidden="true"></i> <a href="#">408-384-4458</a></li>
-                                        <li> <i class="icon-envelope" aria-hidden="true"></i> <a href="#">Info@bayhilldrivingschool.com</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="footer-widget--about">
-                                    <ul class="list-unstyled footer-widget__info">
-                                        <li> <i class="icon-map-pin" aria-hidden="true"></i> <a href="#">4457 Willow Rd, Pleasanton CA 94588</a></li>
-                                        <li> <i class="icon-telephone-call-1" aria-hidden="true"></i> <a href="#">925-464-2899</a></li>
-                                        <li> <i class="icon-envelope" aria-hidden="true"></i> <a href="#">Info@bayhilldrivingschool.com</a></li>
-                                    </ul>
-                                </div>
-                            </div>
+                            <?php } } ?>
                             <div class="col-lg-6">
                                 <h3 class="footertitle">Social Network</h3>
                                 <div class="main-footer__inner-social">
