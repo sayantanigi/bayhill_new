@@ -68,7 +68,6 @@ body{margin-top:20px}
                                                 <option value="Mr." <?php if(@$result->salutation == 'Mr.'){echo "selected";}?>>Mr.</option>
                                                 <option value="Ms." <?php if(@$result->salutation == 'Ms.'){echo "selected";}?>>Ms.</option>
                                                 <option value="Mrs." <?php if(@$result->salutation == 'Mrs.'){echo "selected";}?>>Mrs.</option>
-                                                <option value="Mohd." <?php if(@$result->salutation == 'Mohd.'){echo "selected";}?>>Mohd.</option>
                                                 <option value="Miss." <?php if(@$result->salutation == 'Miss.'){echo "selected";}?>>Miss.</option>
                                             </select>
                                         </div>
@@ -159,24 +158,40 @@ body{margin-top:20px}
                                                     <input type="text" class="form-control" name="city" id="city" value="<?= @$result->city ?>"/>
                                                 </div>
                                                 <div class="col-sm-6">
-                                                    <label class="fw-semibold  text-black">Zipcode</label>
+                                                    <label class="fw-semibold  text-black">Zip Code</label>
                                                     <input type="text" class="form-control" name="pincode" id="pincode" value="<?= @$result->zipcode ?>">
                                                 </div>
+                                                <!-- <div class="col-sm-6">
+                                                    <label class="fw-semibold  text-black">Designation</label>
+                                                    <input type="text" class="form-control" name="degree" id="degree" autocomplete="off" value="<?= @$result->degree ?>">
+                                                </div> -->
                                                 <div class="col-sm-6">
-                                                    <label class="fw-semibold  text-black">Background With Degrees</label>
-                                                    <input type="text" class="form-control" name="degree" id="degree"  autocomplete="off" value="<?= @$result->degree ?>">
+                                                    <label class="fw-semibold  text-black">Driving Instructor Certificates</label>
+                                                    <input type="text" class="form-control" name="certificates" id="certificates" autocomplete="off" value="<?= @$result->certificates ?>">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group mb-2">
                                             <div class="row">
                                                 <div class="col-sm-6">
-                                                    <label class="fw-semibold  text-black">Driving Instructor Certificates</label>
-                                                    <input type="text" class="form-control" name="certificates" id="certificates" autocomplete="off" value="<?= @$result->certificates ?>">
+                                                    <label class="fw-semibold text-black">Instructor License Number <span style="color:red">*</span></label>
+                                                    <input type="text" class="form-control" name="licensenumber" id="licensenumber" value="<?= @$result->licensenumber ?>">
                                                 </div>
                                                 <div class="col-sm-6">
-                                                    <label class="fw-semibold text-black">Instructor License Number <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-control" name="licensenumber" id="licensenumber" placeholder="Enter Instructor License Number" value="<?= @$result->licensenumber ?>">
+                                                    <label class="fw-semibold text-black">Expiration Date</label>
+                                                    <input type="date" class="form-control" name="license_expiration_date" id="license_expiration_date" value="<?= @$result->license_expiration_date ?>">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb-2">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <label class="fw-semibold text-black">Driving License Number <span style="color:red">*</span></label>
+                                                    <input type="text" class="form-control" name="dlicensenumber" id="dlicensenumber"  value="<?= @$result->dlicensenumber ?>">
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label class="fw-semibold text-black">Expiration Date</label>
+                                                    <input type="date" class="form-control" name="driving_expiration_date" id="driving_expiration_date"  value="<?= @$result->driving_expiration_date ?>">
                                                 </div>
                                             </div>
                                         </div>

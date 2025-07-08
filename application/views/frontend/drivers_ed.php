@@ -7,12 +7,17 @@
                         <div class="owl-carousel owl-theme" id="bannerslide">
                             <div class="item">
                                 <div class="imgbox">
-                                    <img src="assets/images/serv-bg-05.jpg"/>
+                                    <img src="assets/images/youth16.jpg"/>
                                 </div>
                             </div>
                             <div class="item">
                                 <div class="imgbox">
-                                    <img src="assets/images/serv-bg-03.jpg"/>
+                                    <img src="assets/images/youth22.jpg"/>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="imgbox">
+                                    <img src="assets/images/youth21.jpg"/>
                                 </div>
                             </div>
                         </div>

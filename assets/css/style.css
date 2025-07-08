@@ -626,7 +626,7 @@ a:visited {
   letter-spacing: 0.1em;
   font-weight: 800;
   margin-right: 8px;
-  color: var(--theme-primary, #EC2526);
+  color: #0060d6;
 }
 .scroll-to-top__wrapper {
   display: inline-block;
@@ -17412,4 +17412,20 @@ body.boxed-wrapper .contact-two__left__shape {
 }
 .purchased-table .dropdown-menu .dropdown-item{
   font-size: 14px;
+}
+.callfixed{
+  position: fixed;
+  right: 64px;
+  bottom: 28px;
+  background: #e20612;
+  font-family: "Josefin Sans", serif;
+  z-index: 99;
+  padding: 10px 10px;
+  display: inline-block;
+  border-radius: 30px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.2;
+  box-shadow: 0 5px 10px #00000070;
 }

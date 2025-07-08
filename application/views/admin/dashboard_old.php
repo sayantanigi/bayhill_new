@@ -144,19 +144,144 @@ span.fc-title {
     cursor: pointer !important;
 }
 </style>
-<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.4.2/main.min.css'>
-<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.4.2/main.min.css'>
-<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@4.4.2/main.min.css'>
-<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@fullcalendar/list@4.4.2/main.min.css'>
-
-<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.4.2/main.min.js'></script>
-<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.4.2/main.min.js'></script>
-<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@4.4.2/main.min.js'></script>
-<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/list@4.4.2/main.min.js'></script>
-<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@4.4.2/main.min.js'></script>
-
+<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.2.0/main.min.css'>
+<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.3.0/main.min.css'>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.2.0/main.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.2.0/main.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@4.2.0/main.js'></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<!-- <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const calendarEl = document.getElementById('calendar');
+    const myEvents = [
+        <?php
+        /*$getBookingData = $this->db->query("SELECT * FROM booking_details")->result();
+        $bookingsByDate = [];
+        if(!empty($getBookingData)) {
+            foreach ($getBookingData as $value) {
+                $booking_id = $value->booking_id;
+                $getbooking = $this->db->query("SELECT * FROM booking WHERE id = '".$booking_id."'")->row();
+                $getcourseData = $this->db->query("SELECT * FROM courses WHERE id = '".$getbooking->course_id."'")->row();
+                $courseName = @$getcourseData->course_name.' '.$getcourseData->course_name1;
+                $gettrainerData = $this->db->query("SELECT * FROM users WHERE id = '".$getbooking->trainer_id."'")->row();
+                $trainerName = !empty($gettrainerData) ? @$gettrainerData->salutation.' '.$gettrainerData->first_name.' '.$gettrainerData->last_name : "";
+                $getstudentData = $this->db->query("SELECT * FROM users WHERE id = '".$getbooking->user_id."'")->row();
+                $studentName = !empty($getstudentData) ? @$getstudentData->salutation.' '.$getstudentData->first_name.' '.$getstudentData->last_name : "";
+                $fromtime = explode(' - ', $value->booking_time);
+                $booking_date = date('Y-m-d', strtotime($value->booking_date));
+
+                $booking_detail = [
+                    'title' => $courseName,
+                    'trainer' => $trainerName,
+                    'student' => $studentName,
+                    'time' => $value->booking_time,
+                ];
+
+                if (!isset($bookingsByDate[$booking_date])) {
+                    $bookingsByDate[$booking_date] = [];
+                }
+                $bookingsByDate[$booking_date][] = $booking_detail;
+            }
+        }
+
+        foreach ($bookingsByDate as $booking_date => $bookings) {
+            $count = count($bookings);
+            for ($i = 0; $i < min(3, $count); $i++) {
+                $b = $bookings[$i];
+                ?>
+                {
+                    title:'<?= addslashes($b['title']) ?> (<?= addslashes($b['student']) ?>)',
+                    start: '<?= $booking_date ?>',
+                    backgroundColor: 'green',
+                    extendedProps: {
+                        trainer: '<?= addslashes($b['trainer']) ?>',
+                        student: '<?= addslashes($b['student']) ?>',
+                        time: '<?= addslashes($b['time']) ?>'
+                    }
+                },
+                <?php
+            }
+            if ($count > 3) {
+                $remaining = array_slice($bookings, 3);
+                $restCount = count($remaining);
+                $restDetails = [];
+                foreach ($remaining as $b) {
+                    $restDetails[] = $b['title'].' ('.$b['student'].' - '.$b['trainer'].' at '.$b['time'].')';
+                }
+                $restDetailsStr = htmlspecialchars(implode('\n', $restDetails));
+                ?>
+                {
+                    title: '+<?= $restCount ?> more',
+                    start: '<?= $booking_date ?>',
+                    backgroundColor: 'red',
+                    extendedProps: {
+                        details: "<?= $restDetailsStr ?>"
+                    }
+                },
+                <?php
+            }
+        } */
+        ?>
+    ];
+
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        headerToolbar: {
+            center: 'title',
+            right: 'today, prev,next '
+        },
+        plugins: ['dayGrid', 'interaction'],
+        selectable: true,
+        events: myEvents,
+        eventClick: function(info) {
+            console.log(info);
+            if (info.event.title.startsWith('+') && info.event.extendedProps.details) {
+                //alert('Other bookings for this day:\n' + info.event.extendedProps.details.replace(/\\n/g, "\n"));
+                $('.choosendate').text(new Date(info.startStr).toDateString());
+                var choosendate = info.startStr;
+                $.ajax({
+                    type:"post",
+                    url:"<?php echo base_url()?>admin/Dashboard/getBookingDetails",
+                    data:{choosendate: choosendate},
+                    dataType: 'html',
+                    success:function(response) {
+                        $('#bookedSlotDataContent').empty();
+                        $('#bookedSlotDataContent').html(response);
+                    },
+                    error: function() {
+                        $('#bookedSlotDataContent').empty();
+                        $('#bookedSlotDataContent').html('An error occurred while submitting your note');
+                    }
+                });
+            } else {
+                // Show individual booking details if needed
+            }
+        }
+    });
+
+    let selectedSlots = [];
+    calendar.on('select', function(info) {
+        $('#staticBackdropcompletedClass').modal('show');
+        $('.choosendate').text(new Date(info.startStr).toDateString());
+        var choosendate = info.startStr;
+        $.ajax({
+            type:"post",
+            url:"<?php echo base_url()?>admin/Dashboard/getBookingDetails",
+            data:{choosendate: choosendate},
+            dataType: 'html',
+            success:function(response) {
+                $('#bookedSlotDataContent').empty();
+                $('#bookedSlotDataContent').html(response);
+            },
+            error: function() {
+                $('#bookedSlotDataContent').empty();
+                $('#bookedSlotDataContent').html('An error occurred while submitting your note');
+            }
+        });
+    });
+    calendar.render();
+});
+</script> -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const calendarEl = document.getElementById('calendar');
@@ -236,13 +361,11 @@ document.addEventListener('DOMContentLoaded', function() {
     ];
 
     const calendar = new FullCalendar.Calendar(calendarEl, {
-        plugins: [ 'dayGrid', 'timeGrid', 'list', 'interaction' ],
-        header: {
-            left: 'prev,next today',
+        headerToolbar: {
             center: 'title',
-            right: 'dayGridDay,timeGridWeek,dayGridMonth,listYear'
+            right: 'today, prev,next '
         },
-        defaultView: 'dayGridMonth',
+        plugins: ['dayGrid', 'interaction'],
         selectable: true,
         events: myEvents,
         eventClick: function(info) {
@@ -270,17 +393,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             } else {
+                // let details = `<b>Course:</b> ${info.event.title}<br><b>Trainer:</b> ${info.event.extendedProps.trainer}<br><b>Student:</b> ${info.event.extendedProps.student}<br><b>Time:</b> ${info.event.extendedProps.time}<br>`;
+                // $('#bookedSlotDataContent').html(details);
+                // $('#staticBackdropcompletedClass').modal('show');
                 var bookingId = btoa(info.event.extendedProps.id);
                 var BASE_URL = "<?= base_url() ?>";
                 var url = BASE_URL + "admin/course/booking_details/" + bookingId;
                 window.open(url);
             }
-        },
-        views: {
-            dayGridDay: { buttonText: 'Day' },
-            timeGridWeek: { buttonText: 'Week' },
-            dayGridMonth: { buttonText: 'Month' },
-            listYear: { buttonText: 'Year' }
         }
     });
 

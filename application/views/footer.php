@@ -1,6 +1,6 @@
 <?php $site_setting = $this->db->query("select * from  settings")->row(); ?>
 <?php //if (current_url() != base_url('faq') && current_url() != base_url('courses') && current_url() != base_url('course/course_details') && current_url() != base_url('booking_slot') && current_url() != base_url('instructor-slot') && current_url() != base_url('login') && current_url() != base_url('login') && current_url() != base_url('complete-payment')) { ?>
-<section class="howitworkspnl <?php if (current_url() == base_url('contact')) { echo 'd-none'; }?>">
+<section class="howitworkspnl <?php if (current_url() == base_url('contact') || current_url() == base_url('driver-ed-faq') || current_url() == base_url('driving-school-faq')) { echo 'd-none'; }?>">
     <div class="container">
         <h3 class="mb-5 text-white wow fadeInUp animated h3 fw-bold text-center">" Bay Area’s trusted choice since 2010, driven by excellence and community care."</h3>
         <div class="row align-items-center ">
@@ -54,7 +54,7 @@
         </div>
     </div>
 </section>
-<section class="satisfactionPnl <?php if (current_url() == base_url('contact')) { echo 'd-none'; }?>">
+<section class="satisfactionPnl <?php if (current_url() == base_url('contact') || current_url() == base_url('driver-ed-faq') || current_url() == base_url('driving-school-faq')) { echo 'd-none'; }?>">
     <div class="container-fluid">
         <div class="row justify-content-center text-center ">
             <div class="col-lg-6  wow fadeInUp">
@@ -63,7 +63,7 @@
             </div>
         </div>
         <div class="servboxlist">
-            <div class="servblocksize  wow fadeInUp" style="background-image: url(<?= base_url(); ?>assets/images/serv-bg-01.jpg);">
+            <div class="servblocksize  wow fadeInUp" style="background-image: url(<?= base_url(); ?>assets/images/yiuth4.jpg);">
                 <div class="servBox">
                     <img src="<?= base_url(); ?>assets/images/serviceicon/serv-01.png" />
                     <h2>Certified driving instructors </h2>
@@ -71,21 +71,21 @@
                     </p>
                 </div>
             </div>
-            <div class="servblocksize  wow fadeInUp" style="background-image: url(<?= base_url(); ?>assets/images/serv-bg-02.jpg);">
+            <div class="servblocksize  wow fadeInUp" style="background-image: url(<?= base_url(); ?>assets/images/youth5.jpg);">
                 <div class="servBox">
                     <img src="<?= base_url(); ?>assets/images/serviceicon/serv-02.png" />
                     <h2>Free Pickup and Drop Off</h2>
                     <p>We come to your house, school or work—and can even drop you off at a convenient location within 5-10 minutes of your pickup address, or meet in convenient public locations</p>
                 </div>
             </div>
-            <div class="servblocksize  wow fadeInUp" style="background-image: url(<?= base_url(); ?>assets/images/serv-bg-04.jpg);">
+            <div class="servblocksize  wow fadeInUp" style="background-image: url(<?= base_url(); ?>assets/images/youth6.jpg);">
                 <div class="servBox">
                     <img src="<?= base_url(); ?>assets/images/serviceicon/planning.png" />
                     <h2>Customized lesson plans</h2>
                     <p>Our driving lessons aren't for everyone, they're for you—our instructors customize every lesson to your precise needs</p>
                 </div>
             </div>
-            <div class="servblocksize  wow fadeInUp" style="background-image: url(<?= base_url(); ?>assets/images/serv-bg-02.jpg);">
+            <div class="servblocksize  wow fadeInUp" style="background-image: url(<?= base_url(); ?>assets/images/youth7.jpg);">
                 <div class="servBox">
                     <img src="<?= base_url(); ?>assets/images/serviceicon/car.png" />
                     <h2>Driving Test coaching</h2>
@@ -94,28 +94,28 @@
             </div>
         </div>
         <div class="servboxlist">
-            <div class="servblocksize  wow fadeInUp" style="background-image: url(<?= base_url(); ?>assets/images/serv-bg-03.jpg);">
+            <div class="servblocksize  wow fadeInUp" style="background-image: url(<?= base_url(); ?>assets/images/youth8.jpg);">
                 <div class="servBox">
                     <img src="<?= base_url(); ?>assets/images/serviceicon/mobile-app.png" />
                     <h2>Cutting-edge technology</h2>
                     <p>Online booking, secure payments and digital lesson reports—we leverage the latest tech to provide an experience you will love</p>
                 </div>
             </div>
-            <div class="servblocksize  wow fadeInUp" style="background-image: url(<?= base_url(); ?>assets/images/serv-bg-04.jpg);">
+            <div class="servblocksize  wow fadeInUp" style="background-image: url(<?= base_url(); ?>assets/images/youth10.jpg);">
                 <div class="servBox">
                     <img src="<?= base_url(); ?>assets/images/serviceicon/smile.png" />
                     <h2>Customers first</h2>
                     <p>Our instructors don't run errands during your driving lessons—your time behind the wheel is your time</p>
                 </div>
             </div>
-            <div class="servblocksize  wow fadeInUp" style="background-image: url(<?= base_url(); ?>assets/images/serv-bg-03.jpg);">
+            <div class="servblocksize  wow fadeInUp" style="background-image: url(<?= base_url(); ?>assets/images/youth11.jpg);">
                 <div class="servBox">
                     <img src="<?= base_url(); ?>assets/images/serviceicon/calendar.png" />
                     <h2>Transparent availability</h2>
                     <p>Our online booking system shows you all available time slots, so you can book packages knowing when we're available</p>
                 </div>
             </div>
-            <div class="servblocksize  wow fadeInUp" style="background-image: url(<?= base_url(); ?>assets/images/serv-bg-06.jpg);">
+            <div class="servblocksize  wow fadeInUp" style="background-image: url(<?= base_url(); ?>assets/images/youth15.jpg);">
                 <div class="servBox">
                     <img src="<?= base_url(); ?>assets/images/serviceicon/customer-service.png" />
                     <h2>Dedicated support team</h2>
@@ -125,7 +125,7 @@
         </div>
     </div>
 </section>
-<section class="whychoose" style="background-image: url(<?= base_url(); ?>assets/images/bg-cover-01.jpg); <?php if (current_url() == base_url('contact')) { echo 'd-none'; }?>">
+<section class="whychoose" style="background-image: url(<?= base_url(); ?>assets/images/youth18.jpg); <?php if (current_url() == base_url('contact')) { echo 'd-none'; }?>">
     <div class="container">
         <div class="row g-5 justify-content-center align-items-center">
             <div class="col-lg-10 text-center">
@@ -367,7 +367,7 @@
         </div>
     </div>
 </section>
-<section class="yelpreview  wow fadeInUp <?php if (current_url() == base_url('contact')) { echo 'd-none'; }?>">
+<section class="yelpreview  wow fadeInUp">
     <div class="container">
         <div class="sec-title2  text-center wow fadeInUp" data-wow-duration='300ms'>
             <h3 class="maintitle text-white"><a href="https://www.yelp.com/biz/bay-hill-driving-school-fremont#reviews" target="_blank"> <img src="<?= base_url(); ?>assets/images/yelp-review.png" height="140"> </a></h3>
@@ -692,6 +692,8 @@
     <span class="scroll-to-top__text">back top</span>
     <span class="scroll-to-top__wrapper"><span class="scroll-to-top__inner"></span></span>
 </a>
+<a href="tel:8006483650" class="callfixed"> <i class="fas fa-phone-alt me-2"></i> 800 648 3650</a>
+
 <script src="<?= base_url() ?>assets/vendors/jquery/jquery-3.7.0.min.js"></script>
 <script src="<?= base_url() ?>assets/vendors/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="<?= base_url() ?>assets/vendors/bootstrap-select/bootstrap-select.min.js"></script>

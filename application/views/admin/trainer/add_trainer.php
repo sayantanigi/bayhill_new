@@ -68,7 +68,6 @@ input.invalid { border-color: red; }
                                                 <option value="Mr." aria-label="Mr.">Mr.</option>
                                                 <option value="Ms." aria-label="Ms.">Ms.</option>
                                                 <option value="Mrs." aria-label="Mrs.">Mrs.</option>
-                                                <option value="Mohd." aria-label="Mohd.">Mohd.</option>
                                                 <option value="Miss." aria-label="Miss.">Miss.</option>
                                             </select>
                                         </div>
@@ -165,21 +164,37 @@ input.invalid { border-color: red; }
                                                     <label class="fw-semibold text-black">Zip Code</label>
                                                     <input type="text" class="form-control" name="pincode" id="pincode" placeholder="Enter Driving Instructor Zip Code" autocomplete="off">
                                                 </div>
-                                                <div class="col-sm-6">
+                                                <!-- <div class="col-sm-6">
                                                     <label class="fw-semibold text-black">Designation</label>
                                                     <input type="text" class="form-control" name="degree"  id="degree" placeholder="Enter Driving Instructor Designation" autocomplete="off">
+                                                </div> -->
+                                                <div class="col-sm-6">
+                                                    <label class="fw-semibold text-black">Driving Instructor Certificates</label>
+                                                    <input type="text" class="form-control" name="certificates" id="certificates" placeholder="Enter Driving Instructor Certificates" autocomplete="off">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group mb-2">
                                             <div class="row">
                                                 <div class="col-sm-6">
-                                                    <label class="fw-semibold text-black">Driving Instructor Certificates</label>
-                                                    <input type="text" class="form-control" name="certificates" id="certificates" placeholder="Enter Driving Instructor Certificates" autocomplete="off">
-                                                </div>
-                                                <div class="col-sm-6">
                                                     <label class="fw-semibold text-black">Instructor License Number <span style="color:red">*</span></label>
                                                     <input type="text" class="form-control" name="licensenumber" id="licensenumber" placeholder="Enter Instructor License Number" autocomplete="off">
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label class="fw-semibold text-black">Expiration Date</label>
+                                                    <input type="date" class="form-control" name="license_expiration_date" id="license_expiration_date" placeholder="Enter Expiration Date" autocomplete="off">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb-2">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <label class="fw-semibold text-black">Driving License Number <span style="color:red">*</span></label>
+                                                    <input type="text" class="form-control" name="dlicensenumber" id="dlicensenumber" placeholder="Enter Driving License Number" autocomplete="off">
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label class="fw-semibold text-black">Expiration Date</label>
+                                                    <input type="date" class="form-control" name="driving_expiration_date" id="driving_expiration_date" placeholder="Enter Expiration Date" autocomplete="off">
                                                 </div>
                                             </div>
                                         </div>

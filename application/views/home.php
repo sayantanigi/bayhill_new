@@ -7,7 +7,7 @@
                     <div class="owl-carousel owl-theme" id="bannerslide">
                         <div class="item">
                             <div class="imgbox">
-                                <img src="<?= base_url(); ?>assets/images/img-01.jpg" />
+                                <img src="<?= base_url(); ?>assets/images/yiuth4.jpg" />
                                 <div class="bnr-content">
                                     <h2>Expert driving lessons for teens - build skills and confidence from day one</h2>
 
@@ -16,7 +16,7 @@
                         </div>
                         <div class="item">
                             <div class="imgbox">
-                                <img src="<?= base_url(); ?>assets/images/serv-bg-02.jpg" />
+                                <img src="<?= base_url(); ?>assets/images/youth5.jpg" />
                                 <div class="bnr-content">
                                     <h2>Personalized driving instruction for adults – whether you're starting fresh or brushing up</h2>
                                 </div>
@@ -24,7 +24,7 @@
                         </div>
                         <div class="item">
                             <div class="imgbox">
-                                <img src="<?= base_url(); ?>assets/images/img-02.jpg" />
+                                <img src="<?= base_url(); ?>assets/images/youth15.jpg" />
                                 <div class="bnr-content">
                                     <h2>Accelerated crash course – get fully prepared to ace your DMV drive test</h2>
                                 </div>
@@ -32,7 +32,7 @@
                         </div>
                         <div class="item">
                             <div class="imgbox">
-                                <img src="<?= base_url(); ?>assets/images/serv-bg-06.jpg" />
+                                <img src="<?= base_url(); ?>assets/images/youth21.jpg" />
                                 <div class="bnr-content">
                                     <h2>DMV test car rental – reliable, test-ready vehicles to help you pass with ease</h2>
                                 </div>
