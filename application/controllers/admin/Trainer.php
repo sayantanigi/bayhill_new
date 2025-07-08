@@ -31,7 +31,6 @@ class Trainer extends CI_Controller {
         }
         echo json_encode($response);
     }
-
     public function check_trainer_username() {
         $trainer_username = $this->input->post('trainer_username');
         $checkUsername = $this->db->query("SELECT * FROM users WHERE username = '".$trainer_username."'")->row();
@@ -469,6 +468,51 @@ class Trainer extends CI_Controller {
         $this->load->view('admin/trainer/edit_trainer');
         $this->load->view('admin/footer');
     }
+    public function trainer_details($id) {
+        $data = array(
+            'title' => 'Bay Hill DS',
+            'page' => 'Trainer Details',
+            'subpage' => 'trainer',
+        );
+        $trainerID = base64_decode($id);
+        $data['trainerData'] = $this->db->query("SELECT * FROM users WHERE id = '".$trainerID."'")->row();
+        $this->load->view('admin/header', $data);
+        $this->load->view('admin/sidebar');
+        $this->load->view('admin/trainer/trainer_details');
+        $this->load->view('admin/footer');
+    }
+    public function getUserAvailability() {
+		$choosendate = $this->input->post('choosendate');
+		$trainerID = $this->input->post('trainerID');
+        $gettimezone = $this->db->query("SELECT * FROM users WHERE id = '".@$trainerID."'")->row();
+        $timezone = $gettimezone->timeZone;
+		$getavailabletime = $this->db->query("SELECT * FROM trainer_availability WHERE user_id = '".$trainerID."'")->result_array();
+        $output = "";
+        if(!empty($getavailabletime)) {
+            foreach ($getavailabletime as $key => $avail) {
+                $timeslot = explode(' to ', $avail['utcTime']);
+                $utcFromTime = new DateTime($timeslot[0], new DateTimeZone('UTC'));
+                $localTimezone = new DateTimeZone($timezone);
+                $utcFromTime->setTimezone($localTimezone);
+                $localFromTime = $utcFromTime->format('H:i');
+                $utcToTime = new DateTime($timeslot[1], new DateTimeZone('UTC'));
+                $utcToTime->setTimezone($localTimezone);
+                $localToTime = $utcToTime->format('H:i');
+                $utcDateTime = new DateTime($avail['utcStartDate']." ".$timeslot[0], new DateTimeZone('UTC'));
+                $localTimeZone = new DateTimeZone($timezone);
+                $utcDateTime->setTimezone($localTimeZone);
+                $utcDateTime = $utcDateTime->format('Y-m-d');
+                if($utcDateTime == $choosendate) {
+                    $output .= '<div class="getdatespecificdatetime" id="getdatespecificdatetime_'.$avail['id'].'" data-slot-id="'.$avail['id'].'">';
+                    $output .= date('h:i A', strtotime($localFromTime)).' to '.date('h:i A', strtotime($localToTime));
+                    $output .= '</div>';
+                }
+            }
+        } else {
+            $output .= '<div class="getdatespecificdatetime">No Time Available</div>';
+        }
+		echo $output;
+	}
     public function changestatus() {
         if ($this->input->post('id')) {
             $id = $this->input->post('id');

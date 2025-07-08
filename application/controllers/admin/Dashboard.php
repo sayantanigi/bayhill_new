@@ -1,6 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 class Dashboard extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
@@ -134,5 +133,48 @@ class Dashboard extends CI_Controller {
         } else {
             echo '<div class="col-lg-12 col-md-12" style="text-align: center; margin-top: 15px; border: 1px solid #f59b24; border-radius: 18px; display: block !important; visibility: visible !important;"><div style="margin-left: 10px;"><p style="font-size: 16px; color: #f59b24;">No Booking Found for this date.</p></div></div>';
         }
+    }
+    public function getTrainerData(){
+        $inputval = $this->input->post('query');
+        $inputval_escaped = $this->db->escape_like_str($inputval);
+        $sql = "SELECT id, first_name, last_name, username FROM users WHERE (first_name LIKE ? OR last_name LIKE ? OR username LIKE ?) AND user_type = '2'";
+        $like = "%$inputval_escaped%";
+        $gettrainterdata = $this->db->query($sql, array($like, $like, $like))->result();
+        if(!empty($gettrainterdata)){
+            $response = [];
+            foreach($gettrainterdata as $trainer){
+                $response[] = [
+                    'id' => $trainer->id,
+                    'name' => trim($trainer->first_name . ' ' . $trainer->last_name),
+                    'username' => $trainer->username
+                ];
+            }
+            echo json_encode($response);
+        } else {
+            echo json_encode([]);
+        }
+        exit;
+    }
+    public function getStudentData(){
+        $inputval = $this->input->post('query');
+        $inputval_escaped = $this->db->escape_like_str($inputval);
+        $sql = "SELECT id, first_name, last_name, username FROM users WHERE (first_name LIKE ? OR last_name LIKE ? OR username LIKE ?) AND user_type = '1'";
+        $like = "%$inputval_escaped%";
+        $getstudentdata = $this->db->query($sql, array($like, $like, $like))->result();
+        header('Content-Type: application/json');
+        if(!empty($getstudentdata)){
+            $response = [];
+            foreach($getstudentdata as $student){
+                $response[] = [
+                    'id' => $student->id,
+                    'name' => trim($student->first_name . ' ' . $student->last_name),
+                    'username' => $student->username
+                ];
+            }
+            echo json_encode($response);
+        } else {
+            echo json_encode([]);
+        }
+        exit;
     }
 }

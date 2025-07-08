@@ -1,7 +1,5 @@
 <style>
-.app-search {
-    margin-left: 0px !important;
-}
+.app-search{margin-left:0!important}.autocomplete-results{position:absolute;top:100%;left:0;right:0;z-index:9999;background:#fff;border:1px solid #ddd;border-top:none;max-height:220px;overflow-y:auto;box-shadow:0 2px 8px rgba(0,0,0,.07)}.search-item{padding:8px 16px;cursor:pointer;transition:background .15s;font-size:15px;line-height:1.5;border-bottom:1px solid #f3f3f3}.search-item:last-child{border-bottom:none}.search-item.active,.search-item:hover{background:#f0f6ff;color:#004085}.student-item strong,.trainer-item strong{color:#007bff}.text-danger{color:#dc3545!important}.text-muted{color:#6c757d!important}.autocomplete-results:empty{display:none}
 </style>
 <div class="main-content">
     <div class="page-content">
@@ -17,29 +15,25 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="col-xl-12" style="display: flex; flex-direction: row; flex-wrap: wrap;">
-                        <div class="col-sm-4" style="padding-right: 15px;">
-                            <form class="app-search d-none d-lg-block">
-                                <div class="position-relative">
-                                    <input type="text" class="form-control" placeholder="Search by Trainer">
-                                    <span class="ri-search-line"></span>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="col-sm-4" style="padding-right: 10px; padding-left: 10px;">
-                            <form class="app-search d-none d-lg-block">
-                                <div class="position-relative">
-                                    <input type="text" class="form-control" placeholder="Search by Student">
-                                    <span class="ri-search-line"></span>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="col-sm-4" style="padding-left: 18px;">
-                            <form class="app-search d-none d-lg-block">
-                                <div class="position-relative">
-                                    <input type="text" class="form-control" placeholder="Search by Course">
-                                    <span class="ri-search-line"></span>
-                                </div>
-                            </form>
+                        <div class="col-xl-12" style="display: flex; flex-direction: row; flex-wrap: wrap;">
+                            <div class="col-sm-6" style="padding-right: 15px;">
+                                <form class="app-search d-none d-lg-block">
+                                    <div class="position-relative">
+                                        <input type="text" class="form-control" id="trainer_search" autocomplete="off" placeholder="Search by Trainer Name">
+                                        <span class="ri-search-line"></span>
+                                        <div id="trainer_results" class="autocomplete-results"></div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-sm-6" style="padding-right: 10px; padding-left: 10px;">
+                                <form class="app-search d-none d-lg-block">
+                                    <div class="position-relative">
+                                        <input type="text" class="form-control" id="student_search" autocomplete="off" placeholder="Search by Student Name">
+                                        <span class="ri-search-line"></span>
+                                        <div id="student_results" class="autocomplete-results"></div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                     <div class="row h-100">
@@ -305,5 +299,62 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     calendar.render();
+});
+
+$("#trainer_search").on("keyup", function(){
+    var inpt = $(this).val().trim();
+    if (inpt.length === 0) {
+        $("#trainer_results").html('');
+        return;
+    }
+    $.ajax({
+        url: "<?= base_url('admin/getTrainerData')?>",
+        type: "POST",
+        data: { query: inpt },
+        dataType: "json",
+        success: function(response) {
+            var resultHtml = '';
+            if (response.length > 0) {
+                $.each(response, function(i, trainer){
+                    resultHtml += '<a href="<?= base_url('admin/trainer/trainer_details/') ?>'+btoa(trainer.id.toString())+'" class="search-link" style="text-decoration:none;color:inherit;" target="_blank">'+'<div class="search-item trainer-item" data-id="'+trainer.id+'" data-name="'+trainer.name+'">'+'<strong>'+trainer.name+'</strong> <span class="text-muted">('+trainer.username+')</span>'+'</div></a>';
+                });
+            } else {
+                resultHtml = '<div class="text-danger">No trainers found</div>';
+            }
+            $("#trainer_results").html(resultHtml);
+        },
+        error: function() {
+            $("#trainer_results").html('<div class="text-danger">No trainers found</div>');
+        }
+    });
+});
+
+// Student search
+$("#student_search").on("keyup", function(){
+    var inpt = $(this).val().trim();
+    if (inpt.length === 0) {
+        $("#student_results").html('');
+        return;
+    }
+    $.ajax({
+        url: "<?= base_url('admin/getStudentData')?>",
+        type: "POST",
+        data: { query: inpt },
+        dataType: "json",
+        success: function(response) {
+            var resultHtml = '';
+            if (response.length > 0) {
+                $.each(response, function(i, student){
+                    resultHtml += '<div class="search-item student-item" data-id="'+student.id+'" data-name="'+student.name+'">'+'<strong>' + student.name + '</strong> <span class="text-muted">(' + student.username + ')</span>'+'</div>';
+                });
+            } else {
+                resultHtml = '<div class="text-danger">No students found</div>';
+            }
+            $("#student_results").html(resultHtml);
+        },
+        error: function() {
+            $("#student_results").html('<div class="text-danger">No students found</div>');
+        }
+    });
 });
 </script>
