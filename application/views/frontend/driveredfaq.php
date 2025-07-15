@@ -54,7 +54,7 @@
             <div class="col-lg-6">
                 <div class="d-md-flex align-items-center text-center gap-4 text-white justify-content-center">
                     <div class="mb-3 mb-md-0">
-                        <a href="#usefullLinks" class="btn btn-warning fw-bold py-2 px-4 rounded-pill">Useful Links</a>
+                        <a href="<?= base_url('drivers-ed')?>" class="btn btn-warning fw-bold py-2 px-4 rounded-pill">Useful Links</a>
                     </div>
                     <div class="mb-3 mb-md-0">
                         <h2 class="mb-0 fw-bold text-white">$24.99</h2>

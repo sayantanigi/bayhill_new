@@ -5166,7 +5166,7 @@ a:visited {
 }
 .main-menu .main-menu__list li ul li.current > a,
 .main-menu .main-menu__list li ul li:hover > a {
-      background-color: #014599;
+    background-color: #e20612;
     color: #ffffff;
 }
 .main-menu .main-menu__list li ul li.current > a::after,
@@ -16592,7 +16592,7 @@ body.boxed-wrapper .contact-two__left__shape {
 }
 .yelpreview{
   padding: 60px 0 100px;
-  background: #d9202b;
+  background: #a50c00;
 }
 .yelpBox{
   box-shadow: 0 0 20px #0000001a;
@@ -16911,7 +16911,7 @@ body.boxed-wrapper .contact-two__left__shape {
   font-weight: 700;
   padding: 18px 22px;
   font-size: 16px;
-  background: #014599;
+  background: #002656;
   color: #fff;
 }
 .faqpnl .accordion-item .accordion-button:not(.collapsed){

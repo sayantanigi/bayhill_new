@@ -137,7 +137,7 @@ class Dashboard extends CI_Controller {
     public function getTrainerData(){
         $inputval = $this->input->post('query');
         $inputval_escaped = $this->db->escape_like_str($inputval);
-        $sql = "SELECT id, first_name, last_name, username FROM users WHERE (first_name LIKE ? OR last_name LIKE ? OR username LIKE ?) AND user_type = '2'";
+        $sql = "SELECT id, first_name, last_name, username FROM users WHERE (first_name LIKE ? OR last_name LIKE ? OR username LIKE ?) AND user_type = '2' AND status = '1' AND email_verify_status = '1'";
         $like = "%$inputval_escaped%";
         $gettrainterdata = $this->db->query($sql, array($like, $like, $like))->result();
         if(!empty($gettrainterdata)){
@@ -158,7 +158,7 @@ class Dashboard extends CI_Controller {
     public function getStudentData(){
         $inputval = $this->input->post('query');
         $inputval_escaped = $this->db->escape_like_str($inputval);
-        $sql = "SELECT id, first_name, last_name, username FROM users WHERE (first_name LIKE ? OR last_name LIKE ? OR username LIKE ?) AND user_type = '1'";
+        $sql = "SELECT id, first_name, last_name, username FROM users WHERE (first_name LIKE ? OR last_name LIKE ? OR username LIKE ?) AND user_type = '1' AND status = '1' AND email_verify_status = '1'";
         $like = "%$inputval_escaped%";
         $getstudentdata = $this->db->query($sql, array($like, $like, $like))->result();
         header('Content-Type: application/json');
@@ -169,6 +169,29 @@ class Dashboard extends CI_Controller {
                     'id' => $student->id,
                     'name' => trim($student->first_name . ' ' . $student->last_name),
                     'username' => $student->username
+                ];
+            }
+            echo json_encode($response);
+        } else {
+            echo json_encode([]);
+        }
+        exit;
+    }
+    public function getSearchData(){
+        $inputval = $this->input->post('query');
+        $inputval_escaped = $this->db->escape_like_str($inputval);
+        $sql = "SELECT id, first_name, last_name, username, user_type FROM users WHERE (phone LIKE ?) AND status = '1' AND email_verify_status = '1'";
+        $like = "%$inputval_escaped%";
+        $getsearchdata = $this->db->query($sql, array($like))->result();
+        header('Content-Type: application/json');
+        if(!empty($getsearchdata)){
+            $response = [];
+            foreach($getsearchdata as $search){
+                $response[] = [
+                    'id' => $search->id,
+                    'name' => trim($search->first_name . ' ' . $search->last_name),
+                    'username' => $search->username,
+                    'usertype' => $search->user_type
                 ];
             }
             echo json_encode($response);

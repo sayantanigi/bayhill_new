@@ -58,11 +58,14 @@ p strong{font-weight: 600 !important; color: black !important;}
                                         </tr>
                                         <tr>
                                             <th>Student Details</th>
-                                            <td>
+                                            <td style=" display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between; align-items: center; ">
                                                 <?php if(!empty($student_details)) { ?>
-                                                <p style="margin: 0;"><strong>Name: </strong><?= $student_details->salutation." ".$student_details->first_name." ".$student_details->last_name; ?></p>
-                                                <p style="margin: 0;"><strong>Email: </strong><?= $student_details->email; ?></p>
-                                                <p style="margin: 0;"><strong>Phone: </strong><?= $student_details->phone; ?></p>
+                                                <div>
+                                                    <p style="margin: 0;"><strong>Name: </strong><?= $student_details->salutation." ".$student_details->first_name." ".$student_details->last_name; ?></p>
+                                                    <p style="margin: 0;"><strong>Email: </strong><?= $student_details->email; ?></p>
+                                                    <p style="margin: 0;"><strong>Phone: </strong><?= $student_details->phone; ?></p>
+                                                </div>
+                                                <a href="<?= base_url('admin/student/student_details/'.base64_encode(@$student_details->id))?>" class="btn btn-primary" style="height: 40px;"> View Student Details</a>
                                                 <?php } else { ?>
                                                 <p style="margin: 0;"><strong>Name: </strong>Not Available</p>
                                                 <p style="margin: 0;"><strong>Email: </strong>Not Available</p>
@@ -74,9 +77,12 @@ p strong{font-weight: 600 !important; color: black !important;}
                                             <th>Trainer Details</th>
                                             <td>
                                                 <?php if(!empty($trainer_details)) { ?>
-                                                <p style="margin: 0;"><strong>Name: </strong><?= $trainer_details->salutation." ".$trainer_details->first_name." ".$trainer_details->last_name; ?></p>
-                                                <p style="margin: 0;"><strong>Email: </strong><?= $trainer_details->email; ?></p>
-                                                <p style="margin: 0;"><strong>Phone: </strong><?= $trainer_details->phone; ?></p>
+                                                <div>
+                                                    <p style="margin: 0;"><strong>Name: </strong><?= $trainer_details->salutation." ".$trainer_details->first_name." ".$trainer_details->last_name; ?></p>
+                                                    <p style="margin: 0;"><strong>Email: </strong><?= $trainer_details->email; ?></p>
+                                                    <p style="margin: 0;"><strong>Phone: </strong><?= $trainer_details->phone; ?></p>
+                                                </div>
+                                                <a href="<?= base_url('admin/trainer/trainer_details/'.base64_encode(@$trainer_details->id))?>" class="btn btn-primary" style="height: 40px;"> View Trainer Details</a>
                                                 <?php } else { ?>
                                                 <p style="margin: 0;"><strong>Name: </strong>Not Available</p>
                                                 <p style="margin: 0;"><strong>Email: </strong>Not Available</p>

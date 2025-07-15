@@ -101,5 +101,6 @@ $route['userLogin'] = 'user/login';
 $route['admin/userfull_link'] = 'admin/dashboard/userfull_link';
 $route['admin/getTrainerData'] = 'admin/dashboard/getTrainerData';
 $route['admin/getStudentData'] = 'admin/dashboard/getStudentData';
+$route['admin/getSearchData'] = 'admin/dashboard/getSearchData';
 $route['admin/trainer'] = 'admin/trainer';
 $route['admin/booking'] = 'admin/course/booking_list';

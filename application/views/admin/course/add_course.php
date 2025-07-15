@@ -37,6 +37,8 @@ body{margin-top:20px}
 .files:before{bottom:10px;width:100%;height:57px;color:#2ea591;font-weight:600;text-transform:capitalize}
 .jobsites{padding: 0px !important; margin: 0px !important;}
 .table tr {box-shadow: unset !important; border-color: unset !important; border-style: hidden !important; border-width: 0px !important;}
+.add-zipcode{width: 36px; height: 36px; line-height: 0px;}
+.remove-zipcode{width: 36px; height: 36px; line-height: 0px;}
 </style>
 <div class="main-content">
     <div class="page-content">
@@ -90,7 +92,7 @@ body{margin-top:20px}
                                         <small id="address_error"></small>
                                         <div class="form-group mb-2">
                                             <div class="row">
-                                                <div class="col-sm-6">
+                                                <div class="col-sm-12">
                                                     <label class="fw-semibold text-black">Country</label>
                                                     <select class="form-control form-select" id="country" name="country">
                                                         <option value="">Select Country</option>
@@ -113,18 +115,32 @@ body{margin-top:20px}
                                                         <option value="">Select State</option>
                                                     </select>
                                                 </div>
-                                                <div class="col-sm-6">
-                                                    <label class="fw-semibold  text-black">Zipcode</label>
-                                                    <!-- <input type="text" class="form-control" name="pincode" id="pincode"> -->
-                                                    <select class="form-control" name="pincode" required id="pincode">
-                                                        <option value="">Select Zipcode</option>
-                                                        <?php if(!empty($zipcodeList)) {
-                                                        foreach($zipcodeList as $zipcode) { ?>
-                                                        <option value="<?= $zipcode->zipcode; ?>"><?= $zipcode->zipcode; ?></option>
-                                                        <?php } } else { ?>
-                                                        <option value="">No Zipcode found</option>
-                                                        <?php } ?>
-                                                    </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb-2">
+                                            <label class="fw-semibold text-black">Zipcode(s) & Price</label>
+                                            <div id="zipcode_container">
+                                                <div class="row zipcode-row mb-2">
+                                                    <div class="col-sm-4" style="padding-right: 0;">
+                                                        <select class="form-control" name="pincode[]" required>
+                                                            <option value="">Select Zipcode</option>
+                                                            <?php if(!empty($zipcodeList)) {
+                                                                foreach($zipcodeList as $zipcode) { ?>
+                                                                <option value="<?= $zipcode->zipcode; ?>"><?= $zipcode->zipcode; ?></option>
+                                                            <?php } } else { ?>
+                                                                <option value="">No Zipcode found</option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-3" style="padding-right: 0;">
+                                                        <input type="text" class="form-control" name="course_price[]" placeholder="Actual Price" required>
+                                                    </div>
+                                                    <div class="col-sm-3" style="padding-right: 0;">
+                                                        <input type="text" class="form-control" name="offer_price[]" placeholder="Offer Price" required>
+                                                    </div>
+                                                    <div class="col-sm-2" style="text-align: end;">
+                                                        <button type="button" class="btn btn-success add-zipcode">+</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -138,18 +154,14 @@ body{margin-top:20px}
                                                     <label class="fw-semibold  text-black">Course Classes</label>
                                                     <input type="text" class="form-control" name="course_class" id="course_class" required autocomplete="off">
                                                 </div>
-                                                <!-- <div class="col-sm-4">
-                                                    <label class="fw-semibold  text-black">Class Duration</label>
-                                                    <input type="text" class="form-control" name="class_duration" id="class_duration" required autocomplete="off" readonly>
-                                                </div> -->
-                                                <div class="col-sm-6">
+                                                <!-- <div class="col-sm-6">
                                                     <label class="fw-semibold  text-black">Actual Price</label>
                                                     <input type="text" class="form-control" name="course_price" id="course_price" required autocomplete="off">
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <label class="fw-semibold  text-black">Offer Price</label>
                                                     <input type="text" class="form-control" name="offer_price" id="offer_price" required autocomplete="off">
-                                                </div>
+                                                </div> -->
                                             </div>
                                         </div>
                                         <div class="form-group mb-2">
@@ -291,6 +303,31 @@ $(document).ready(function() {
         }
     }
     $('#course_duration, #course_class').on('input', calculateClassDuration);*/
+
+    $('#zipcode_container').on('click', '.add-zipcode', function(e) {
+        e.preventDefault();
+        var $firstRow = $('#zipcode_container .zipcode-row:first');
+        var $newRow = $firstRow.clone();
+
+        // Clear input/select values
+        $newRow.find('select, input').val('');
+
+        // Change "+" to "-" and class for remove
+        $newRow.find('.add-zipcode')
+            .removeClass('btn-success add-zipcode')
+            .addClass('btn-danger remove-zipcode')
+            .text('-');
+
+        $('#zipcode_container').append($newRow);
+    });
+
+    // Remove zipcode row
+    $('#zipcode_container').on('click', '.remove-zipcode', function(e) {
+        e.preventDefault();
+        if ($('#zipcode_container .zipcode-row').length > 1) {
+            $(this).closest('.zipcode-row').remove();
+        }
+    });
 });
 $(document).on('keyup', '#course_name', function (e) {
     var course_name = $(this).val();

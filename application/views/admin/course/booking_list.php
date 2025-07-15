@@ -29,7 +29,7 @@ p strong{font-weight: 600 !important; color: black !important;}
                     <div class="card custom-shadow rounded-lg border">
                         <div class="card-body">
                             <div class="">
-                                <table id="datatable" class="table table-bordered dt-responsive nowrap w-100" style="overflow-x: scroll; display: inline-block;">
+                                <table id="datatable" class="table table-bordered w-100">
                                     <thead class="thead-light text-center">
                                         <tr>
                                             <th>#</th>
@@ -46,13 +46,19 @@ p strong{font-weight: 600 !important; color: black !important;}
                                     <tbody class="text-center">
                                         <?php if (is_array($booking_list) || is_object($booking_list)) { ?>
                                             <?php foreach ($booking_list as $key => $v): ?>
-                                                <tr>
+                                                <?php
+                                                $courseData = $this->db->query("SELECT * FROM courses WHERE id = '".@$v->course_id."'")->row();
+                                                $getpincode = $this->db->query("SELECT * FROM zipcode WHERE zipcode = '".@$courseData->pincode."'")->row();
+                                                if($getpincode->is_outside == '1') {
+                                                    $courstyle = "color: #fc001a;";
+                                                } else {
+                                                    $courstyle = "color: #000;";
+                                                }
+                                                ?>
+                                                <tr style="<?= $courstyle ?>">
                                                     <td><?= $key + 1 ?></td>
                                                     <td>
-                                                        <?php
-                                                        $courseData = $this->db->query("SELECT * FROM courses WHERE id = '".@$v->course_id."'")->row();
-                                                        echo "<p>".@$courseData->course_name."</br>".@$courseData->course_name1."</p>";
-                                                        ?>
+                                                        <p><?= @$courseData->course_name."</br>".@$courseData->course_name1; ?></p>
                                                     </td>
                                                     <td>
                                                         <?php
@@ -70,18 +76,18 @@ p strong{font-weight: 600 !important; color: black !important;}
                                                         }
                                                         ?>
                                                     </td>
-                                                    <td>
+                                                    <td style="font-size: 12px;">
                                                         <?php
                                                         $bookingDate = $this->db->query("SELECT * FROM booking_details WHERE booking_id = '".@$v->id."'")->result();
                                                         foreach ($bookingDate as $key => $value) {
                                                             if($value->booking_date != '0000-00-00') {
-                                                                echo '<p class="mb-0">'.date('d-m-Y', strtotime($value->booking_date)).'</p>';
+                                                                echo '<p class="mb-0">'.date('d-m-Y', strtotime($value->booking_date)).' '.$value->booking_time.'</p>';
                                                             }
                                                         }
                                                         ?>
                                                     </td>
                                                     <!-- <td><?= @$v->booking_time; ?></td> -->
-                                                    <td>
+                                                    <td style="font-size: 12px">
                                                         <p style="margin: 0px;"><b>Transaction ID: </b><?= @$v->transaction_id;?></p>
                                                         <p style="margin: 0px;"><b>Transaction Date: </b><?= @$v->transaction_date;?></p>
                                                         <p style="margin: 0px;"><b>Payment: </b><?= @$v->total_payment;?></p>
@@ -116,7 +122,7 @@ p strong{font-weight: 600 !important; color: black !important;}
                                                         <a href="<?= base_url("admin/course/booking_details/".base64_encode(@$v->id))?>" class="btn btn-primary">View</a>
                                                         <input type="hidden" id="booking_id_<?= @$v->id ?>" value="<?= @$v->id ?>">
                                                     </td>
-                                                    <td class="text-center"></td>
+                                                    <!-- <td class="text-center"></td> -->
                                                 </tr>
                                             <?php endforeach ?>
                                         <?php } ?>

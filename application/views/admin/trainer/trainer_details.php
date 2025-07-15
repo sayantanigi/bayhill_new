@@ -211,6 +211,7 @@ body{margin-top:20px}
                                                     <div class="mt-3" style="margin-top: 5px !important;">
                                                         <div class="tx-11 font-weight-bold mb-0 ">
                                                             <b>Status: </b><p class="text-muted" id="individual_status" style="display: contents"><?php if($trainerData->status == 1) { echo "Active"; } else { echo "Inactive"; } ?> </p>
+                                                            <?= @$trainerData->timeZone; ?>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -247,11 +248,16 @@ body{margin-top:20px}
         </div>
     </div>
 </div>
-<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.2.0/main.min.css'>
-<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.3.0/main.min.css'>
-<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.2.0/main.min.js'></script>
-<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.2.0/main.js'></script>
-<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@4.2.0/main.js'></script>
+<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.4.2/main.min.css'>
+<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.4.2/main.min.css'>
+<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@4.4.2/main.min.css'>
+<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@fullcalendar/list@4.4.2/main.min.css'>
+
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.4.2/main.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.4.2/main.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@4.4.2/main.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/list@4.4.2/main.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@4.4.2/main.min.js'></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const calendarEl = document.getElementById('calendar');
@@ -278,13 +284,66 @@ document.addEventListener('DOMContentLoaded', function() {
         } ?>
     ];
     const calendar = new FullCalendar.Calendar(calendarEl, {
-        headerToolbar: {
+        plugins: [ 'dayGrid', 'timeGrid', 'list', 'interaction' ],
+        header: {
+            left: 'prev,next today',
             center: 'title',
-            right: 'today, prev,next '
+            right: 'dayGridDay,timeGridWeek,dayGridMonth,listYear'
         },
-        plugins: ['dayGrid', 'interaction'],
+        defaultView: 'dayGridMonth',
         selectable: true,
-        events: myEvents
+        events: myEvents,
+        eventClick: function(info) {
+            var clickedDate = info.event.start;
+            var year = clickedDate.getFullYear();
+            var month = String(clickedDate.getMonth() + 1).padStart(2, '0');
+            var day = String(clickedDate.getDate()).padStart(2, '0');
+            var clickedDateStr = year + '-' + month + '-' + day;
+            $('.choosendate').text(clickedDate.toDateString());
+            if (info.event.title.startsWith('+') && info.event.extendedProps.details) {
+                var choosendate = clickedDateStr;
+                var trainerID = <?= @$trainerData->id?>;
+                $.ajax({
+                    type:"post",
+                    url:"<?php echo base_url()?>admin/Trainer/getUserAvailability",
+                    data:{choosendate: choosendate, trainerID: trainerID},
+                    dataType: 'html',
+                    success:function(response) {
+                        $('.getdatespecificdata').html(response);
+                        $('.availtimedata').show();
+                        $('.availslotdata').hide();
+                    },
+                    error: function() {
+                        $('#getdatespecificdata').empty();
+                        $('#getdatespecificdata').html('An error occurred while submitting your note');
+                    }
+                });
+            } else {
+                var choosendate = clickedDateStr;
+                var trainerID = <?= @$trainerData->id?>;
+                $.ajax({
+                    type:"post",
+                    url:"<?php echo base_url()?>admin/Trainer/getUserAvailability",
+                    data:{choosendate: choosendate, trainerID: trainerID},
+                    dataType: 'html',
+                    success:function(response) {
+                        $('.getdatespecificdata').html(response);
+                        $('.availtimedata').show();
+                        $('.availslotdata').hide();
+                    },
+                    error: function() {
+                        $('#getdatespecificdata').empty();
+                        $('#getdatespecificdata').html('An error occurred while submitting your note');
+                    }
+                });
+            }
+        },
+        views: {
+            dayGridDay: { buttonText: 'Day' },
+            timeGridWeek: { buttonText: 'Week' },
+            dayGridMonth: { buttonText: 'Month' },
+            listYear: { buttonText: 'Year' }
+        }
     });
 
     let selectedSlots = [];

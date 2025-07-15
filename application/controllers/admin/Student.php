@@ -199,6 +199,19 @@ class Student extends CI_Controller {
         $this->load->view('admin/student/edit_student');
         $this->load->view('admin/footer');
     }
+    public function student_details($id) {
+        $data = array(
+            'title' => 'Bay Hill DS',
+            'page' => 'Student Details',
+            'subpage' => 'student',
+        );
+        $studentID = base64_decode($id);
+        $data['studentData'] = $this->db->query("SELECT * FROM users WHERE id = '".$studentID."'")->row();
+        $this->load->view('admin/header', $data);
+        $this->load->view('admin/sidebar');
+        $this->load->view('admin/student/student_details');
+        $this->load->view('admin/footer');
+    }
     public function changestatus() {
         if ($this->input->post('id')) {
             $id = $this->input->post('id');

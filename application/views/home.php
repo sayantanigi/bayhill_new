@@ -172,7 +172,7 @@
         </div>
     </div>
 </section>
-<section class="enrollBg bg-primary">
+<section class="enrollBg bg-primary" id="enrollnow">
     <div class="container">
         <div class="d-lg-flex justify-content-between align-items-center">
             <div class="text-start mb-4 mb-lg-0">

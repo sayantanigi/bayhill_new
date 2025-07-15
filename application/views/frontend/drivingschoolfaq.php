@@ -56,7 +56,7 @@
             <div class="col-lg-6">
                 <div class="d-md-flex align-items-center text-center gap-4 text-white justify-content-center">
                     <div class="mb-3 mb-md-0">
-                        <a href="#usefullLinks" class="btn btn-warning fw-bold py-2 px-4 rounded-pill">Useful Links</a>
+                        <a href="<?= base_url('')?>/#enrollnow" class="btn btn-warning fw-bold py-2 px-4 rounded-pill">Useful Links</a>
                     </div>
                     <div>
                         <h3 class="mb-0 blinking-text h5 text-center"> In-Car <br> Driving Lessons</h3>

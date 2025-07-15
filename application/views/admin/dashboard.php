@@ -1,5 +1,15 @@
 <style>
-.app-search{margin-left:0!important}.autocomplete-results{position:absolute;top:100%;left:0;right:0;z-index:9999;background:#fff;border:1px solid #ddd;border-top:none;max-height:220px;overflow-y:auto;box-shadow:0 2px 8px rgba(0,0,0,.07)}.search-item{padding:8px 16px;cursor:pointer;transition:background .15s;font-size:15px;line-height:1.5;border-bottom:1px solid #f3f3f3}.search-item:last-child{border-bottom:none}.search-item.active,.search-item:hover{background:#f0f6ff;color:#004085}.student-item strong,.trainer-item strong{color:#007bff}.text-danger{color:#dc3545!important}.text-muted{color:#6c757d!important}.autocomplete-results:empty{display:none}
+.app-search{margin-left:0!important}
+.autocomplete-results{position:absolute;top:100%;left:0;right:0;z-index:9999;background:#fff;border:1px solid #ddd;border-top:none;max-height:220px;overflow-y:auto;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.search-item{padding:8px 16px;cursor:pointer;transition:background .15s;font-size:15px;line-height:1.5;border-bottom:1px solid #f3f3f3}
+.search-item:last-child{border-bottom:none}
+.search-item.active,.search-item:hover{background:#f0f6ff;color:#004085}
+.student-item strong,.trainer-item strong{color:#007bff}
+.text-danger{color:#dc3545!important}
+.text-muted{color:#6c757d!important; margin: 0px !important}
+.autocomplete-results:empty{display:none}
+.trainer-item{display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-between;}
+.student-item{display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-between;}
 </style>
 <div class="main-content">
     <div class="page-content">
@@ -16,7 +26,7 @@
                 <div class="col-xl-12">
                     <div class="col-xl-12" style="display: flex; flex-direction: row; flex-wrap: wrap;">
                         <div class="col-xl-12" style="display: flex; flex-direction: row; flex-wrap: wrap;">
-                            <div class="col-sm-6" style="padding-right: 15px;">
+                            <div class="col-sm-4" style="padding-right: 15px;">
                                 <form class="app-search d-none d-lg-block">
                                     <div class="position-relative">
                                         <input type="text" class="form-control" id="trainer_search" autocomplete="off" placeholder="Search by Trainer Name">
@@ -25,12 +35,21 @@
                                     </div>
                                 </form>
                             </div>
-                            <div class="col-sm-6" style="padding-right: 10px; padding-left: 10px;">
+                            <div class="col-sm-4" style="padding-right: 10px; padding-left: 10px;">
                                 <form class="app-search d-none d-lg-block">
                                     <div class="position-relative">
                                         <input type="text" class="form-control" id="student_search" autocomplete="off" placeholder="Search by Student Name">
                                         <span class="ri-search-line"></span>
                                         <div id="student_results" class="autocomplete-results"></div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-sm-4" style="padding-right: 10px; padding-left: 10px;">
+                                <form class="app-search d-none d-lg-block">
+                                    <div class="position-relative">
+                                        <input type="text" class="form-control" id="search_by_mobile" autocomplete="off" placeholder="Search by Mobile Number">
+                                        <span class="ri-search-line"></span>
+                                        <div id="search_by_mobile_results" class="autocomplete-results"></div>
                                     </div>
                                 </form>
                             </div>
@@ -76,19 +95,19 @@
                             </a>
                         </div>
                         <div class="col-xl-4">
-                            <a href="<?= base_url('admin/course') ?>">
+                            <a href="<?= base_url('admin/booking') ?>">
                                 <div class="card overflow-hidden card-h-100 custom-shadow rounded-lg border">
-                                <?php $course = $this->Adminmodel->count('courses', array('status' => 1)); ?>
+                                <?php $booking_list = $this->Adminmodel->count('booking', ''); ?>
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between">
-                                            <h5 class="font-size-15 text-uppercase mb-0">course</h5>
+                                            <h5 class="font-size-15 text-uppercase mb-0">Booking List</h5>
                                             <div class="avatar-xs">
                                                 <span class="avatar-title rounded bg-soft-primary font-size-20 mini-stat-icon">
                                                     <i class="fa fa-link text-primary"></i>
                                                 </span>
                                             </div>
                                         </div>
-                                        <h3 class="font-size-24"><?= $course ?></h3>
+                                        <h3 class="font-size-24"><?= $booking_list ?></h3>
                                     </div>
                                     <div id="completed-chart"></div>
                                 </div>
@@ -316,7 +335,7 @@ $("#trainer_search").on("keyup", function(){
             var resultHtml = '';
             if (response.length > 0) {
                 $.each(response, function(i, trainer){
-                    resultHtml += '<a href="<?= base_url('admin/trainer/trainer_details/') ?>'+btoa(trainer.id.toString())+'" class="search-link" style="text-decoration:none;color:inherit;" target="_blank">'+'<div class="search-item trainer-item" data-id="'+trainer.id+'" data-name="'+trainer.name+'">'+'<strong>'+trainer.name+'</strong> <span class="text-muted">('+trainer.username+')</span>'+'</div></a>';
+                    resultHtml += '<a href="<?= base_url('admin/trainer/trainer_details/') ?>'+btoa(trainer.id.toString())+'" class="search-link" style="text-decoration:none;color:inherit;" target="_blank">'+'<div class="search-item trainer-item" data-id="'+trainer.id+'" data-name="'+trainer.name+'">'+'<strong>'+trainer.name+'</strong> <p class="text-muted">('+trainer.username+')</p>'+'</div></a>';
                 });
             } else {
                 resultHtml = '<div class="text-danger">No trainers found</div>';
@@ -345,7 +364,7 @@ $("#student_search").on("keyup", function(){
             var resultHtml = '';
             if (response.length > 0) {
                 $.each(response, function(i, student){
-                    resultHtml += '<div class="search-item student-item" data-id="'+student.id+'" data-name="'+student.name+'">'+'<strong>' + student.name + '</strong> <span class="text-muted">(' + student.username + ')</span>'+'</div>';
+                    resultHtml += '<a href="<?= base_url('admin/student/student_details/') ?>'+btoa(student.id.toString())+'" class="search-link" style="text-decoration:none;color:inherit;" target="_blank">'+'<div class="search-item student-item" data-id="'+student.id+'" data-name="'+student.name+'">'+'<strong>'+student.name+'</strong><p class="text-muted">('+student.username+')</p>'+'</div></a>';
                 });
             } else {
                 resultHtml = '<div class="text-danger">No students found</div>';
@@ -354,6 +373,39 @@ $("#student_search").on("keyup", function(){
         },
         error: function() {
             $("#student_results").html('<div class="text-danger">No students found</div>');
+        }
+    });
+});
+
+$("#search_by_mobile").on("keyup", function(){
+    var inpt = $(this).val().trim();
+    if (inpt.length === 0) {
+        $("#search_by_mobile_results").html('');
+        return;
+    }
+    $.ajax({
+        url: "<?= base_url('admin/getSearchData')?>",
+        type: "POST",
+        data: { query: inpt },
+        dataType: "json",
+        success: function(response) {
+            console.log(response);
+            var resultHtml = '';
+            if (response.length > 0) {
+                $.each(response, function(i, search){
+                    if(search.usertype == '1'){
+                        resultHtml += '<a href="<?= base_url('admin/student/student_details/') ?>'+btoa(search.id.toString())+'" class="search-link" style="text-decoration:none;color:inherit;" target="_blank">'+'<div class="search-item student-item" data-id="'+search.id+'" data-name="'+search.name+'">'+'<strong>'+search.name+'</strong><p class="text-muted">('+search.username+')</p>'+'</div></a>';
+                    } else {
+                        resultHtml += '<a href="<?= base_url('admin/trainer/trainer_details/') ?>'+btoa(search.id.toString())+'" class="search-link" style="text-decoration:none;color:inherit;" target="_blank">'+'<div class="search-item student-item" data-id="'+search.id+'" data-name="'+search.name+'">'+'<strong>'+search.name+'</strong><p class="text-muted">('+search.username+')</p>'+'</div></a>';
+                    }
+                });
+            } else {
+                resultHtml = '<div class="text-danger">No result found</div>';
+            }
+            $("#search_by_mobile_results").html(resultHtml);
+        },
+        error: function() {
+            $("#search_by_mobile_results").html('<div class="text-danger">No result found</div>');
         }
     });
 });

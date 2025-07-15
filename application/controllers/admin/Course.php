@@ -20,7 +20,7 @@ class Course extends CI_Controller {
         $this->load->view('admin/course/course_list');
         $this->load->view('admin/footer');
     }
-    public function add_course() {
+    /*public function add_course() {
         $data = array(
             'title' => 'Bay Hill Driving School',
             'page' => 'Add Course',
@@ -73,6 +73,78 @@ class Course extends CI_Controller {
                 redirect(base_url('admin/course'), 'refresh');
             }
         }
+        $data['zipcodeList'] = $this->db->query("SELECT * FROM zipcode WHERE status = '1'")->result();
+        $this->load->view('admin/header', $data);
+        $this->load->view('admin/sidebar');
+        $this->load->view('admin/course/add_course');
+        $this->load->view('admin/footer');
+    }*/
+    public function add_course() {
+        $data = array(
+            'title' => 'Bay Hill Driving School',
+            'page' => 'Add Course',
+            'subpage' => 'courses',
+        );
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Handle image upload (upload once, use for all)
+            $image = '';
+            if (!empty($_FILES['upload_image']['name'])) {
+                $src = $_FILES['upload_image']['tmp_name'];
+                $avatar = rand(1000, 9999) . "_" . preg_replace('/[()\s]/', '', $_FILES['upload_image']['name']);
+                $dest = getcwd() . '/uploads/course/' . $avatar;
+                if (move_uploaded_file($src, $dest)) {
+                    $image = $avatar;
+                }
+            }
+
+            // Get posted zipcodes and prices (as arrays)
+            $zipcodes = $this->input->post('pincode');
+            $course_price = $this->input->post('course_price');
+            $offer_price = $this->input->post('offer_price');
+
+            // Insert a row for each zipcode/price
+            if (is_array($zipcodes) && is_array($course_price)) {
+                foreach ($zipcodes as $i => $zipcode) {
+                    $zipcode = strip_tags($zipcode);
+                    $coursePrice = isset($course_price[$i]) ? strip_tags($course_price[$i]) : '';
+                    $offerPrice = isset($offer_price[$i]) ? strip_tags($offer_price[$i]) : '';
+                    if (!empty($zipcode) && $coursePrice !== '') {
+                        $courseData = array(
+                            'course_code' => time() . rand(100,999), // make code unique per row
+                            'course_name' => strip_tags($this->input->post('course_name')),
+                            'course_name1' => strip_tags($this->input->post('course_name1')),
+                            'course_short_description' => htmlspecialchars($this->input->post('course_short_description')),
+                            'course_description' => htmlspecialchars($this->input->post('course_description')),
+                            'address' => strip_tags($this->input->post('address')),
+                            'latitude' => strip_tags($this->input->post('latitude')),
+                            'longitude' => strip_tags($this->input->post('longitude')),
+                            'country' => strip_tags($this->input->post('country')),
+                            'state' => strip_tags($this->input->post('state')),
+                            'city' => strip_tags($this->input->post('city')),
+                            'pincode' => $zipcode,
+                            'course_duration' => strip_tags($this->input->post('course_duration')),
+                            'course_class' => strip_tags($this->input->post('course_class')),
+                            'course_price' => $coursePrice, // use per-row course price
+                            'offer_price' => $offerPrice, // use per-row offer price
+                            'course_image' => $image,
+                            'course_type' => $this->input->post('course_type'),
+                            'status' => $this->input->post('status'),
+                            'created_at' => date('Y-m-d H:i:s')
+                        );
+                        $this->Adminmodel->add('courses', $courseData);
+                    }
+                }
+                $msg = '["Course has been added successfully.", "success", "#A5DC86"]';
+                $this->session->set_flashdata('msg', $msg);
+                redirect(base_url('admin/course'), 'refresh');
+            } else {
+                $msg = 'Some error occurred. Please try again.';
+                $this->session->set_flashdata('msg', $msg);
+                redirect(base_url('admin/course'), 'refresh');
+            }
+        }
+
         $data['zipcodeList'] = $this->db->query("SELECT * FROM zipcode WHERE status = '1'")->result();
         $this->load->view('admin/header', $data);
         $this->load->view('admin/sidebar');
