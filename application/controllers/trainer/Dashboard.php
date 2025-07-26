@@ -191,6 +191,312 @@ class Dashboard extends CI_Controller {
             echo json_encode(array('status' => 'error', 'message' => 'Failed to update booking status.'));
         }
     }
+    function availability() {
+        $data = array(
+            'title' => 'Bay Hill Driving School',
+            'page' => 'Trainer Dashboard',
+            'subpage' => 'Trainer Dashboard'
+        );
+        $data['trainer_id'] = $_SESSION['bayhill']['user_id'];
+		$this->load->view('header', $data);
+		$this->load->view('trainer/calender');
+		$this->load->view('footer');
+	}
+    function getDateForWeekDay($startingDate, $weekDay) {
+        $startDate = new DateTime($startingDate);
+        $currentWeekDay = $startDate->format('l');
+        $diffDays = (new DateTime($weekDay))->diff($startDate)->days;
+        $daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        $currentDayIndex = array_search($currentWeekDay, $daysOfWeek);
+        $targetDayIndex = array_search($weekDay, $daysOfWeek);
+        $daysToAdd = ($targetDayIndex - $currentDayIndex + 7) % 7;
+        $date = clone $startDate;
+        $date->modify("+$daysToAdd days");
+        return $date->format('Y-m-d');
+    }
+    function isEmptyWeekDay($weekDay) {
+        //return empty(@$weekDay['day']) && empty(array_filter(@$weekDay['fromtime'])) && empty(array_filter(@$weekDay['totime']));
+    }
+    function getWeekdayNumber($weekday) {
+        $weekdays = [
+            'Monday' => 1,
+            'Tuesday' => 2,
+            'Wednesday' => 3,
+            'Thursday' => 4,
+            'Friday' => 5,
+            'Saturday' => 6,
+            'Sunday' => 7
+        ];
+        if (isset($weekdays[$weekday])) {
+            return $weekdays[$weekday];
+        } else {
+            return 1; // Default to Monday
+        }
+    }
+    function utcDateTime($dateTimeInput, $inputTimezone) {
+        $dateTime = new DateTime($dateTimeInput, new DateTimeZone($inputTimezone));
+        $dateTime->setTimezone(new DateTimeZone('UTC'));
+        return $dateTime->format('Y-m-d H:i:s');
+    }
+    public function create_availability() {
+        $action_id = $_POST['action_id'];
+        $user_id = $_POST['user_id'];
+        if($action_id == '1') {
+            $this->db->query("DELETE FROM trainer_availability WHERE user_id = '".$user_id."' AND is_datewise = '0' AND is_booked = '0'");
+        }
+        $this->db->query("UPDATE users SET timeZone = '".$_POST['timeZone']."' WHERE id = '".$user_id."'");
+        $outputArray = [];
+        $weekDays = ['weekDay1', 'weekDay2', 'weekDay3', 'weekDay4', 'weekDay5'];
+        $fromTimes = ['fromtime1', 'fromtime2','fromtime3', 'fromtime4','fromtime5'];
+        $toTimes = ['totime1', 'totime2','totime3', 'totime4','totime5'];
+        for ($i = 0; $i < count($weekDays); $i++) {
+            $weekDay = $_POST[$weekDays[$i]];
+            $fromTime = $_POST[$fromTimes[$i]];
+            $toTime = $_POST[$toTimes[$i]];
+            $outputArray[$i]['weekDay'] = [
+                'date' => $this->getDateForWeekDay($_POST['starting_date'], $weekDay),
+                'day' => $weekDay,
+                'fromtime' => $fromTime,
+                'totime' => $toTime,
+                'timeZone' => $_POST['timeZone'],
+                'repeat_month' => @$_POST['repeat_month'],
+                'schedule_status' => '1',
+                'user_id' => $user_id,
+            ];
+        }
+        $output = $outputArray;
+        $filteredArray = array_filter($output, function($item) {
+            return !$this->isEmptyWeekDay($item['weekDay']);
+        });
+        $filteredArray = array_values($filteredArray);
+        foreach ($filteredArray as $entry) {
+            $weekDay = $entry['weekDay'];
+            foreach ($weekDay['fromtime'] as $key => $fromtime) {
+                $totime = isset($weekDay['totime'][$key]) ? $weekDay['totime'][$key] : null;
+                $utcfromTime = new DateTime($fromtime, new DateTimeZone($_POST['timeZone']));
+                $utcfromTime->setTimezone(new DateTimeZone('UTC'));
+                $utcFromTime = $utcfromTime->format('H:i');
+
+                $utctoTime = new DateTime($totime, new DateTimeZone($_POST['timeZone']));
+                $utctoTime->setTimezone(new DateTimeZone('UTC'));
+                $utcToTime = $utctoTime->format('H:i');
+
+                $utcStartDate = new DateTime($weekDay['date']." ".$fromtime, new DateTimeZone($_POST['timeZone']));
+                $utcStartDate->setTimezone(new DateTimeZone('UTC'));
+                $utcStartDate = $utcStartDate->format('Y-m-d');
+
+                $schedule_data = array(
+                    'user_id' => $weekDay['user_id'],
+                    'weekday' => $weekDay['day'],
+                    'weekdayslot' => $fromtime." to ".$totime,
+                    'timeZone' => $_POST['timeZone'],
+                    'utcTime' => $utcFromTime." to ".$utcToTime,
+                    'start_date' => $weekDay['date'],
+                    'utcStartDate' => $utcStartDate,
+                    'repeat_month' => $weekDay['repeat_month'],
+                    'schedule_status' => $weekDay['schedule_status'],
+                );
+
+                $data = $schedule_data;
+                if($data['repeat_month'] == '1') {
+                    $repeatMonth = '12';
+                    $schedule = [];
+                    $startDate = new DateTime($data['start_date']);
+                    $targetWeekday = $this->getWeekdayNumber($data['weekday']);
+                    $currentMonth = $startDate->format('m');
+                    $currentYear = $startDate->format('Y');
+                    for ($i = 0; $i < $repeatMonth; $i++) {
+                        $firstDayOfMonth = new DateTime("$currentYear-$currentMonth-01");
+                        $firstTargetWeekday = clone $firstDayOfMonth;
+                        $firstDayOfWeek = $firstTargetWeekday->format('N');
+                        $diff = $targetWeekday - $firstDayOfWeek;
+                        if ($diff < 0) {
+                            $diff += 7;
+                        }
+                        $firstTargetWeekday->modify("+$diff days");
+                        if ($firstTargetWeekday < $startDate) {
+                            $firstTargetWeekday->modify('+1 week');
+                        }
+
+                        while ($firstTargetWeekday->format('m') == $currentMonth) {
+                            $utcStartDate = new DateTime($firstTargetWeekday->format('Y-m-d'), new DateTimeZone($data['timeZone']));
+                            $utcStartDate->setTimezone(new DateTimeZone('UTC'));
+                            $utcStartDate = $utcStartDate->format('Y-m-d');
+                            $schedule[] = [
+                                'user_id' => $data['user_id'],
+                                'weekday' => $data['weekday'],
+                                'weekdayslot' => $data['weekdayslot'],
+                                'timeZone' => $data['timeZone'],
+                                'utcTime' => $data['utcTime'],
+                                'start_date' => $firstTargetWeekday->format('Y-m-d'),
+                                'utcStartDate' => $utcStartDate,
+                                'repeat_month' => $data['repeat_month'],
+                                'schedule_status' => $data['schedule_status'],
+                            ];
+                            $firstTargetWeekday->modify('+1 week');
+                        }
+                        $currentMonth++;
+                        if ($currentMonth > 12) {
+                            $currentMonth = 1;
+                            $currentYear++;
+                        }
+                    }
+                    $finalData = [];
+                    foreach ($schedule as $key => $value) {
+                        $finalData['user_id'] = $value['user_id'];
+                        $finalData['weekday'] = $value['weekday'];
+                        $finalData['weekdayslot'] = $value['weekdayslot'];
+                        $finalData['timeZone'] = $value['timeZone'];
+                        $finalData['utcTime'] = $value['utcTime'];
+                        $finalData['start_date'] = $value['start_date'];
+                        $finalData['utcStartDate'] = $value['utcStartDate'];
+                        $finalData['repeat_month'] = $value['repeat_month'];
+                        $finalData['schedule_status'] = $value['schedule_status'];
+                        $this->Adminmodel->add('trainer_availability', $finalData);
+                    }
+                } else {
+                    $repeatMonth = '1';
+                    $schedule = [];
+                    $startDate = new DateTime($data['start_date']);
+                    $targetWeekday = $this->getWeekdayNumber($data['weekday']);
+                    $currentMonth = $startDate->format('m');
+                    $currentYear = $startDate->format('Y');
+                    for ($i = 0; $i < $repeatMonth; $i++) {
+                        $firstDayOfMonth = new DateTime($data['start_date']);
+                        $firstTargetWeekday = clone $firstDayOfMonth;
+                        $firstDayOfWeek = (int)$firstTargetWeekday->format('N');
+                        $diff = $targetWeekday - $firstDayOfWeek;
+                        if ($diff < 0) {
+                            $diff += 7;
+                        }
+                        $firstTargetWeekday->modify("+$diff days");
+                        if ($firstTargetWeekday < $startDate) {
+                            $firstTargetWeekday->modify('+1 week');
+                        }
+                        while ($firstTargetWeekday->format('m') == $currentMonth) {
+                            $utcStartDate = new DateTime($firstTargetWeekday->format('Y-m-d'), new DateTimeZone($data['timeZone']));
+                            $utcStartDate->setTimezone(new DateTimeZone('UTC'));
+                            $utcStartDate = $utcStartDate->format('Y-m-d');
+                            $schedule[] = [
+                                'user_id' => $data['user_id'],
+                                'weekday' => $data['weekday'],
+                                'weekdayslot' => $data['weekdayslot'],
+                                'timeZone' => $data['timeZone'],
+                                'utcTime' => $data['utcTime'],
+                                'start_date' => $firstTargetWeekday->format('Y-m-d'),
+                                'utcStartDate' => $utcStartDate,
+                                'repeat_month' => $data['repeat_month'],
+                                'schedule_status' => $data['schedule_status'],
+                            ];
+                            $firstTargetWeekday->modify('+1 week');
+                        }
+                        $currentMonth++;
+                        if ($currentMonth > 12) {
+                            $currentMonth = 1;
+                            $currentYear++;
+                        }
+                    }
+                    $finalData = [];
+                    //print_r($schedule);
+                    foreach ($schedule as $key => $value) {
+                        $finalData['user_id'] = $value['user_id'];
+                        $finalData['weekday'] = $value['weekday'];
+                        $finalData['weekdayslot'] = $value['weekdayslot'];
+                        $finalData['timeZone'] = $value['timeZone'];
+                        $finalData['utcTime'] = $value['utcTime'];
+                        $finalData['start_date'] = $value['start_date'];
+                        $finalData['utcStartDate'] = $value['utcStartDate'];
+                        $finalData['repeat_month'] = $value['repeat_month'];
+                        $finalData['schedule_status'] = $value['schedule_status'];
+                        $this->Adminmodel->add('trainer_availability', $finalData);
+                    }
+                }
+            }
+        }
+        echo '1';
+    }
+    public function createdatewiseavailability() {
+        $user_id = $_POST['user_id'];
+        $output = array();
+        $specific_dates = explode(',', $_POST['specific_date'][0]);
+        $this->db->query("DELETE FROM trainer_availability WHERE user_id = '".$user_id."' AND is_datewise = '1' AND is_booked = '0'");
+        foreach ($specific_dates as $date) {
+            $weekday = $this->getWeekdayName($date);
+            foreach ($_POST['fromtimedate'] as $index => $start_time) {
+                $end_time = $_POST['totimedate'][$index];
+                $time_slot = $start_time . ' to ' . $end_time;
+
+                $utcfromTimedate = new DateTime($start_time, new DateTimeZone($_POST['timeZonedate']));
+                $utcfromTimedate->setTimezone(new DateTimeZone('UTC'));
+                $utcFromTimedate = $utcfromTimedate->format('H:i');
+
+                $utctoTimedate = new DateTime($end_time, new DateTimeZone($_POST['timeZonedate']));
+                $utctoTimedate->setTimezone(new DateTimeZone('UTC'));
+                $utcToTimedate = $utctoTimedate->format('H:i');
+
+                $utcStartDate = new DateTime($date." ".$start_time, new DateTimeZone($_POST['timeZonedate']));
+                $utcStartDate->setTimezone(new DateTimeZone('UTC'));
+                $utcStartDate = $utcStartDate->format('Y-m-d');
+
+                $slot = array(
+                    'user_id' => $_POST['user_id'],
+                    'weekday' => $weekday,
+                    'weekdayslot' => $time_slot,
+                    'start_date' => $date,
+                    'timeZone' => $_POST['timeZonedate'],
+                    'utcTime' => $utcFromTimedate." to ".$utcToTimedate,
+                    'utcStartDate' => $utcStartDate,
+                    'schedule_status' => 1,
+                    'is_booked' => 0
+                );
+                $output[] = $slot;
+            }
+        }
+        $finalArray = $output;
+        $storedata = [];
+        foreach ($finalArray as $key1 => $value) {
+            $storedata['user_id'] = $value['user_id'];
+            $storedata['weekday'] = $value['weekday'];
+            $storedata['weekdayslot'] = $value['weekdayslot'];
+            $storedata['timeZone'] = $value['timeZone'];
+            $storedata['start_date'] = $value['start_date'];
+            $storedata['utcTime'] = $value['utcTime'];
+            $storedata['utcStartDate'] = $value['utcStartDate'];
+            $storedata['schedule_status'] = $value['schedule_status'];
+            $storedata['is_booked'] = $value['is_booked'];
+            $storedata['is_datewise'] = '1';
+            $this->Adminmodel->add('trainer_availability', $storedata);
+        }
+		echo "1";
+    }
+    function getWeekdayName($date) {
+        return date('l', strtotime($date)); // Returns the full weekday name (e.g., "Monday")
+    }
+    public function getBookingDetails() {
+        $user_id = $this->input->post('user_id');
+        $choosendate = $this->input->post('choosendate');
+        $availability = $this->db->query("SELECT * FROM booking_details WHERE trainer_id = '".$user_id."' AND booking_date = '".$choosendate."'")->result();
+        if (empty($availability)) {
+            echo json_encode(array('status' => 'error', 'message' => 'No bookings found for the selected date.'));
+            return;
+        }
+        $response = [];
+        foreach ($availability as $slot) {
+            $getBookingData = $this->db->query("SELECT * FROM booking WHERE id = '".$slot->booking_id."'")->row();
+            $course = $this->db->query("SELECT * FROM courses WHERE id = '".$getBookingData->course_id."'")->row();
+            $student = $this->db->query("SELECT * FROM users WHERE id = '".$getBookingData->user_id."'")->row();
+            $response[] = array(
+                'booking_id' => $slot->booking_id,
+                'booking_date' => date('d-m-Y', strtotime($slot->booking_date)),
+                'booking_time' => $slot->booking_time,
+                'course_name' => $course->course_name,
+                'student_name' => $student->first_name . ' ' . $student->last_name,
+                'student_phone' => $student->phone,
+                'student_email' => $student->email
+            );
+        }
+        echo json_encode(array('status' => 'success', 'message' => $response));
+    }
     public function logout() {
 	    unset($_SESSION['bayhill']);
         $this->session->set_flashdata('message', 'You have logged out.');

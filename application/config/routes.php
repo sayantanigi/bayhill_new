@@ -90,6 +90,7 @@ $route['logout'] = 'users/dashboard/logout';
 
 $route['trainer/trainer-dashboard'] = 'trainer/dashboard';
 $route['trainer/profile-settings'] = 'trainer/dashboard/profile_settings';
+$route['trainer/availability'] = 'trainer/dashboard/availability';
 $route['trainer/saveProfileData'] = 'trainer/dashboard/update_profile';
 $route['trainer/change-password'] = 'trainer/dashboard/change_password';
 $route['trainer/updatePassword'] = 'trainer/dashboard/update_password';

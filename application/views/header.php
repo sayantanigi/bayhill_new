@@ -100,6 +100,7 @@
                                         <ul class="sub-menu">
                                             <li><a href="<?= base_url('trainer/trainer-dashboard') ?>">Dashboard </a></li>
                                             <li><a href="<?= base_url('trainer/profile-settings') ?>">Profile Settings </a></li>
+                                            <li><a href="<?= base_url('trainer/availability') ?>">Update Availability</a></li>
                                             <li><a href="<?= base_url('trainer/change-password') ?>">Change Password </a></li>
                                             <li><a href="<?= base_url('trainer/logout') ?>"><i class="fas fa-power-off me-2"></i> Logout </a></li>
                                         </ul>

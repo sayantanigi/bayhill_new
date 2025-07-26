@@ -154,9 +154,9 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
 <script>
 const slots = [
     { time: '09:00 am - 11:00 am', status: 'available' },
-    { time: '11:00 am - 01:00 pm', status: 'available' },
-    { time: '01:00 pm - 03:00 pm', status: 'available' },
-    { time: '03:00 pm - 05:00 pm', status: 'available' },
+    { time: '11:30 am - 01:30 pm', status: 'available' },
+    { time: '02:00 pm - 04:00 pm', status: 'available' },
+    { time: '04:30 pm - 05:30 pm', status: 'available' },
 ];
 
 let selectedSlots = [];

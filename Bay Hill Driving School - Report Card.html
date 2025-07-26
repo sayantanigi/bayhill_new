@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bay Hill Driving School - Report Card</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        .report-info {
+            background-color: #f8f8f8;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .report-info h2 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+            color: #333;
+        }
+        
+        .session-details {
+            display: flex;
+            justify-content: space-around;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+        
+        .session-details div {
+            margin: 5px;
+        }
+        
+        .status {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            padding: 30px;
+        }
+        
+        .skill-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .skill-indicator {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .proficient {
+            background-color: #4CAF50;
+        }
+        
+        .needs-focus {
+            background-color: #FFC107;
+        }
+        
+        .not-covered {
+            background-color: #9E9E9E;
+        }
+        
+        .skill-content {
+            flex-grow: 1;
+        }
+        
+        .skill-name {
+            font-weight: bold;
+            color: #333;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+        
+        .skill-grade {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 2px;
+        }
+        
+        .skill-status {
+            font-size: 12px;
+            color: #888;
+        }
+        
+        .notes-section {
+            background-color: #f8f8f8;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        .notes-title {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .notes-content {
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #f0f0f0;
+            color: #666;
+            font-size: 12px;
+        }
+        
+        @media (max-width: 600px) {
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .session-details {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Bay Hill Driving School</h1>
+        </div>
+        
+        <div class="report-info">
+            <h2>Report card for session on Wednesday, July 23rd 2025</h2>
+            <span class="status">Active</span>
+            
+            <div class="session-details">
+                <div><strong>From:</strong> 10:30 am to 12:30 pm</div>
+                <div><strong>Session Type:</strong> Behind The Wheel Lessons</div>
+                <div><strong>Instructor:</strong> Michael R - ID4456789</div>
+                <div><strong>Vehicle:</strong> Honda Civic</div>
+            </div>
+        </div>
+        
+        <div class="skills-grid">
+            <div class="skill-item">
+                <div class="skill-indicator proficient"></div>
+                <div class="skill-content">
+                    <div class="skill-name">Changing Lanes</div>
+                    <div class="skill-grade">Grade: A</div>
+                    <div class="skill-status">proficient</div>
+                </div>
+            </div>
+            
+            <div class="skill-item">
+                <div class="skill-indicator proficient"></div>
+                <div class="skill-content">
+                    <div class="skill-name">Following Distance</div>
+                    <div class="skill-grade">Grade: A-</div>
+                    <div class="skill-status">proficient</div>
+                </div>
+            </div>
+            
+            <div class="skill-item">
+                <div class="skill-indicator proficient"></div>
+                <div class="skill-content">
+                    <div class="skill-name">Left Turns</div>
+                    <div class="skill-grade">Grade: B+</div>
+                    <div class="skill-status">proficient</div>
+                </div>
+            </div>
+            
+            <div class="skill-item">
+                <div class="skill-indicator proficient"></div>
+                <div class="skill-content">
+                    <div class="skill-name">Right Turns</div>
+                    <div class="skill-grade">Grade: A</div>
+                    <div class="skill-status">proficient</div>
+                </div>
+            </div>
+            
+            <div class="skill-item">
+                <div class="skill-indicator proficient"></div>
+                <div class="skill-content">
+                    <div class="skill-name">Staying Centered</div>
+                    <div class="skill-grade">Grade: B+</div>
+                    <div class="skill-status">proficient</div>
+                </div>
+            </div>
+            
+            <div class="skill-item">
+                <div class="skill-indicator proficient"></div>
+                <div class="skill-content">
+                    <div class="skill-name">General Parking</div>
+                    <div class="skill-grade">Grade: A</div>
+                    <div class="skill-status">proficient</div>
+                </div>
+            </div>
+            
+            <div class="skill-item">
+                <div class="skill-indicator needs-focus"></div>
+                <div class="skill-content">
+                    <div class="skill-name">Straight Line Reversing</div>
+                    <div class="skill-grade">Grade: C+</div>
+                    <div class="skill-status">needs focus</div>
+                </div>
+            </div>
+            
+            <div class="skill-item">
+                <div class="skill-indicator proficient"></div>
+                <div class="skill-content">
+                    <div class="skill-name">Intersections</div>
+                    <div class="skill-grade">Grade: B</div>
+                    <div class="skill-status">proficient</div>
+                </div>
+            </div>
+            
+            <div class="skill-item">
+                <div class="skill-indicator proficient"></div>
+                <div class="skill-content">
+                    <div class="skill-name">Acceleration (Smooth/Gradual)</div>
+                    <div class="skill-grade">Grade: A-</div>
+                    <div class="skill-status">proficient</div>
+                </div>
+            </div>
+            
+            <div class="skill-item">
+                <div class="skill-indicator proficient"></div>
+                <div class="skill-content">
+                    <div class="skill-name">Braking (Smooth)</div>
+                    <div class="skill-grade">Grade: A</div>
+                    <div class="skill-status">proficient</div>
+                </div>
+            </div>
+            
+            <div class="skill-item">
+                <div class="skill-indicator proficient"></div>
+                <div class="skill-content">
+                    <div class="skill-name">Blind Spots (Proper Checks)</div>
+                    <div class="skill-grade">Grade: B+</div>
+                    <div class="skill-status">proficient</div>
+                </div>
+            </div>
+            
+            <div class="skill-item">
+                <div class="skill-indicator not-covered"></div>
+                <div class="skill-content">
+                    <div class="skill-name">Freeway Driving</div>
+                    <div class="skill-grade">Grade: --</div>
+                    <div class="skill-status">not covered</div>
+                </div>
+            </div>
+            
+            <div class="skill-item">
+                <div class="skill-indicator proficient"></div>
+                <div class="skill-content">
+                    <div class="skill-name">Proper Bike Lane Merge</div>
+                    <div class="skill-grade">Grade: B</div>
+                    <div class="skill-status">proficient</div>
+                </div>
+            </div>
+            
+            <div class="skill-item">
+                <div class="skill-indicator proficient"></div>
+                <div class="skill-content">
+                    <div class="skill-name">Unprotected Left Turn</div>
+                    <div class="skill-grade">Grade: B+</div>
+                    <div class="skill-status">proficient</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="notes-section">
+            <div class="notes-title">Notes (These notes are visible to the office, other instructors, and the students and guardians)</div>
+            <div class="notes-content">Excellent progress today! Student shows strong confidence and control. Focus on reverse parking techniques in next session. Ready for freeway introduction.</div>
+        </div>
+        
+        <div class="footer">
+            Bay Hill Driving School | www.bayhilldrivingschool.com | (555) 123-DRIVE
+        </div>
+    </div>
+</body>
+</html>
