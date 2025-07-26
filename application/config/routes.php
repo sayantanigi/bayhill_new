@@ -89,6 +89,8 @@ $route['updatePassword'] = 'users/dashboard/update_password';
 $route['logout'] = 'users/dashboard/logout';
 
 $route['trainer/trainer-dashboard'] = 'trainer/dashboard';
+$route['trainer/assessment'] = 'trainer/dashboard/assessment';
+$route['trainer/assessmentSave']['post'] = 'trainer/dashboard/assessmentSave';
 $route['trainer/profile-settings'] = 'trainer/dashboard/profile_settings';
 $route['trainer/availability'] = 'trainer/dashboard/availability';
 $route['trainer/saveProfileData'] = 'trainer/dashboard/update_profile';

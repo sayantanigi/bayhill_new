@@ -497,6 +497,50 @@ class Dashboard extends CI_Controller {
         }
         echo json_encode(array('status' => 'success', 'message' => $response));
     }
+    public function assessment() {
+        $loggedinUID = $_SESSION['bayhill']['user_id'];
+        $getUserDetails = $this->db->query("SELECT * FROM users WHERE id = '".$loggedinUID."'")->row();
+        $data = array(
+            'title' => 'Bay Hill Driving School',
+            'page' => 'Trainer Assessment',
+            'subpage' => 'Trainer Assessment',
+            'getUserDetails' => $getUserDetails
+        );
+        $this->load->view('header', $data);
+        $this->load->view('trainer/assessment');
+        $this->load->view('footer');
+    }
+    public function save() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            show_404();
+        }
+        $data = json_decode(file_get_contents('php://input'), true); print_r($data); die();
+        if (!$data) {
+            echo json_encode(['status'=>'error','message'=>'Invalid data.']);
+            return;
+        }
+
+        // Store skill set as JSON
+        $saveData = [
+            'session_date'   => $data['sessionDate'] ?? null,
+            'session_status' => $data['sessionStatus'] ?? null,
+            'start_time'     => $data['startTime'] ?? null,
+            'end_time'       => $data['endTime'] ?? null,
+            'session_type'   => $data['sessionType'] ?? null,
+            'instructor'     => $data['instructor'] ?? null,
+            'vehicle'        => $data['vehicle'] ?? null,
+            'skills'         => json_encode($data['skills'] ?? []),
+            'notes'          => $data['notes'] ?? null
+        ];
+
+        $result = $this->Assessment_model->insert_assessment($saveData);
+
+        if($result){
+            echo json_encode(['status'=>'success']);
+        }else{
+            echo json_encode(['status'=>'error', 'message'=>'Failed to save.']);
+        }
+    }
     public function logout() {
 	    unset($_SESSION['bayhill']);
         $this->session->set_flashdata('message', 'You have logged out.');

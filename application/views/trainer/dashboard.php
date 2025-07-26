@@ -17,6 +17,9 @@ if ($dob) {
 ?>
 <style>
 #bookingData{width: 100%; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-around; margin-bottom: 10px}
+.package-card__body__btn {margin-top: 0 !important;}
+.package-card__body {padding: 8px 16px 8px 16px !important;}
+.package-card {height: 60px !important;}
 </style>
 <section class="courseListpnl">
     <div class="container">
@@ -35,6 +38,15 @@ if ($dob) {
                 <h2 class="subtitle mb-0 wow fadeInUp">Welcome, <?= $userData->first_name." ".$userData->last_name?></h2>
                 <h3 class="maintitle mb-0 wow fadeInUp">Your Assigned Course List</h3>
                 <p class="mb-1 mt-4 fw-bold" style="#000; ">Assigned Course Count: <?= @$getAssignedCourseListCount->count; ?></p>
+            </div>
+            <div class="col-lg-4 col-md-6 wow fadeInUp animated">
+                <div class="package-card">
+                    <div class="package-card__body">
+                        <div class="package-card__body__btn text-center">
+                            <a href="<?= base_url("trainer/assessment")?>" class="drivschol-btn w-100">Pay Now</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="mt-3 purchased-table">
