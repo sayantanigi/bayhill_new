@@ -500,45 +500,93 @@ class Dashboard extends CI_Controller {
     public function assessment() {
         $loggedinUID = $_SESSION['bayhill']['user_id'];
         $getUserDetails = $this->db->query("SELECT * FROM users WHERE id = '".$loggedinUID."'")->row();
+        $getAssignedCourseList = $this->db->query("SELECT * FROM booking WHERE trainer_id = '".$loggedinUID."' ORDER BY id DESC")->result();
         $data = array(
             'title' => 'Bay Hill Driving School',
             'page' => 'Trainer Assessment',
             'subpage' => 'Trainer Assessment',
-            'getUserDetails' => $getUserDetails
+            'getUserDetails' => $getUserDetails,
+            'getAssignedCourseList' => $getAssignedCourseList,
         );
         $this->load->view('header', $data);
         $this->load->view('trainer/assessment');
         $this->load->view('footer');
     }
-    public function save() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            show_404();
-        }
-        $data = json_decode(file_get_contents('php://input'), true); print_r($data); die();
-        if (!$data) {
-            echo json_encode(['status'=>'error','message'=>'Invalid data.']);
+    public function assessmentSave() {
+        $this->form_validation->set_rules('sessionDate', 'Session Date', 'required');
+        if ($this->form_validation->run() == FALSE) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => validation_errors()
+            ]);
             return;
         }
+        $data = [
+            'session_date' => $this->input->post('sessionDate'),
+            'session_status' => $this->input->post('sessionStatus'),
+            'start_time' => $this->input->post('startTime'),
+            'end_time' => $this->input->post('endTime'),
+            'session_type' => $this->input->post('sessionType'),
+            'student' => $this->input->post('student'),
+            'instructor' => $this->input->post('instructor'),
+            'vehicle' => $this->input->post('vehicle'),
 
-        // Store skill set as JSON
-        $saveData = [
-            'session_date'   => $data['sessionDate'] ?? null,
-            'session_status' => $data['sessionStatus'] ?? null,
-            'start_time'     => $data['startTime'] ?? null,
-            'end_time'       => $data['endTime'] ?? null,
-            'session_type'   => $data['sessionType'] ?? null,
-            'instructor'     => $data['instructor'] ?? null,
-            'vehicle'        => $data['vehicle'] ?? null,
-            'skills'         => json_encode($data['skills'] ?? []),
-            'notes'          => $data['notes'] ?? null
+            // Skills status and grades
+            'changing_lane' => $this->input->post('dchanging_lane'),
+            'changing_lane_grade' => $this->input->post('ichanging_lane'),
+
+            'following_distance' => $this->input->post('dfollowing_distance'),
+            'following_distance_grade' => $this->input->post('ifollowing_distance'),
+
+            'left_turns' => $this->input->post('dleft_turns'),
+            'left_turns_grade' => $this->input->post('ileft_turns'),
+
+            'right_turns' => $this->input->post('dright_turns'),
+            'right_turns_grade' => $this->input->post('iright_turns'),
+
+            'staying_centered' => $this->input->post('dstaying_centered'),
+            'staying_centered_grade' => $this->input->post('istaying_centered'),
+
+            'general_parking' => $this->input->post('dgeneral_parking'),
+            'general_parking_grade' => $this->input->post('igeneral_parking'),
+
+            'straight_line_reversing' => $this->input->post('dstraight_line_reversing'),
+            'straight_line_reversing_grade' => $this->input->post('istraight_line_reversing'),
+
+            'intersections' => $this->input->post('dintersections'),
+            'intersections_grade' => $this->input->post('iintersections'),
+
+            'acceleration' => $this->input->post('dacceleration'),
+            'acceleration_grade' => $this->input->post('iacceleration'),
+
+            'breaking' => $this->input->post('dbreaking'),
+            'breaking_grade' => $this->input->post('ibreaking'),
+
+            'blind_spot' => $this->input->post('dblind_spot'),
+            'blind_spot_grade' => $this->input->post('iblind_spot'),
+
+            'freeway_driving' => $this->input->post('dfreeway_driving'),
+            'freeway_driving_grade' => $this->input->post('ifreeway_driving'),
+
+            'proper_bike_lane' => $this->input->post('dproper_bike_lane'),
+            'proper_bike_lane_grade' => $this->input->post('iproper_bike_lane'),
+
+            'unprotected_left_turn' => $this->input->post('dunprotected_left_turn'),
+            'unprotected_left_turn_grade' => $this->input->post('iunprotected_left_turn'),
+
+            'notes' => $this->input->post('notes')
         ];
-
-        $result = $this->Assessment_model->insert_assessment($saveData);
-
-        if($result){
-            echo json_encode(['status'=>'success']);
-        }else{
-            echo json_encode(['status'=>'error', 'message'=>'Failed to save.']);
+        $checkExisting = $this->db->get_where('assessments', ['session_type' => $this->input->post('sessionType'), 'student' => $this->input->post('student'), 'instructor' => $this->input->post('instructor')])->row();
+        if (!empty($checkExisting)) {
+            echo json_encode(['status' => 'error', 'message' => 'Assessment for this session already exists.']);
+            return;
+        } else {
+            $inserted = $this->db->insert('assessments', $data);
+            if ($inserted) {
+                echo json_encode(['status' => 'success', 'message' => 'Assessment saved successfully.']);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Failed to save assessment.']);
+            }
         }
     }
     public function logout() {
