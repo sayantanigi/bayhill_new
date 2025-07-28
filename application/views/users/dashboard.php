@@ -122,6 +122,11 @@ if ($dob) {
                                     <li><a class="dropdown-item" href="javascript:void(0)" onclick="cancelClass(<?= @$getBookingData->id ?>, <?= @$course->id ?>)">Cancel Class</a></li>
                                     <li><a class="dropdown-item" href="javascript:void(0)">Reschedule</a></li>
                                     <li><a class="dropdown-item" href="javascript:void(0);" onclick="courseNote(<?= @$getBookingData->id; ?>)">Notes</a></li>
+                                    <?php
+                                    $assessment_data = $this->db->query("SELECT * FROM assessments WHERE student = '".@$userData->id."' AND session_type = '".@$course->id."'")->row();
+                                    if(!empty($assessment_data)) { ?>
+                                    <li><a class="dropdown-item" href="<?= base_url() ?>assessment_report?courseID=<?= base64_encode(@$course->id)?>&studentID=<?= base64_encode(@$userData->id)?>" target="_blank">Assessment Report</a></li>
+                                    <?php } ?>
                                 </ul>
                             </div>
                         </td>

@@ -86,6 +86,11 @@
                             <span class="hide-menu">Booking List</span>
                         </a>
                     </li>
+                    <li class="<?= (!empty($page) && $page == 'Trainer Assessment')? 'mm-active' : ''; ?>">
+                        <a href="<?= base_url('admin/trainer_assessment') ?>" class="<?= (!empty($subpage) && $subpage == 'trainer_assessment')? 'active' : ''; ?>">
+                            <span class="hide-menu">Trainer Assessment</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
             <li class="<?= (!empty($subpage) && $subpage == 'contact_list')? 'mm-active' : ''; ?>">

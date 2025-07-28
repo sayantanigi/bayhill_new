@@ -355,4 +355,35 @@ class Course extends CI_Controller {
         $this->load->view('admin/course/booking_details');
         $this->load->view('admin/footer');
     }
+    public function trainer_assessment() {
+        $data = array(
+            'title' => 'Bay Hill Driving School',
+            'page' => 'Trainer Assessment',
+            'subpage' => 'trainer_assessment',
+        );
+        $data['assessment_list'] = $this->Adminmodel->get_all_record('*', 'assessments', '', array('id', 'DESC'), '');
+        $this->load->view('admin/header', $data);
+        $this->load->view('admin/sidebar');
+        $this->load->view('admin/course/trainer_assessment');
+        $this->load->view('admin/footer');
+    }
+    public function assessment_details($assessment_id) {
+        $id = base64_decode($assessment_id);
+        if(empty($id)){
+            redirect(base_url('admin/course/trainer_assessment'),'refresh');
+        }
+        $data = array(
+            'title' => 'Bay Hill Driving School',
+            'page' => 'Assessment Details',
+            'subpage' => 'trainer_assessment',
+        );
+        $data['assessment_data'] = $this->db->query("SELECT * FROM assessments WHERE id = '".$id."'")->row();
+        $data['course_details'] = $this->db->query("SELECT * FROM courses WHERE id = '".$data['assessment_data']->session_type."'")->row();
+        $data['student_details'] = $this->db->query("SELECT * FROM users WHERE id = '".$data['assessment_data']->student."'")->row();
+        $data['trainer_details'] = $this->db->query("SELECT * FROM users WHERE id = '".$data['assessment_data']->instructor."'")->row();
+        $this->load->view('admin/header', $data);
+        $this->load->view('admin/sidebar');
+        $this->load->view('admin/course/assessment_details');
+        $this->load->view('admin/footer');
+    }
 }
