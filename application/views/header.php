@@ -71,8 +71,9 @@
                             <li class="dropdown">
                                 <a href="javascript:void(0)" class="<?= (current_url() == base_url('faq')) ? 'active' : '' ?>">FAQ</a>
                                 <ul>
-                                    <li><a href="<?= base_url('driver-ed-faq') ?>" class="<?= (current_url() == base_url('drivers-ed')) ? 'active' : '' ?>">Drivers Ed</a></li>
                                     <li><a href="<?= base_url('driving-school-faq') ?>" class="<?= (current_url() == base_url('driving-school-faq')) ? 'active' : '' ?>">Driving School</a></li>
+                                    <li><a href="<?= base_url('driver-ed-faq') ?>" class="<?= (current_url() == base_url('drivers-ed')) ? 'active' : '' ?>">Drivers Ed</a></li>
+                                    
                                 </ul>
                             </li>
                             <li><a href="<?= base_url('contact') ?>" class="<?= (current_url() == base_url('contact')) ? 'active' : '' ?>">Contact</a></li>

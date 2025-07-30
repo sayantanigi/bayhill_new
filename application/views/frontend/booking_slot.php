@@ -1,5 +1,6 @@
 <?php
 $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'")->row();
+$site_setting = $this->db->query("select * from  settings")->row();
 ?>
 <section class="enrollPnl">
     <div class="container">
@@ -82,7 +83,7 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                                                 <i class="fas fa-dollar-sign"></i>
                                             </div>
                                             <div class="boxInfo">
-                                                <h3>$ <?= $offer_price; ?></h3>
+                                                <h3>$ <?= $offer_price + $site_setting->tax_amount; ?></h3>
                                                 <h4>Price</h4>
                                             </div>
                                         </div>

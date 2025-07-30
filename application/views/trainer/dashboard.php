@@ -43,7 +43,7 @@ if ($dob) {
                 <div class="package-card">
                     <div class="package-card__body">
                         <div class="package-card__body__btn text-center">
-                            <a href="<?= base_url("trainer/assessment")?>" class="drivschol-btn w-100">Pay Now</a>
+                            <a href="<?= base_url("trainer/assessment")?>" class="drivschol-btn w-100">Trainer Assessment</a>
                         </div>
                     </div>
                 </div>
@@ -138,6 +138,11 @@ if ($dob) {
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="javascript:void(0)" onclick="completedClass(<?= @$getBookingData->id ?>, <?= @$course->id ?>)">Completed Class</a></li>
                                     <li><a class="dropdown-item" href="javascript:void(0);" onclick="courseNote(<?= @$getBookingData->id; ?>)">Notes</a></li>
+                                    <?php
+                                    $assessment_data = $this->db->query("SELECT * FROM assessments WHERE instructor = '".@$userData->id."' AND student = '".@$purchsedList->user_id."' AND session_type = '".@$course->id."'")->row();
+                                    if(!empty($assessment_data)) { ?>
+                                    <li><a class="dropdown-item" href="<?= base_url() ?>assessment_report?courseID=<?= base64_encode(@$course->id)?>&studentID=<?= base64_encode(@$purchsedList->user_id)?>&instructorID=<?= base64_encode(@$userData->id)?>" target="_blank">Assessment Report</a></li>
+                                    <?php } ?>
                                 </ul>
                             </div>
                         </td>

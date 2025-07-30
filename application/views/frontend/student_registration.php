@@ -1,5 +1,6 @@
 <?php
 $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'")->row();
+$site_setting = $this->db->query("select * from  settings")->row();
 ?>
 <section class="enrollPnl">
     <div class="container">
@@ -165,8 +166,12 @@ $getCourse = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'
                                 <td class="text-end">$ <?= $offer_price; ?></td>
                             </tr>
                             <tr>
+                                <td class="border-top fw-semibold">Tax :</td>
+                                <td class="border-top text-end h6 text-primary fw-semibold">$ <?= $site_setting->tax_amount; ?></td>
+                            </tr>
+                            <tr>
                                 <td class="border-top fw-semibold">You Pay	:</td>
-                                <td class="border-top text-end h6 text-primary fw-semibold">$ <?= $offer_price; ?></td>
+                                <td class="border-top text-end h6 text-primary fw-semibold" style="width: 80px !important;">$ <?= $offer_price + $site_setting->tax_amount; ?></td>
                             </tr>
                         </tbody>
                     </table>

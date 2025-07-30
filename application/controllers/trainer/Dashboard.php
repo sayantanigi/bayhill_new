@@ -589,6 +589,27 @@ class Dashboard extends CI_Controller {
             }
         }
     }
+    public function assessment_report() {
+        $student_id = base64_decode($this->input->get('studentID'));
+        $course_id = base64_decode($this->input->get('courseID'));
+        $instructor_id = base64_decode($this->input->get('instructorID'));
+        $assessment_data = $this->db->query("SELECT * FROM assessments WHERE instructor = '".@$instructor_id."' AND student = '".@$student_id."' AND session_type = '".@$course_id."'")->row();
+        $course_details = $this->db->query("SELECT * FROM courses WHERE id = '".$assessment_data->session_type."'")->row();
+        $student_details = $this->db->query("SELECT * FROM users WHERE id = '".$assessment_data->student."'")->row();
+        $trainer_details = $this->db->query("SELECT * FROM users WHERE id = '".$assessment_data->instructor."'")->row();
+        $data = array(
+            'title' => 'Bay Hill Driving School',
+            'page' => 'Assessment Report',
+            'subpage' => 'Assessment Report',
+            'assessment_data' => $assessment_data,
+            'course_details' => $course_details,
+            'student_details' => $student_details,
+            'trainer_details' => $trainer_details
+        );
+        $this->load->view('header', $data);
+        $this->load->view('trainer/assessment_report');
+        $this->load->view('footer');
+    }
     public function logout() {
 	    unset($_SESSION['bayhill']);
         $this->session->set_flashdata('message', 'You have logged out.');
