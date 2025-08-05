@@ -118,18 +118,10 @@
                 <div class="col-xl-12">
                     <div class="card custom-shadow rounded-lg border">
                         <div class="card-body">
-                            <div class="Calender_Pick" id="calendar">
-                                <!-- <div style="display: flex; flex-direction: row; justify-content: space-around; margin-top: 10px;">
-                                    <p style="margin: 0px !important;display: flex;align-items: center;">
-                                        <span style="background: #008000; display: inline-block; width: 10px; height: 10px; margin-right: 10px;">&nbsp;</span>
-                                        <span> Available</span>
-                                    </p>
-                                    <p style="margin: 0px !important;display: flex;align-items: center;">
-                                        <span style="background: #fe0000; display: inline-block; width: 10px; height: 10px; margin-right: 10px;"></span>
-                                        <span> Booked</span>
-                                    </p>
-                                </div> -->
+                            <div style="margin-bottom: 10px; display: flex; justify-content: flex-end;">
+                                <button id="addBookingBtn" type="button" class="fc-today-button fc-button fc-button-primary">Add New Booking</button>
                             </div>
+                            <div class="Calender_Pick" id="calendar"></div>
                         </div>
                     </div>
                 </div>
@@ -152,6 +144,152 @@
         </form>
     </div>
 </div>
+<div id="bookingModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdrop1Label" aria-hidden="true" style="display:none; position:fixed; z-index:99999; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.5); justify-content:center; align-items:center;">
+    <div style="background:#fff; padding:20px; border-radius:8px; min-width:300px; position:relative; max-height: 525px; overflow-x: scroll;">
+        <span id="closeModal" style="position:absolute; top:10px; right:15px; cursor:pointer; font-weight:bold;">&times;</span>
+        <h2>New Booking</h2>
+        <div class="col-lg-12 mb-3">
+            <div class="card shadow rounded">
+                <form id="bookingFromAdminDahhboard">
+                    <div class="card-body">
+                        <div class="col-12 d-flex">
+                            <div class="col-sm-6" style="padding: 0px 10px 0px 0px;">
+                                <div class="form-group mb-2">
+                                    <!-- <label class="fw-semibold  text-black">Email <span style="color:red">*</span></label> -->
+                                    <input type="email" class="form-control" placeholder="Enter Student Email" name="email" id="email" required autocomplete="off">
+                                </div>
+                                <small id="email_error"></small>
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex">
+                            <div class="col-sm-2" style="padding: 0px 10px 0px 0px;">
+                                <div class="form-group mb-2">
+                                    <!-- <label class="fw-semibold  text-black">Salutation <span style="color:red">*</span></label> -->
+                                    <select class="form-control" name="salutation" id="salutation" required disabled>
+                                        <option value="">Select Salutation</option>
+                                        <option value="Mr." aria-label="Mr.">Mr.</option>
+                                        <option value="Ms." aria-label="Ms.">Ms.</option>
+                                        <option value="Mrs." aria-label="Mrs.">Mrs.</option>
+                                        <option value="Miss." aria-label="Miss.">Miss.</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-5" style="padding: 0px 10px 0px 0px;">
+                                <div class="form-group mb-2">
+                                    <!-- <label class="fw-semibold  text-black">First Name <span style="color:red">*</span></label> -->
+                                    <input type="text" class="form-control" name="fname" id="fname" placeholder="Enter Student First Name" required autocomplete="off" readonly="readonly">
+                                </div>
+                                <small id="fname_error"></small>
+                            </div>
+                            <div class="col-sm-5" style="padding: 0px 10px 0px 0px;">
+                                <div class="form-group mb-2">
+                                    <!-- <label class="fw-semibold  text-black">Last Name <span style="color:red">*</span></label> -->
+                                    <input type="text" class="form-control" name="lname" id="lname" placeholder="Enter Student Last Name" required autocomplete="off" readonly="readonly">
+                                </div>
+                                <small id="lname_error"></small>
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex">
+                            <div class="col-sm-3" style="padding: 0px 10px 0px 0px;">
+                                <div class="form-group mb-2">
+                                    <!-- <label class="fw-semibold  text-black">Phone <span style="color:red">*</span></label> -->
+                                    <input type="number" class="form-control" name="phone" id="phone" placeholder="Enter Student Phone No." required autocomplete="off" readonly="readonly">
+                                </div>
+                                <small id="phone_error"></small>
+                            </div>
+                            <div class="col-sm-3" style="padding: 0px 10px 0px 0px;">
+                                <!-- <label class="fw-semibold  text-black">State</label> -->
+                                <select class="form-control" name="state" id="state" disabled>
+                                    <?php
+                                    $state_list = $this->db->query("SELECT * FROM states WHERE id = '1416'")->result();
+                                    if($state_list) {
+                                    foreach ($state_list as $state) { ?>
+                                    <option value="<?= $state->id?>"><?= $state->name?></option>
+                                    <?php } } ?>
+                                </select>
+                            </div>
+                            <div class="col-sm-3" style="padding: 0px 10px 0px 0px;">
+                                <!-- <label class="fw-semibold  text-black">City</label> -->
+                                <input type="text" class="form-control" placeholder="Enter City" name="city" id="city" readonly/>
+                            </div>
+                            <div class="col-sm-3" style="padding: 0px 10px 0px 0px;">
+                                <!-- <label class="fw-semibold  text-black">Zip Code</label> -->
+                                <input type="text" class="form-control" placeholder="Enter Zip Code" name="pincode" id="pincode" readonly>
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex">
+                            <div class="col-sm-12" style="padding: 0px 10px 0px 0px;">
+                                <div class="form-group mb-2">
+                                    <!-- <label class="fw-semibold  text-black">Street Address</label> -->
+                                    <input type="text" class="form-control" name="address" id="address" placeholder="Enter Street Adress" value="" readonly>
+                                </div>
+                                <small id="address_error"></small>
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex">
+                            <div class="col-sm-6" style="padding: 0px 10px 0px 0px;">
+                                <!-- <label class="fw-semibold text-black">Course List</label> -->
+                                <select class="form-control" name="courseList" id="courseList">
+                                    <option value="">Select Course</option>
+                                    <?php
+                                    $course_list = $this->db->query("SELECT * FROM courses WHERE status = '1' AND is_deleted='1'")->result();
+                                    if($course_list) {
+                                    foreach ($course_list as $course) { ?>
+                                    <option value="<?= $course->id?>"><?= $course->course_name.' '.$course->course_name1.' '.$course->course_name2?></option>
+                                    <?php } } ?>
+                                </select>
+                            </div>
+                            <div class="col-sm-6" style="padding: 0px 10px 0px 0px;">
+                                <div class="form-group mb-2">
+                                    <!-- <label class="fw-semibold text-black">Trainer List</label> -->
+                                    <select class="form-control" name="trainerList" id="trainerList">
+                                        <option value="">Select Trainer</option>
+                                        <?php
+                                        $trainer_list = $this->db->query("SELECT * FROM users WHERE user_type = '2'")->result();
+                                        if($trainer_list) {
+                                        foreach ($trainer_list as $trainer) { ?>
+                                        <option value="<?= $trainer->id?>"><?= $trainer->salutation.' '.$trainer->first_name.' '.$trainer->last_name?></option>
+                                        <?php } } ?>
+                                    </select>
+                                </div>
+                                <small id="address_error"></small>
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex">
+                            <div id="booking-container" style="width: 100%">
+                                <div class="booking-row row mb-2 w-100" style="padding: 10px 0 0 15px;">
+                                    <div class="col-sm-4" style="padding: 0px 10px 0px 0px;">
+                                        <label class="fw-semibold text-black">Booking Date</label>
+                                        <input type="date" class="form-control" name="bookingdate[]" />
+                                    </div>
+                                    <div class="col-sm-3" style="padding: 0px 10px 0px 0px;">
+                                        <label class="fw-semibold text-black">Booking From Time</label>
+                                        <input type="time" class="form-control" name="bookingfromtime[]" data-validation="time" data-validation-format="hh:mm"/>
+                                    </div>
+                                    <div class="col-sm-3" style="padding: 0px 10px 0px 0px;">
+                                        <label class="fw-semibold text-black">Booking To Time</label>
+                                        <input type="time" class="form-control" name="bookingtotime[]" data-validation="time" data-validation-format="hh:mm"/>
+                                    </div>
+                                    <div class="col-sm-2 d-flex align-items-end">
+                                        <button type="button" class="btn btn-success add-booking-row" style="width: 37px; height: 38px;">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mt-3 mb-2">
+                            <button class="btn btn-success text-uppercase px-5 shadow" id="addTrainerButton">Submit</button>
+                            <!-- <a class="btn btn-danger waves-effect waves-light m-l-30" href="javascript:history.go(-1)">Back</a> -->
+                            <input type="hidden" name="student_id" id="student_id">
+                            <input type="hidden" name="course_id" id="course_id">
+                            <input type="hidden" name="trainer_id" id="trainer_id">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div style="text-align: center;" id="submit_status"></div>
+        </div>
+    </div>
+</div>
 <style>
 span.fc-title {
     cursor: pointer !important;
@@ -171,6 +309,18 @@ span.fc-title {
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 <script>
+const modal = document.getElementById('bookingModal');
+const openBtn = document.getElementById('addBookingBtn');
+const closeBtn = document.getElementById('closeModal');
+
+openBtn.onclick = function() {
+    modal.style.display = 'flex';
+};
+
+closeBtn.onclick = function() {
+    modal.style.display = 'none';
+};
+
 document.addEventListener('DOMContentLoaded', function() {
     const calendarEl = document.getElementById('calendar');
     const myEvents = [
@@ -406,6 +556,104 @@ $("#search_by_mobile").on("keyup", function(){
         },
         error: function() {
             $("#search_by_mobile_results").html('<div class="text-danger">No result found</div>');
+        }
+    });
+});
+
+$('#email').on('blur', function(){
+    var email = $('#email').val();
+    $.ajax({
+        url: "<?= base_url('admin/getStudentDataForBooking')?>",
+        type: "POST",
+        data: { email: email },
+        dataType: "json",
+        success: function(response) {
+            //console.log(response.length);
+            if(response.length > 0) {
+                $('#salutation').prop('disabled', true);
+                $('#fname, #lname, #phone, #state, #city, #pincode, #address').prop('readonly', true);
+                $('#salutation').val(response[0].salutation);
+                $('#fname').val(response[0].first_name);
+                $('#lname').val(response[0].last_name);
+                $('#phone').val(response[0].phone);
+                $('#state').val(response[0].state);
+                $('#city').val(response[0].city);
+                $('#pincode').val(response[0].zipcode);
+                $('#address').val(response[0].address);
+                $('#student_id').val(response[0].id);
+            } else {
+                $('#salutation').prop('disabled', false);
+                $('#fname, #lname, #phone, #state, #city, #pincode, #address').prop('readonly', false);
+                $('#salutation, #fname, #lname, #phone, #city, #pincode, #address, #courseList, #trainerList, #student_id').val('');
+            }
+        },
+        error: function() {
+            $('#salutation').prop('disabled', false);
+            $('#fname, #lname, #phone, #state, #city, #pincode, #address').prop('readonly', false);
+            $('#salutation, #fname, #lname, #phone, #city, #pincode, #address, #courseList, #trainerList, #student_id').val('');
+        }
+    });
+})
+
+$('#courseList').on('change', function(){
+    $('#course_id').val($(this).val());
+})
+
+$('#trainerList').on('change', function(){
+    $('#trainer_id').val($(this).val());
+})
+
+$(document).ready(function() {
+    // Handle Add More
+    $('#booking-container').on('click', '.add-booking-row', function() {
+        var newRow = `
+        <div class="booking-row row mb-2 w-100" style="padding: 10px 0 0 15px;">
+            <div class="col-sm-4" style="padding: 0px 10px 0px 0px;">
+                <input type="date" class="form-control" name="bookingdate[]" />
+            </div>
+            <div class="col-sm-3" style="padding: 0px 10px 0px 0px;">
+                <input type="time" class="form-control" name="bookingfromtime[]" data-validation="time" data-validation-format="hh:mm"/>
+            </div>
+            <div class="col-sm-3" style="padding: 0px 10px 0px 0px;">
+                <input type="time" class="form-control" name="bookingtotime[]" data-validation="time" data-validation-format="hh:mm"/>
+            </div>
+            <div class="col-sm-2 d-flex align-items-end">
+                <button type="button" class="btn btn-danger remove-booking-row" style="width: 37px; height: 38px;">-</button>
+            </div>
+        </div>`;
+        $('#booking-container').append(newRow);
+    });
+
+    // Handle Remove Row
+    $('#booking-container').on('click', '.remove-booking-row', function() {
+        $(this).closest('.booking-row').remove();
+    });
+});
+
+$('#bookingFromAdminDahhboard').submit(function(e) {
+    e.preventDefault();
+    var formData = new FormData(this);
+    $.ajax({
+        type: "POST",
+        url: "<?= base_url('admin/save_booking')?>",
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            // Handle server response (success/failure)
+            response = JSON.parse(response);
+            if(response.status === 'success'){
+                $('#submit_status').text(response.message).css('color', 'green');
+                setTimeout(() => {
+                    location.reload();
+                }, 3000);
+            } else {
+                $('#submit_status').text('An error occurred. Please try again.').css('color', 'red');
+            }
+        },
+        error: function(xhr) {
+            $('#submit_status').text('An error occurred. Please try again.').css('color', 'greeredn');
         }
     });
 });

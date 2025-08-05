@@ -200,4 +200,106 @@ class Dashboard extends CI_Controller {
         }
         exit;
     }
+    public function getStudentDataForBooking() {
+        $email = $this->input->post('email');
+        $inputval_escaped = $this->db->escape_like_str($email);
+        $sql = "SELECT * FROM users WHERE email LIKE ? AND user_type = '1' AND status = '1' AND email_verify_status = '1'";
+        $like = "%$inputval_escaped%";
+        $getstudentdata = $this->db->query($sql, array($like))->result();
+        header('Content-Type: application/json');
+        if(!empty($getstudentdata)){
+            $response = [];
+            foreach($getstudentdata as $student){
+                $response[] = [
+                    'id' => $student->id,
+                    'salutation' => trim(@$student->salutation),
+                    'first_name' => trim(@$student->first_name),
+                    'last_name' => trim(@$student->last_name),
+                    'phone' => @$student->phone,
+                    'state' => @$student->state,
+                    'city' => @$student->city,
+                    'zipcode' => @$student->zipcode,
+                    'address' => @$student->address,
+                ];
+            }
+            echo json_encode($response);
+        } else {
+            echo json_encode([]);
+        }
+        exit;
+    }
+    public function save_booking() {
+        $email = $this->input->post('email');
+        $salutation = $this->input->post('salutation');
+        $fname = $this->input->post('fname');
+        $lname = $this->input->post('lname');
+        $phone = $this->input->post('phone');
+        $state = $this->input->post('state');
+        $city = $this->input->post('city');
+        $pincode = $this->input->post('pincode');
+        $address = $this->input->post('address');
+        $course_id = $this->input->post('courseList');
+        $trainer_id = $this->input->post('trainerList');
+
+        $booking_dates = $this->input->post('bookingdate');
+        $bookingfromtimes = $this->input->post('bookingfromtime');
+        $bookingtotimes = $this->input->post('bookingtotime');
+
+        $user_row = $this->db->get_where('users', ['email' => $email])->row();
+        if(!$user_row) {
+            $student_data = [
+                'salutation' => $salutation,
+                'first_name' => $fname,
+                'last_name'  => $lname,
+                'email' => $email,
+                'phone' => $phone,
+                'state' => $state,
+                'city' => $city,
+                'pincode' => $pincode,
+                'address_line1' => $address,
+                'user_type' => 1, // assuming '1' means student
+                'created_at' => date('Y-m-d H:i:s'),
+            ];
+            $this->db->insert('users', $student_data);
+            $student_id = $this->db->insert_id();
+        } else {
+            $student_id = $user_row->id;
+        }
+        $course_details = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'")->row();
+        if(!empty($course_details->offer_price)){
+            $course_price = $course_details->offer_price;
+        } else {
+            $course_price = $course_details->course_price;
+        }
+        $settings = $this->db->query("SELECT * FROM settings")->row();
+        $booking_data = [
+            'user_id' => $student_id,
+            'course_id'  => $course_id,
+            'price'  => number_format((float)$course_price, 2, '.', ''),
+            'tax'  => number_format((float)$settings->tax_amount, 2, '.', ''),
+            'total_payment'  => number_format((float)($course_price + $settings->tax_amount), 2, '.', ''),
+            'trainer_id' => $trainer_id,
+            'created_at' => date('Y-m-d H:i:s'),
+            'status' => '0',
+        ];
+        $this->db->insert('booking', $booking_data);
+
+        $booking_id = $this->db->insert_id();
+        if (!empty($booking_dates)) {
+            foreach ($booking_dates as $index => $date) {
+                if ($date && !empty($bookingfromtimes[$index])) {
+                    $detail_data = [
+                        'booking_id' => $booking_id,
+                        'booking_date' => $date,
+                        'booking_time' => date('h:i a', strtotime($bookingfromtimes[$index]))." - ".date('h:i a', strtotime($bookingtotimes[$index])),
+                        'trainer_id' => $trainer_id,
+                        'status' => '1',
+                    ];
+                    $this->db->insert('booking_details', $detail_data);
+                }
+            }
+        }
+        echo json_encode(['status' => 'success', 'message' => 'Booking saved successfully.']);
+        exit;
+    }
 }

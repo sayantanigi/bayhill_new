@@ -75,7 +75,7 @@ p strong{font-weight: 600 !important; color: black !important;}
                                         </tr>
                                         <tr>
                                             <th>Trainer Details</th>
-                                            <td>
+                                            <td style=" display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between; align-items: center; ">
                                                 <?php if(!empty($trainer_details)) { ?>
                                                 <div>
                                                     <p style="margin: 0;"><strong>Name: </strong><?= $trainer_details->salutation." ".$trainer_details->first_name." ".$trainer_details->last_name; ?></p>
@@ -94,7 +94,11 @@ p strong{font-weight: 600 !important; color: black !important;}
                                             <th>Transaction Details: </th>
                                             <td>
                                                 <p style="margin: 0;"><strong>Transaction ID: </strong><?= $booking_data->transaction_id; ?></p>
-                                                <p style="margin: 0;"><strong>Transaction Date: </strong><?= date('d-m-Y', strtotime($booking_data->transaction_date)); ?></p>
+                                                <p style="margin: 0;"><strong>Transaction Date: </strong>
+                                                    <?php if(!empty($booking_data->transaction_date)) {
+                                                        echo date('d-m-Y', strtotime($booking_data->transaction_date));
+                                                    } ?>
+                                                </p>
                                                 <p style="margin: 0;"><strong>Price: </strong><?= "$".$booking_data->price; ?></p>
                                                 <p style="margin: 0;"><strong>Tax: </strong><?= "$".$booking_data->tax; ?></p>
                                                 <p style="margin: 0;"><strong>Total Payment: </strong><?= "$".$booking_data->total_payment; ?></p>
@@ -102,7 +106,7 @@ p strong{font-weight: 600 !important; color: black !important;}
                                         </tr>
                                         <tr>
                                             <th>Status</th>
-                                            <td><?php if($booking_data->status == '1') {echo "Active";} else {echo "Canceled";}?></td>
+                                            <td><?php if($booking_data->status == '0') {echo "Pending";} else if($booking_data->status == '1'){echo "Success";} else if($booking_data->status == '1'){echo "Failed";} else {echo "Canceled";}?></td>
                                         </tr>
                                     </tbody>
                                 </table>
