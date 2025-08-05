@@ -212,9 +212,9 @@ class Dashboard extends CI_Controller {
             foreach($getstudentdata as $student){
                 $response[] = [
                     'id' => $student->id,
-                    'salutation' => trim(@$student->salutation),
-                    'first_name' => trim(@$student->first_name),
-                    'last_name' => trim(@$student->last_name),
+                    'salutation' => @$student->salutation,
+                    'first_name' => @$student->first_name,
+                    'last_name' => @$student->last_name,
                     'phone' => @$student->phone,
                     'state' => @$student->state,
                     'city' => @$student->city,
@@ -228,6 +228,7 @@ class Dashboard extends CI_Controller {
         }
         exit;
     }
+
     public function save_booking() {
         $email = $this->input->post('email');
         $salutation = $this->input->post('salutation');
@@ -248,6 +249,8 @@ class Dashboard extends CI_Controller {
         $user_row = $this->db->get_where('users', ['email' => $email])->row();
         if(!$user_row) {
             $student_data = [
+                'unique_code' => random_int(100000, 999999),
+                'user_type' => '1',
                 'salutation' => $salutation,
                 'first_name' => $fname,
                 'last_name'  => $lname,
@@ -255,9 +258,11 @@ class Dashboard extends CI_Controller {
                 'phone' => $phone,
                 'state' => $state,
                 'city' => $city,
-                'pincode' => $pincode,
-                'address_line1' => $address,
-                'user_type' => 1, // assuming '1' means student
+                'zipcode' => $pincode,
+                'address' => $address,
+                'status' => '1',
+                'email_verify_status' => '1',
+                'password' => base64_encode('12345678'),
                 'created_at' => date('Y-m-d H:i:s'),
             ];
             $this->db->insert('users', $student_data);

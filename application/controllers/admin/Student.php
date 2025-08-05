@@ -93,7 +93,7 @@ class Student extends CI_Controller {
                 'coverImage' => $cimage,
                 'status' => $this->input->post('status'),
                 'email_verify_status' => $this->input->post('email_verify_status'),
-                'password' => md5($this->input->post('password')),
+                'password' => base64_encode($this->input->post('password')),
                 'created_at' => date('Y-m-d H:i:s')
             );
             $result = $this->Adminmodel->add('users', $data);
