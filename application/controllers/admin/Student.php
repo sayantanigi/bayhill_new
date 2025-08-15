@@ -207,10 +207,64 @@ class Student extends CI_Controller {
         );
         $studentID = base64_decode($id);
         $data['studentData'] = $this->db->query("SELECT * FROM users WHERE id = '".$studentID."'")->row();
+        $data['getPurchasedCourseList'] = $this->db->query("SELECT * FROM booking WHERE user_id = '".$studentID."' ORDER BY id DESC")->result();
         $this->load->view('admin/header', $data);
         $this->load->view('admin/sidebar');
         $this->load->view('admin/student/student_details');
         $this->load->view('admin/footer');
+    }
+    public function BookigData() {
+        $booking_id = $this->input->post('booking_id');
+        $course_id = $this->input->post('courseId');
+        $student_id = $this->input->post('student_id');
+        $course = $this->db->query("SELECT * FROM courses WHERE id = '".$course_id."'")->row();
+        $getBookingData = $this->db->query("SELECT * FROM booking WHERE user_id = '".@$student_id."' AND course_id = '".@$course_id."'")->row();
+        if(empty($getBookingData->transaction_id)){
+            $getBookingSlots = $this->db->query("SELECT * FROM booking_details WHERE booking_id = '".@$getBookingData->id."'")->result();
+            if($course->course_class > count($getBookingSlots)) { ?>
+            <div class="package-card__body__btn text-center" style="margin-top: 10px; !important;">
+                <a href="<?= base_url() ?>booking_slot?course_code=<?= base64_encode($course->course_code)?>&uid=<?= base64_encode(@$student_id)?>&bookingid=<?= base64_encode($getBookingData->id)?>" class="drivschol-btn w-100">Book slot for pending classes</a>
+                <div class="col-lg-12 col-md-12" style="text-align: center; margin-top: 15px;border: 1px solid #f59b24;border-radius: 18px; display: block !important; visibility: visible !important;">
+                    <div style="margin-left: 10px;">
+                    <?php
+                    if(!empty($getBookingSlots)) {
+                        $i = 1;
+                        foreach ($getBookingSlots as $slot) {
+                        if($slot->status == "1") { ?>
+                        <p style="margin: 0px; font-size: 14px; color:#f59b24;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time."(Pending)"; ?></p>
+                        <?php } else if($slot->status == "2") { ?>
+                        <p style="margin: 0px; font-size: 14px; color:red;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time."(Canceled)"; ?></p>
+                        <?php } else { ?>
+                        <p style="margin: 0px; font-size: 14px; color:green;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time."(Completed)"; ?></p>
+                        <?php } ?>
+                    <?php $i++; } } ?>
+                    </div>
+                </div>
+            </div>
+            <?php } else { ?>
+            <div class="col-lg-12 col-md-12" style="text-align: center; margin-top: 15px;border: 1px solid #f59b24;border-radius: 18px; display: block !important; visibility: visible !important;">
+                <div style="margin-left: 10px;">
+                <?php
+                if(!empty($getBookingSlots)) {
+                    $i = 1;
+                    foreach ($getBookingSlots as $slot) {
+                        if($slot->status == "1") { ?>
+                        <p style="margin: 0px; font-size: 14px; color:#f59b24;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time."(Pending)"; ?></p>
+                        <?php } else if($slot->status == "2") { ?>
+                        <p style="margin: 0px; font-size: 14px; color:red;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time."(Canceled)"; ?></p>
+                        <?php } else { ?>
+                        <p style="margin: 0px; font-size: 14px; color:green;">Slot-<?= $i.": ".date('d-m-Y', strtotime($slot->booking_date))." ".$slot->booking_time."(Completed)"; ?></p>
+                        <?php } ?>
+                <?php $i++; } } ?>
+                </div>
+            </div>
+            <?php }
+        } else { ?>
+        <div class="package-card__body__btn text-center" style="margin-top: 10px; !important;">
+            <a href="javascript:void(0)" onclick="completePayment(<?= @$getBookingData->id ?>)" class="drivschol-btn w-100">Book slot for pending classes</a>
+        </div>
+        <div class="completePayment_<?= @$getBookingData->id ?>" style="display: none;text-align: left; margin-top: 20px; color: #ed1c24; font-size: 15px;">Please complete your payment first for this course to book pending slots.</div>
+        <?php }
     }
     public function changestatus() {
         if ($this->input->post('id')) {

@@ -8,7 +8,7 @@ class Cms extends CI_Controller {
     public function about_us() {
         $data = array(
             'title' => 'About Us',
-            'page' => 'CMS',
+            'page' => 'CMS - About Us',
             'subpage' => 'about_us'
         );
         $data['aboutUs'] = $this->db->query("select * from about_us where slug = 'about'")->row();
@@ -103,7 +103,7 @@ class Cms extends CI_Controller {
     public function contact_us() {
         $data = array(
             'title' => 'Contact Us',
-            'page' => 'CMS',
+            'page' => 'CMS - Contact Us',
             'subpage' => 'contact_us'
         );
         $data['contactUs'] = $this->db->query("select * from about_us where slug = 'contact'")->row();
@@ -183,7 +183,7 @@ class Cms extends CI_Controller {
     public function privacy() {
         $data = array(
             'title' => 'Privacy Policy',
-            'page' => 'cms',
+            'page' => 'CMS - Privacy Policy',
             'subpage' => 'privacy_policy'
         );
         $data['aboutUs'] = $this->db->query("select * from about_us where status = '1' and slug = 'privacy'")->row();
@@ -233,7 +233,7 @@ class Cms extends CI_Controller {
     public function terms() {
         $data = array(
             'title' => 'Terms & Condition',
-            'page' => 'cms',
+            'page' => 'CMS - Terms & Condition',
             'subpage' => 'terms'
         );
         $data['aboutUs'] = $this->db->query("select * from about_us where status = '1' and slug = 'term'")->row();
@@ -283,7 +283,7 @@ class Cms extends CI_Controller {
     public function home_block() {
         $data = array(
             'title' => 'Home Page Block',
-            'page' => 'cms',
+            'page' => 'CMS - Home Page Block',
             'subpage' => 'home_block'
         );
         $data['aboutUs'] = $this->db->query("select * from home_block where status = '1'")->row();
@@ -402,16 +402,16 @@ class Cms extends CI_Controller {
     public function help() {
         $data = array(
             'title' => 'Help & Support',
-            'page' => 'cms',
+            'page' => 'CMS - Help & Support',
             'subpage' => 'help'
         );
-        $data['help'] = $this->db->query("select * from about_us where status = '1' and slug = 'help'")->row();
+        $data['help'] = $this->db->query("select * from about_us where status = '1' and slug = 'support'")->row();
         $this->load->view('admin/header', $data);
         $this->load->view('admin/sidebar');
         $this->load->view('admin/help');
         $this->load->view('admin/footer');
     }
-    function saveHelp() {
+    public function saveHelp() {
         $id = $this->input->post('id');
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $this->form_validation->set_rules('heading', 'Heading', 'required|trim');
@@ -430,7 +430,7 @@ class Cms extends CI_Controller {
                     $result = $this->Adminmodel->update($data, 'about_us', array('id' => $id));
                     if ($result) {
                         $response['status'] = 1;
-                        $response['message'] = 'Help & Support us updated successfully.';
+                        $response['message'] = 'Help & Support updated successfully.';
                     } else {
                         $response['status'] = 0;
                         $response['message'] = 'Some error ocure.Please try again.';

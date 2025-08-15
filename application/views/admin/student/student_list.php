@@ -70,6 +70,9 @@ p strong{font-weight: 600 !important; color: black !important;}
                                                         <a href="<?= base_url('admin/student/edit_student/' . $v->id) ?>" class="btn btn-outline-success btn-sm" data-toggle="tooltip" title="Edit">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
+                                                        <a href="<?= base_url('admin/student/student_details/'.base64_encode($v->id)) ?>" class="btn btn-outline-success btn-sm" data-toggle="tooltip" title="View">
+                                                            <i class="fas fa-eye"></i>
+                                                        </a>
                                                         <a href="javascript:void(0)" class="btn btn-outline-warning btn-sm" data-toggle="tooltip" title="Delete"  onclick="deleteDeals(<?= @$v->id ?>)">
                                                             <i class="fa fa-trash"></i>
                                                         </a>

@@ -57,7 +57,7 @@ body{margin-top:20px}
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-6 mb-0">
+                        <div class="col-lg-4 mb-0">
                             <div class="card shadow rounded">
                                 <div class="card-body">
                                     <div class="row">
@@ -175,9 +175,151 @@ body{margin-top:20px}
                                 </div>
                             </div>
                         </div>
+                        <div class="col-lg-8 mb-0">
+                            <div class="card shadow rounded">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="mt-3 purchased-table">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>SL No</th>
+                                                        <th>Course Name</th>
+                                                        <th>Price</th>
+                                                        <th>Discount</th>
+                                                        <th>To be Paid</th>
+                                                        <th>Trainer</th>
+                                                        <th>Payment</th>
+                                                        <th>Status</th>
+                                                        <th>View Slot</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php
+                                                    if (!empty($getPurchasedCourseList)) {
+                                                        $i = 1;
+                                                    foreach ($getPurchasedCourseList as $purchsedList) {
+                                                    $course = $this->db->query("SELECT * FROM courses WHERE id = '".$purchsedList->course_id."'")->row();
+                                                    ?>
+                                                    <tr>
+                                                        <td><?= $i; ?></td>
+                                                        <td class="fw-bold align-middle">
+                                                            <p style="margin: 0px;"><?= $course->course_name; ?> <br/><?= $course->course_name1; ?></p>
+                                                            <!-- <a href="<?= base_url('course/course_details?course_code='.base64_encode($course->course_code))?>" class="text-warning fw-bold">Read More <i class="fas fa-arrow-right"></i></a>
+                                                            <p>Booked Classes: <?php $getBookingData = $this->db->query("SELECT * FROM booking WHERE user_id = '".@$studentData->id."' AND course_id = '".@$purchsedList->course_id."'")->row();
+                                                            if(!empty($getBookingData->transaction_id)){
+                                                                $getBookingSlots = $this->db->query("SELECT * FROM booking_details WHERE booking_id = '".@$getBookingData->id."'")->result();
+                                                                echo count($getBookingSlots)."/".$course->course_class;
+                                                            } ?>
+                                                            </p> -->
+                                                        </td>
+                                                        <td>
+                                                            <p>
+                                                                <?php if(!empty($course->course_price)) {
+                                                                    echo "$".$course->course_price;
+                                                                } else {
+                                                                    echo "Free";
+                                                                } ?>
+                                                            </p>
+                                                        </td>
+                                                        <td>
+                                                            <p><?= "$".$course->course_price - $course->offer_price; ?></p>
+                                                        </td>
+                                                        <td>
+                                                            <p>
+                                                                <?php if(!empty($course->offer_price)) {
+                                                                    echo "$".$course->offer_price;
+                                                                } else {
+                                                                    echo "$".$course->course_price;
+                                                                } ?>
+                                                            </p>
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <?php if(!empty($purchsedList->trainer_id)) {
+                                                            $getTrainer = $this->db->query("SELECT * FROM users WHERE id = '".$purchsedList->trainer_id."'")->row();
+                                                            echo $getTrainer->salutation." ".$getTrainer->first_name." ".$getTrainer->last_name;
+                                                            } else {
+                                                                echo "Trainer Not Assigned";
+                                                            } ?>
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <?php if($purchsedList->status != '1') {
+                                                                echo '<i class="fas fa-exclamation me-2 text-pending" style="background: #fdc12d; width: 25px; border-radius: 50px; height: 25px; display: flex; flex-direction: row; justify-content: center; align-items: center; color: #fff !important;"></i>';
+                                                                echo "Pending";
+                                                            } else {
+                                                                echo '<i class="fas fa-check-circle me-2 text-success"></i>';
+                                                                echo "Active";
+                                                            } ?>
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <?php
+                                                            $getBookingData = $this->db->query("SELECT * FROM booking WHERE user_id = '".@$studentData->id."' AND course_id = '".@$course->id."'")->row();
+                                                            if($getBookingData->status == '0') {
+                                                                echo '<i class="fas fa-exclamation me-2 text-pending" style="background: #fdc12d; width: 25px; border-radius: 50px; height: 25px; display: flex; flex-direction: row; justify-content: center; align-items: center; color: #fff !important;"></i>';
+                                                                echo "Pending";
+                                                            } else if($getBookingData->status == '1') {
+                                                                echo '<i class="fas fa-check-circle me-2 text-success"></i>';
+                                                                echo "Active";
+                                                            } else {
+                                                                echo '<i class="fa fa-close me-2 text-danger" style="background: red; width: 25px; border-radius: 50px; height: 25px; display: flex; flex-direction: row; justify-content: center; align-items: center; color: #fff !important;">&#xf00d;</i>';
+                                                                echo "Inactive";
+                                                            }
+                                                            ?>
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="bookedSlotData(<?= @$getBookingData->id ?>, <?= @$course->id ?>, <?= @$studentData->id ?>)" style="background: #f1a728; color: #fff; padding: 8px 15px 8px 15px; border-radius: 10px;">View Slots</a>
+                                                        </td>
+                                                    </tr>
+                                                    <?php $i++; } } else { ?>
+                                                    <tr>No course purchased yet.</tr>
+                                                    <?php } ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
         </div>
     </div>
+    <div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdrop1Label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fw-bold fs-5" id="staticBackdropLabel">Booking Details</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3" id="bookedSlotDataContent">
+                    </div>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
 </div>
+<script>
+function bookedSlotData(bookingId, courseId, student_id) {
+    $('#staticBackdrop1').modal('show');
+    $.ajax({
+        url: '<?= base_url("admin/Student/BookigData") ?>',
+        type: 'POST',
+        data: {
+            booking_id: bookingId,
+            courseId: courseId,
+            student_id: student_id,
+        },
+        dataType: 'html',
+        success: function(response) {
+            $('#bookedSlotDataContent').empty();
+            $('#bookedSlotDataContent').html(response);
+        },
+        error: function() {
+            alert('An error occurred while submitting you note');
+        }
+    });
+}
+</script>

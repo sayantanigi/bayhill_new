@@ -86,8 +86,16 @@ $site_setting = $this->db->query("select * from  settings")->row();
                         </div>
                     </div>
                 </div>
+
             </div>
         </form>
+        <div class="col-lg-12 mb-4">
+            <div class="p-lg-5 p-4 shadow-lg rounded-4">
+                <div class="row">
+                    <img src="<?= base_url('uploads/qr-bayhill.png')?>" >
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 <script>

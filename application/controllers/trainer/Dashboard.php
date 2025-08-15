@@ -205,10 +205,15 @@ class Dashboard extends CI_Controller {
     function getDateForWeekDay($startingDate, $weekDay) {
         $startDate = new DateTime($startingDate);
         $currentWeekDay = $startDate->format('l');
-        $diffDays = (new DateTime($weekDay))->diff($startDate)->days;
-        $daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+        $daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
         $currentDayIndex = array_search($currentWeekDay, $daysOfWeek);
         $targetDayIndex = array_search($weekDay, $daysOfWeek);
+
+        if ($currentDayIndex === false || $targetDayIndex === false) {
+            return $startDate->format('Y-m-d'); // fallback to starting date if weekday is invalid
+        }
+
         $daysToAdd = ($targetDayIndex - $currentDayIndex + 7) % 7;
         $date = clone $startDate;
         $date->modify("+$daysToAdd days");
@@ -216,6 +221,15 @@ class Dashboard extends CI_Controller {
     }
     function isEmptyWeekDay($weekDay) {
         //return empty(@$weekDay['day']) && empty(array_filter(@$weekDay['fromtime'])) && empty(array_filter(@$weekDay['totime']));
+        if (!is_array($weekDay)) {
+            return true;
+        }
+
+        $day = $weekDay['day'] ?? '';
+        $fromtime = isset($weekDay['fromtime']) ? array_filter($weekDay['fromtime']) : [];
+        $totime = isset($weekDay['totime']) ? array_filter($weekDay['totime']) : [];
+
+        return empty($day) && empty($fromtime) && empty($totime);
     }
     function getWeekdayNumber($weekday) {
         $weekdays = [
@@ -223,20 +237,18 @@ class Dashboard extends CI_Controller {
             'Tuesday' => 2,
             'Wednesday' => 3,
             'Thursday' => 4,
-            'Friday' => 5,
-            'Saturday' => 6,
-            'Sunday' => 7
+            'Friday' => 5
         ];
-        if (isset($weekdays[$weekday])) {
-            return $weekdays[$weekday];
-        } else {
-            return 1; // Default to Monday
-        }
+        return $weekdays[$weekday] ?? 1; // Default to Monday
     }
     function utcDateTime($dateTimeInput, $inputTimezone) {
-        $dateTime = new DateTime($dateTimeInput, new DateTimeZone($inputTimezone));
-        $dateTime->setTimezone(new DateTimeZone('UTC'));
-        return $dateTime->format('Y-m-d H:i:s');
+        try {
+            $dateTime = new DateTime($dateTimeInput, new DateTimeZone($inputTimezone));
+            $dateTime->setTimezone(new DateTimeZone('UTC'));
+            return $dateTime->format('Y-m-d H:i:s');
+        } catch (Exception $e) {
+            return null; // return null if invalid date or timezone
+        }
     }
     public function create_availability() {
         $action_id = $_POST['action_id'];
@@ -244,15 +256,21 @@ class Dashboard extends CI_Controller {
         if($action_id == '1') {
             $this->db->query("DELETE FROM trainer_availability WHERE user_id = '".$user_id."' AND is_datewise = '0' AND is_booked = '0'");
         }
-        $this->db->query("UPDATE users SET timeZone = '".$_POST['timeZone']."' WHERE id = '".$user_id."'");
+
+        if ($user_id && isset($_POST['timeZone'])) {
+            $this->db->query("UPDATE users SET timeZone = '".$_POST['timeZone']."' WHERE id = '".$user_id."'");
+        }
+
         $outputArray = [];
         $weekDays = ['weekDay1', 'weekDay2', 'weekDay3', 'weekDay4', 'weekDay5'];
         $fromTimes = ['fromtime1', 'fromtime2','fromtime3', 'fromtime4','fromtime5'];
         $toTimes = ['totime1', 'totime2','totime3', 'totime4','totime5'];
+
         for ($i = 0; $i < count($weekDays); $i++) {
-            $weekDay = $_POST[$weekDays[$i]];
-            $fromTime = $_POST[$fromTimes[$i]];
-            $toTime = $_POST[$toTimes[$i]];
+            $weekDay = $_POST[$weekDays[$i]] ?? ''; // Avoid undefined index
+            $fromTime = $_POST[$fromTimes[$i]] ?? [];
+            $toTime   = $_POST[$toTimes[$i]] ?? [];
+
             $outputArray[$i]['weekDay'] = [
                 'date' => $this->getDateForWeekDay($_POST['starting_date'], $weekDay),
                 'day' => $weekDay,
@@ -264,8 +282,8 @@ class Dashboard extends CI_Controller {
                 'user_id' => $user_id,
             ];
         }
-        $output = $outputArray;
-        $filteredArray = array_filter($output, function($item) {
+
+        $filteredArray = array_filter($outputArray, function($item) {
             return !$this->isEmptyWeekDay($item['weekDay']);
         });
         $filteredArray = array_values($filteredArray);

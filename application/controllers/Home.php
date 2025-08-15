@@ -213,7 +213,7 @@ class Home extends CI_Controller {
                 try {
                     //Server settings
                     $mail->CharSet = 'UTF-8';
-                    $mail->SetFrom('info@bayhilldrivingschool.com', $get_setting->title);
+                    $mail->SetFrom($get_setting->smtp_email, $get_setting->title);
                     $mail->AddAddress($this->input->post('email'));
                     $mail->IsHTML(true);
                     $mail->Subject = 'Registration Confirmation From '.$get_setting->title;
@@ -227,7 +227,12 @@ class Home extends CI_Controller {
                     $mail->Port = $get_setting->smtp_port; //587 465
                     $mail->Username = $get_setting->smtp_email;
                     $mail->Password = base64_decode($get_setting->smtp_pass);
-                    $mail->send();
+                    if(!$mail->send()){
+                        $message = "Dear ".@$fullName.", You have successfully registered. Thank you for registration.";
+                        $this->sendSMSToUser($getUserData->phone, $message);
+                    } else {
+                        echo $e->getMessage();
+                    }
                 } catch (Exception $e) {
                     echo $e->getMessage(); //Boring error messages from anything else!
                     //exit();
@@ -471,7 +476,7 @@ class Home extends CI_Controller {
         $mail = new PHPMailer(true);
         try {
             $mail->CharSet = 'UTF-8';
-            $mail->SetFrom('info@bayhilldrivingschool.com', $get_setting->title);
+            $mail->SetFrom($get_setting->smtp_email, $get_setting->title);
             $mail->AddAddress($trainerEmail);
             $mail->IsHTML(true);
             $mail->Subject = 'You’ve Been Assigned to Train: '.$courseName;
@@ -485,7 +490,7 @@ class Home extends CI_Controller {
             $mail->Username = $get_setting->smtp_email;
             $mail->Password = base64_decode($get_setting->smtp_pass);
             $mail->send();
-            $this->sendEmailToUser($userfullName, $userEmail, $courseName, $trainerfullName);
+            $this->sendEmailToUser($userName, $userEmail, $courseName, $trainerfullName);
         } catch (Exception $e) {
             echo $e->getMessage();
         }
@@ -508,12 +513,13 @@ class Home extends CI_Controller {
         if(isset($get_setting->phone)) {
             $phone = " / ".$get_setting->phone;
         }
+        $getuserdata = $this->db->query("SELECT * FROM users WHERE email = '".$userEmail."'")->row();
         $message = "<body><div style='width:100%;margin: 0 auto;background: #fff; border: 1px solid #e6e6e6;'><div style='padding: 30px 30px 15px 30px;box-sizing: border-box;'><img src='cid:Logo' style='width:100px;float: right;margin-top: 0 auto;'><h3 style='padding-top:40px; line-height: 30px;'>Greetings from<span style='font-weight: 900;font-size: 25px;color: #014599; display: block;'>$get_setting->title</span></h3><p style='font-size: 17px; margin: 0;'>Hello $userfullName,</p><p style='font-size: 17px; margin: 5px 0 0 0;'>We’re pleased to inform you that a trainer has been assigned to your course <b>$courseName</b>.</p><p style='font-size: 17px; margin: 5px 0 0 0;'>Your trainer will guide you through the learning process and be available to support you with any questions or challenges during the course.</p><p style='font-size: 17px; margin: 5px 0 0 0;'>Please login to your <a href='".base_url('login')."'><b>Dashboard</b></a> for further information.</p><p style='font-size: 17px; margin: 5px 0 0 0;'>You’re all set! You’ll receive further updates and important information shortly.</p><p style='font-size: 17px; margin: 10px 0 0 0;'>If you have any questions, feel free to reply to this email or contact us at <b>$get_setting->email $phone</b>.</p><p style='font-size: 17px; margin: 5px 0 0 0;'>Thank you!</p><p style='font-size: 17px; margin: 5px 0 0 0; list-style: none;'>Sincerly</p><p style='list-style: none;margin: 5px 0 0 0;font-size: 15px;'><b>$get_setting->title</b></p><p style='list-style: none;margin: 5px 0 0 0;font-size: 10px;'><b>Visit us:</b> <span>$get_setting->address</span></p><p style='list-style: none;margin: 5px 0 0 0;font-size: 10px;'><b>Email us:</b> <span>$get_setting->email</span></p><p style='list-style: none;margin: 5px 0 0 0;font-size: 10px;'><b>Call us:</b> <span>$get_setting->phone</span></p></div><table style='width: 100%;'><tr><td style='height:30px;width:100%; background: red;padding: 10px 0px; font-size:13px; color: #fff; text-align: center;'>Copyright &copy; <?=date('Y')?> $get_setting->title. All rights reserved.</td></tr></table></body>";
         require 'vendor/autoload.php';
         $mail = new PHPMailer(true);
         try {
             $mail->CharSet = 'UTF-8';
-            $mail->SetFrom('info@bayhilldrivingschool.com', $get_setting->title);
+            $mail->SetFrom($get_setting->smtp_email, $get_setting->title);
             $mail->AddAddress($userEmail);
             $mail->IsHTML(true);
             $mail->Subject = 'Trainer Assigned to Your Course: '.$courseName;
@@ -527,6 +533,8 @@ class Home extends CI_Controller {
             $mail->Username = $get_setting->smtp_email;
             $mail->Password = base64_decode($get_setting->smtp_pass);
             $mail->send();
+            $msg = "Dear ".@$userfullName.", We are pleased to inform you that a trainer has been assigned to your course. Your trainer will guide you through the learning process and be available to support you with any questions or challenges during the course.";
+            $this->sendSMSToUser($getuserdata->phone, $msg);
         } catch (Exception $e) {
             echo $e->getMessage();
         }
@@ -864,6 +872,36 @@ class Home extends CI_Controller {
         }
         echo json_encode($data); exit;
     }
+    public function checkusermobile() {
+        $phone = $this->input->post('phone');
+        $checkUser = $this->db->where('phone', $phone)->get('users')->row();
+
+        if (!empty($checkUser)) {
+            $data = array('result'=> 'error', 'data' => 'Mobile number already exists.');
+        } else {
+            $data = array('result'=> 'success', 'data' => 'Mobile number is available.');
+        }
+        echo json_encode($data);
+    }
+    public function sendOTPtoMobile() {
+        $phone = $this->input->post('phone');
+        $otp = rand(100000, 999999);
+        $this->session->set_userdata('mobile_otp_'.$phone, $otp);
+        $msg = "Your OTP is: $otp. It is valid for 10 minutes. Do not share this code with anyone. If you did not request this, please ignore this message.";
+        $response = $this->sendSMSToUser($phone, $msg);
+        echo json_encode($response);
+    }
+    public function verifyMobileOTP() {
+        $phone = $this->input->post('phone');
+        $otp = $this->input->post('otp');
+        $storedOtp = $this->session->userdata('mobile_otp_'.$phone);
+
+        if ($otp == $storedOtp) {
+            echo json_encode(['result' => 'success', 'data' => 'OTP Verified']);
+        } else {
+            echo json_encode(['result' => 'error', 'data' => 'Invalid OTP']);
+        }
+    }
     public function course_zipcode() {
         $pincode = $this->input->post('pincode');
         $course_type = $this->input->post('course_type');
@@ -978,5 +1016,48 @@ class Home extends CI_Controller {
         $this->load->view('header');
         $this->load->view('frontend/customservice');
         $this->load->view('footer');
+    }
+    public function sendSMSToUser($phone, $message) {
+        try {
+            $account_sid = 'AC1931ae23494c19d8ba13e6675fbc2d01';
+            $auth_token = '113ac37c6f4e868bc3b337f84c5bc30f'; // Replace with your actual Auth Token
+            $twilio_number = '+18559180807';
+            $message = $message;
+            $url = "https://api.twilio.com/2010-04-01/Accounts/{$account_sid}/Messages.json";
+            $data = [
+                'From' => $twilio_number,
+                'To' => "+91".$phone,
+                'Body' => $message
+            ];
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+            curl_setopt($ch, CURLOPT_USERPWD, "{$account_sid}:{$auth_token}");
+
+            $response = curl_exec($ch);
+            $error = curl_error($ch);
+            $errno = curl_errno($ch);
+            curl_close($ch);
+
+            if ($errno) {
+                return ['success' => false, 'message' => $error];
+            }
+            $result = json_decode($response, true);
+            if (isset($result['code'])) {
+                return [
+                    'success' => false,
+                    'message' => $result['message'] ?? 'Twilio API Error',
+                    'twilio_code' => $result['code']
+                ];
+            }
+            return ['success' => true, 'message' => 'OTP SMS sent successfully.'];
+        } catch (\Twilio\Exceptions\TwilioException $e) {
+            return [
+                'success' => false,
+                'error' => 'Twilio error: ' . $e->getMessage()
+            ];
+        }
     }
 }

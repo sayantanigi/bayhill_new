@@ -416,6 +416,9 @@ $('#submit-button').on('click', function() {
                     setInterval(function () {
                         $('#err_msg').empty();
                     }, 8000);
+                    setInterval(function () {
+                        location.reload();
+                    }, 10000);
                 } else {
                     $('#err_msg').text('Something went wrong. Please try again later.').css('color', '#e20612');
                     setInterval(function () {

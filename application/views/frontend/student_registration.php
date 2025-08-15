@@ -43,21 +43,16 @@ $site_setting = $this->db->query("select * from  settings")->row();
                             <div id="vld_last_name"></div>
                         </div>
                         <div class="col-lg-6 col-md-6 mb-3">
-                            <label class="mb-2">Phone No <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" placeholder="Enter your phone number" name="phone" id="phone"/>
-                            <div id="vld_phone"></div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 mb-3">
                             <label class="mb-2">Email <span class="text-danger">*</span></label>
                             <input type="email" class="form-control" placeholder="Enter your email" name="email" id="email"/>
                             <div id="vld_email"></div>
                         </div>
-                        <div class="col-lg-4 col-md-6 mb-3">
+                        <div class="col-lg-3 col-md-6 mb-3">
                             <label class="mb-2">Student Date of Birth  <span class="text-danger">*</span></label>
                             <input type="date" class="form-control" name="dob" id="dob" />
                             <div id="vld_dob"></div>
                         </div>
-                        <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="col-lg-3 col-md-6 mb-4">
                             <label class="mb-2">Gender <span class="text-danger">*</span></label>
                             <select class="form-control form-select" id="gender" name="gender">
                                 <option value="">Select Gender</option>
@@ -66,6 +61,19 @@ $site_setting = $this->db->query("select * from  settings")->row();
                                 <option value="Other">Other</option>
                             </select>
                             <div id="vld_gender"></div>
+                        </div>
+                        <div class="col-lg-7 col-md-6 mb-3">
+                            <label class="mb-2">Phone No <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" placeholder="Enter your phone number" name="phone" id="phone"/>
+                            <div id="vld_phone"></div>
+                        </div>
+                        <div class="col-lg-5 col-md-6 mb-3">
+                            <label class="mb-2">Enter OTP <span class="text-danger">*</span></label>
+                            <div style=" display: flex; gap: 15px; justify-content: center; align-items: center; ">
+                                <input type="text" id="sotp" class="form-control" placeholder="Enter OTP" disabled style="width: 60%;">
+                                <button type="button" id="verifyOtpBtn" class="btn btn-success" disabled>Verify OTP</button>
+                            </div>
+                            <div id="vld_otp"></div>
                         </div>
                         <div class="col-lg-12">
                             <h2 class="subtitle wow fadeInUp mt-4" style="margin-bottom: 0px;">Contact Information</h2>
@@ -171,7 +179,7 @@ $site_setting = $this->db->query("select * from  settings")->row();
                             </tr>
                             <tr>
                                 <td class="border-top fw-semibold">You Pay	:</td>
-                                <td class="border-top text-end h6 text-primary fw-semibold" style="width: 80px !important;">$ <?= $offer_price + $site_setting->tax_amount; ?></td>
+                                <td class="border-top text-end h6 text-primary fw-semibold" style="width: 200px !important;">$ <?= $offer_price + $site_setting->tax_amount; ?></td>
                             </tr>
                         </tbody>
                     </table>
@@ -304,6 +312,87 @@ $(document).ready(function() {
             }
         } else {
             $('#vld_dob').html('Please select a valid date of birth.');
+        }
+    });
+
+    $('#phone').on('keyup', function(e) {
+        let phone = $('#phone').val().trim();
+        let phonePattern = /^[6-9]\d{9}$/; // Indian mobile number validation
+
+        if (phone === '' || !phonePattern.test(phone)) {
+            $('#vld_phone').text('Enter a valid 10 digit phone number').css('color', 'red').show();
+            $('#phone').css('border', '1px solid red');
+            return;
+        } else {
+            $('#vld_phone').hide();
+            $('#phone').css('border', '1px solid green');
+
+            // Check for duplicate number
+            $.ajax({
+                type: "POST",
+                url: "<?= base_url('Home/checkusermobile')?>",
+                data: { phone: phone },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.result === 'error') {
+                        $('#vld_phone').text(response.data).css('color', 'red').show();
+                        $('#phone').css('border', '1px solid red');
+                        $("#enrollbtn").prop("disabled", true);
+                    } else {
+                        $('#vld_phone').text('Sending OTP...').css('color', 'green').show();
+
+                        // Send OTP to the valid & unique mobile number
+                        $.ajax({
+                            type: "POST",
+                            url: "<?= base_url('Home/sendOTPtoMobile')?>",
+                            data: { phone: phone },
+                            dataType: 'json',
+                            success: function(otpRes) {
+                                if (otpRes && otpRes.success) {
+                                    $('#vld_phone').text('OTP Sent!').css('color', 'green');
+                                    $('#otp_section').show();
+                                    $('#sotp').prop('disabled', false);
+                                    $('#verifyOtpBtn').prop('disabled', false);
+                                } else {
+                                    $('#vld_phone').text(otpRes.message || 'Failed to send OTP').css('color', 'red');
+                                    $('#sotp').prop('disabled', true);
+                                    $('#verifyOtpBtn').prop('disabled', true);
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                $('#vld_phone').text('Server error: ' + error).css('color', 'red');
+                                $('#sotp').prop('disabled', true);
+                                $('#verifyOtpBtn').prop('disabled', true);
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    });
+
+    $('#verifyOtpBtn').on('click', function() {
+        let otp = $('#sotp').val();
+        let phone = $('#phone').val();
+
+        $.post("<?= base_url('Home/verifyMobileOTP')?>", { phone: phone, otp: otp }, function(res) {
+            if (res.result === 'success') {
+                $('#vld_otp').text('Phone Verified!').css('color', 'green');
+                $("#enrollbtn").prop("disabled", false);
+            } else {
+                $('#vld_otp').text('Invalid OTP').css('color', 'red');
+                $("#enrollbtn").prop("disabled", true);
+            }
+        }, 'json');
+    });
+
+    $('#disclaimer').change(function(){
+        if($(this).is(':checked')){
+            $('#submitBtn').prop('disabled', false);
+            $('#vld_disclaimer').text('').hide();
+        } else {
+            $('#submitBtn').prop('disabled', true);
+            $('#vld_disclaimer').text('You must agree before continuing.').css('color', 'red').show();
         }
     });
 });
